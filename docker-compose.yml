@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+  db:
+    container_name: postgresql
+    image: postgres:15-alpine
+    volumes:
+      - /var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_INITDB_ARGS: --encoding=UTF-8
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: pg_isready -U postgres -h 127.0.0.1
+      interval: 5s
+      timeout: 120s
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: algosolved-server
+    depends_on:
+      - db
+    ports:
+      - 8080:8080
+
+
+
+
