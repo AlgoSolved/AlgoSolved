@@ -1,11 +1,29 @@
-FROM openjdk:17
+FROM openjdk:17-slim-buster AS base
+ENV JAR_FILE_NAME=backend-0.0.1-SNAPSHOT.jar
+ENV JAR_FILE_PATH=/home/deploy/app/backend/build/libs/${JAR_FILE_NAME}
 
-WORKDIR /usr/app/backend
 
-ARG JAR_PATH=./build/libs
+FROM base as builder
 
-COPY ${JAR_PATH}/backend-0.0.1-SNAPSHOT.jar ${JAR_PATH}/backend-0.0.1-SNAPSHOT.jar
+RUN apt-get -qq update > /dev/null && \
+    DEBIAN_FRONTEND=noninteractive apt-get -yq --no-install-recommends install build-essential unzip > /dev/null
 
-EXPOSE "8080"
+RUN useradd --uid 1000 --gid users --shell /bin/bash --create-home deploy
+USER deploy
 
-CMD ["java", "-jar", "./build/libs//backend-0.0.1-SNAPSHOT.jar"]
+RUN mkdir -p /home/deploy/app/backend
+WORKDIR /home/deploy/app/backend
+COPY --chown=deploy:users . .
+RUN ./gradlew build -x test
+
+
+FROM base AS production
+RUN useradd --uid 1000 --gid users --shell /bin/bash --create-home deploy
+USER deploy
+
+RUN mkdir -p /home/deploy/app/backend
+WORKDIR /home/deploy/app/backend
+COPY --chown=deploy:users --from=builder ${JAR_FILE_PATH} ${JAR_FILE_PATH}
+EXPOSE 3000
+
+ENTRYPOINT ["sh", "-c", "java -jar ${JAR_FILE_PATH}"]
