@@ -14,7 +14,7 @@ USER deploy
 RUN mkdir -p /home/deploy/app/backend
 WORKDIR /home/deploy/app/backend
 COPY --chown=deploy:users . .
-RUN ./gradlew build -x test
+RUN ./gradlew build -x test --parallel
 
 
 FROM base AS production
