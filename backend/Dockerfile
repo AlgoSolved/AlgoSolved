@@ -10,8 +10,8 @@ RUN apt-get -qq update > /dev/null && \
 RUN useradd --uid 1000 --gid users --shell /bin/bash --create-home deploy
 USER deploy
 
-RUN mkdir /home/deploy/app
-WORKDIR /home/deploy/app
+RUN mkdir /home/deploy/app/backend
+WORKDIR /home/deploy/app/backend
 COPY --chown=deploy:users . .
 RUN ./gradlew build
 
@@ -20,9 +20,9 @@ FROM base AS production
 RUN useradd --uid 1000 --gid users --shell /bin/bash --create-home deploy
 USER deploy
 
-RUN mkdir /home/deploy/app
-WORKDIR /home/deploy/app
-COPY --chown=deploy:users --from=builder /home/deploy/app/build/libs/${JAR_FILE_NAME} /home/deploy/app/build/libs/${JAR_FILE_NAME}
+RUN mkdir /home/deploy/app/backend
+WORKDIR /home/deploy/app/backend
+COPY --chown=deploy:users --from=builder /home/deploy/app/backend/build/libs/${JAR_FILE_NAME} /home/deploy/app/backend/build/libs/${JAR_FILE_NAME}
 EXPOSE 3000
 
-ENTRYPOINT ["java", "-jar", "/home/deploy/app/build/libs/AlgoSolved-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "/home/deploy/app/backend/build/libs/AlgoSolved-0.0.1-SNAPSHOT.jar"]
