@@ -1,5 +1,6 @@
 FROM openjdk:17-slim-buster AS base
 ENV JAR_FILE_NAME=backend-0.0.1-SNAPSHOT.jar
+ENV JAR_FILE_PATH=/home/deploy/app/backend/build/libs/${JAR_FILE_NAME}
 
 
 FROM base as builder
@@ -22,7 +23,7 @@ USER deploy
 
 RUN mkdir -p /home/deploy/app/backend
 WORKDIR /home/deploy/app/backend
-COPY --chown=deploy:users --from=builder /home/deploy/app/backend/build/libs/${JAR_FILE_NAME} /home/deploy/app/backend/build/libs/${JAR_FILE_NAME}
+COPY --chown=deploy:users --from=builder ${JAR_FILE_PATH} ${JAR_FILE_PATH}
 EXPOSE 3000
 
-ENTRYPOINT ["java", "-jar", "/home/deploy/app/backend/build/libs/backend-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["sh", "-c", "java -jar ${JAR_FILE_PATH}"]
