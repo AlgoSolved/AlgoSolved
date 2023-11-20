@@ -27,7 +27,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
       target: production
-    container_name: algosolved-server
+    container_name: backend
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/algosolved
       - SPRING_DATASOURCE_USERNAME=postgres
