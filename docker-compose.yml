@@ -5,7 +5,7 @@ services:
     container_name: postgresql
     image: postgres:15-alpine
     volumes:
-      - /var/lib/postgresql/data
+      - ${HOME}/algosolved/data/postgresql:/var/lib/postgresql
     restart: always
     environment:
       POSTGRES_DB: "algosolved"
@@ -34,7 +34,8 @@ services:
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_SERVER_PORT=8080
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
       - 8080:8080
     restart: always
