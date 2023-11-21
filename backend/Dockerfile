@@ -6,7 +6,7 @@ ENV JAR_FILE_PATH=/home/deploy/app/backend/build/libs/${JAR_FILE_NAME}
 FROM base as builder
 
 RUN apt-get -qq update > /dev/null && \
-    DEBIAN_FRONTEND=noninteractive apt-get -yq --no-install-recommends install build-essential unzip > /dev/null
+    DEBIAN_FRONTEND=noninteractive apt-get -yq --no-install-recommends install build-essential unzip procps > /dev/null
 
 RUN useradd --uid 1000 --gid users --shell /bin/bash --create-home deploy
 USER deploy
@@ -24,6 +24,20 @@ USER deploy
 RUN mkdir -p /home/deploy/app/backend
 WORKDIR /home/deploy/app/backend
 COPY --chown=deploy:users --from=builder ${JAR_FILE_PATH} ${JAR_FILE_PATH}
-EXPOSE 3000
+COPY --chown=deploy:users entrypoint.sh entrypoint.sh
+EXPOSE 8080
 
-ENTRYPOINT ["sh", "-c", "java -jar ${JAR_FILE_PATH}"]
+RUN chmod +x entrypoint.sh && ./gradlew getDependencies
+
+ENTRYPOINT ["./entrypoint.sh"]
+
+
+FROM builder AS development
+
+WORKDIR /home/deploy/app/backend
+COPY --chown=deploy:users entrypoint.sh entrypoint.sh
+EXPOSE 8080
+
+RUN chmod +x entrypoint.sh && ./gradlew getDeps
+
+ENTRYPOINT ["./entrypoint.sh"]
