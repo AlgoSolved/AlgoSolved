@@ -53,6 +53,8 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Setup node
         uses: actions/setup-node@v3
@@ -65,7 +67,7 @@ jobs:
         run: |
           echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
       - uses: actions/cache@v3
-        id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
+        id: npm-cache
         with:
           path: ${{ steps.npm-cache-dir.outputs.dir }}
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
