@@ -1,6 +1,7 @@
 package com.example.backend.model;
 
 import javax.persistence.*;
+import java.util.StringTokenizer;
 
 @Entity
 @Table(name = "repositories")
@@ -16,5 +17,5 @@ public class Repository extends BaseTimeEntity {
 
     private String url;
 
-
+    private String token;
 }

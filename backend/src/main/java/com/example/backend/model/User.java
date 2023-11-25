@@ -23,12 +23,14 @@ public class User extends BaseTimeEntity {
     private Long id;
 
     @OneToOne
-    @Column(name = "repository_id")
+    @JoinColumn(name = "repository_id")
     private Repository repository;
 
     private String username;
 
     private String name;
+
+    private String role;
 
     @Column(name = "profile_image_url")
     private String profileImageUrl;
