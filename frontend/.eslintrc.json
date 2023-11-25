@@ -1,5 +1,8 @@
 {
-  "env": { "browser": true, "es2020": true },
+  "env": {
+    "browser": true,
+    "es2020": true
+  },
   "extends": [
     "prettier",
     "eslint:recommended",
@@ -7,9 +10,14 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:react-hooks/recommended"
   ],
-  "ignorePatterns": ["dist", ".eslintrc.json"],
+  "ignorePatterns": [
+    "dist",
+    ".eslintrc.json"
+  ],
   "parser": "@typescript-eslint/parser",
-  "plugins": ["import"],
+  "plugins": [
+    "import"
+  ],
   "rules": {
     "react/prop-types": 0,
     "react-hooks/exhaustive-deps": 0,
@@ -22,7 +30,11 @@
           "builtin",
           "external",
           "internal",
-          ["sibling", "parent", "index"],
+          [
+            "sibling",
+            "parent",
+            "index"
+          ],
           "type",
           "unknown"
         ],
@@ -42,9 +54,16 @@
           "order": "asc",
           "caseInsensitive": true
         },
-        "pathGroupsExcludedImportTypes": ["builtin"],
+        "pathGroupsExcludedImportTypes": [
+          "builtin"
+        ],
         "newlines-between": "always"
       }
     ]
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }
