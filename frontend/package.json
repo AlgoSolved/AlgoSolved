@@ -17,6 +17,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "coverage": "react-scripts test --env=jsdom --watchAll=false --coverage",
     "prettier": "prettier --write **/*.{ts,tsx}",
     "lint": "eslint --fix **/*.{js,jsx,ts,tsx}",
     "tsc": "tsc"
