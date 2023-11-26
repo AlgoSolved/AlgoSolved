@@ -19,14 +19,8 @@
     "eject": "react-scripts eject",
     "coverage": "react-scripts test --env=jsdom --watchAll=false --coverage",
     "prettier": "prettier --write **/*.{ts,tsx}",
-    "lint": "eslint --fix **/*.{js,jsx,ts,tsx}",
+     "lint": "eslint --fix **/*.{js,jsx,ts,tsx}",
     "tsc": "tsc"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [
