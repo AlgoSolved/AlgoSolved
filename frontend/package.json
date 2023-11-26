@@ -19,7 +19,7 @@
     "eject": "react-scripts eject",
     "coverage": "react-scripts test --env=jsdom --watchAll=false --coverage",
     "prettier": "prettier --write **/*.{ts,tsx}",
-    "lint": "eslint --fix **/*.{js,jsx,ts,tsx}",
+    "lint": "eslint --fix ./src/**/*.{js,ts,tsx}",
     "tsc": "tsc"
   },
   "eslintConfig": {
