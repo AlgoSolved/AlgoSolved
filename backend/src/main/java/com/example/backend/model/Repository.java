@@ -1,8 +1,12 @@
 package com.example.backend.model;
 
-import javax.persistence.*;
-import java.util.StringTokenizer;
+import lombok.Getter;
+import lombok.Setter;
 
+import javax.persistence.*;
+
+@Setter
+@Getter
 @Entity
 @Table(name = "repositories")
 public class Repository extends BaseTimeEntity {
