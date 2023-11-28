@@ -1,8 +1,10 @@
-package com.example.backend.model;
+package com.example.backend.domain;
 
 
+import com.example.backend.common.enums.RoleType;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -22,7 +24,7 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "repository_id")
     private Repository repository;
 
@@ -30,7 +32,8 @@ public class User extends BaseTimeEntity {
 
     private String name;
 
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private RoleType role;
 
     @Column(name = "profile_image_url")
     private String profileImageUrl;
