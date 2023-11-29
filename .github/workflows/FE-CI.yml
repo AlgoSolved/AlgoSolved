@@ -75,3 +75,4 @@ jobs:
 
       - name: Test react
         run: npm run coverage
+        
