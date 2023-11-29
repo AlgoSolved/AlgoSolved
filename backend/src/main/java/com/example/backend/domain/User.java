@@ -1,6 +1,7 @@
 package com.example.backend.domain;
 
 
+import com.example.backend.common.converters.RoleTypeListConverter;
 import com.example.backend.common.enums.RoleType;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Getter
@@ -24,6 +26,7 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @MapsId
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "repository_id")
     private Repository repository;
@@ -32,8 +35,8 @@ public class User extends BaseTimeEntity {
 
     private String name;
 
-    @Enumerated(EnumType.STRING)
-    private RoleType role;
+    @Convert(converter = RoleTypeListConverter.class)
+    private List<RoleType> roles;
 
     @Column(name = "profile_image_url")
     private String profileImageUrl;
