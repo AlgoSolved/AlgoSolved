@@ -20,10 +20,10 @@ jobs:
           skip-commit: true
 
   test:
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./backend
-    runs-on: ubuntu-latest
     services:
       postgres:
         image: postgres:10.16
