@@ -30,7 +30,7 @@ jobs:
         env:
           POSTGRES_DB: algosolved
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
         ports:
           - 5432:5432
         options: >-
