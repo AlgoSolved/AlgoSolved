@@ -6,11 +6,9 @@ CREATE TABLE users (
     username VARCHAR(255) NOT NULL,
     roles VARCHAR(255) NOT NULL,
     content VARCHAR(255) NOT NULL,
-    repository_id BIGINT,
     created_at timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    deleted_at timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT users_repository_id_fk FOREIGN KEY (repository_id) REFERENCES repositories (id)
+    deleted_at timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE repositories (
