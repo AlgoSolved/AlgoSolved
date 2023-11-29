@@ -20,10 +20,24 @@ jobs:
           skip-commit: true
 
   test:
-    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./backend
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:10.16
+        env:
+          POSTGRES_DB: algosolved
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -36,22 +50,6 @@ jobs:
           java-version: '17'
           distribution: 'zulu'
           cache: gradle
-
-      - name: Setup PostgreSQL
-        services:
-          postgres:
-            image: postgres:10.16
-            env:
-              POSTGRES_DB: algosolved
-              POSTGRES_USER: postgres
-              POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-            ports:
-              - 5432:5432
-            options: >-
-              --health-cmd pg_isready
-              --health-interval 10s
-              --health-timeout 5s
-              --health-retries 5
 
       - name: Gradle caching
         uses: actions/cache@v3
