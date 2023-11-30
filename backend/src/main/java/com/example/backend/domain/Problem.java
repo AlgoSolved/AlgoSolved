@@ -1,5 +1,7 @@
 package com.example.backend.domain;
 
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -10,6 +12,7 @@ import javax.persistence.*;
 @Getter
 @RequiredArgsConstructor
 public class Problem extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,7 +25,11 @@ public class Problem extends BaseTimeEntity {
 
     // TODO: many to one 관계로 providers 테이블과 연결
 
-    // TODO: one to many 관계로 solutions 테이블과 연결
+    @OneToMany(mappedBy = "problem")
+    private List<Solution> solutions = new ArrayList<>();
+
+    @OneToOne(mappedBy = "problem", fetch = FetchType.LAZY)
+    private BaekjoonProblemDetail baekjoonProblemDetail;
 
     public Problem(String title, String content) {
         this.title = title;
