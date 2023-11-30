@@ -8,8 +8,8 @@ import javax.persistence.*;
 @Setter
 @Getter
 @Entity
-@Table(name = "repositories")
-public class Repository extends BaseTimeEntity {
+@Table(name = "github_repositories")
+public class GithubRepository extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

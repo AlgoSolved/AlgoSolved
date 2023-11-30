@@ -28,7 +28,7 @@ public class User extends BaseTimeEntity {
 
     @MapsId
     @OneToOne(mappedBy = "user")
-    private Repository repository;
+    private GithubRepository repository;
 
     private String username;
 
