@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -22,4 +24,8 @@ public class GithubRepository extends BaseTimeEntity {
     private String url;
 
     private String token;
+
+    @OneToMany(mappedBy = "github_repository")
+//    @JoinColumn(name = "github_repository_id")
+    private List<Solution> solutions = new ArrayList<>();
 }

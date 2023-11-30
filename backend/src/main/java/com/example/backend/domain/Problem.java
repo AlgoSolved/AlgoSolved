@@ -1,11 +1,11 @@
 package com.example.backend.domain;
 
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "problems")
@@ -23,7 +23,9 @@ public class Problem extends BaseTimeEntity {
     @Column(name = "content", length = 10_000, nullable = false)
     private String content;
 
-    // TODO: many to one 관계로 providers 테이블과 연결
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "provider_id")
+    private Provider provider;
 
     @OneToMany(mappedBy = "problem")
     private List<Solution> solutions = new ArrayList<>();

@@ -1,8 +1,9 @@
 package com.example.backend.domain;
 
-import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "solutions")
@@ -13,11 +14,11 @@ public class Solution extends BaseTimeEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  @JoinColumn(name = "repository_id")
-  private Repository repository;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "github_repository_id")
+  private GithubRepository github_repository;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "problem_id")
   private Problem problem;
 }
