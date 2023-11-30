@@ -27,8 +27,7 @@ public class User extends BaseTimeEntity {
     private Long id;
 
     @MapsId
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "repository_id")
+    @OneToOne(mappedBy = "user")
     private Repository repository;
 
     private String username;
