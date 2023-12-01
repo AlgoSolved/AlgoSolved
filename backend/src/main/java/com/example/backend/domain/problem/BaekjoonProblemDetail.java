@@ -1,6 +1,8 @@
-package com.example.backend.domain;
+package com.example.backend.domain.problem;
 
 import javax.persistence.*;
+
+import com.example.backend.domain.problem.Problem;
 import lombok.Getter;
 import lombok.Setter;
 

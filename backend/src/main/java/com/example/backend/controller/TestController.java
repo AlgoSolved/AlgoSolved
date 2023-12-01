@@ -1,7 +1,7 @@
 package com.example.backend.controller;
 
-import com.example.backend.domain.Problem;
-import com.example.backend.domain.Solution;
+import com.example.backend.domain.problem.Problem;
+import com.example.backend.domain.solution.Solution;
 import com.example.backend.repository.ProblemRepository;
 
 import com.example.backend.repository.SolutionRepository;
