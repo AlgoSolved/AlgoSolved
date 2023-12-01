@@ -1,11 +1,11 @@
-package com.example.backend.domain;
+package com.example.backend.domain.user;
 
 
-import com.example.backend.common.converters.RoleTypeListConverter;
-import com.example.backend.common.enums.RoleType;
+import com.example.backend.domain.BaseTimeEntity;
+import com.example.backend.domain.githubRepository.GithubRepository;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -26,7 +26,6 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @MapsId
     @OneToOne(mappedBy = "user")
     private GithubRepository repository;
 
@@ -34,8 +33,8 @@ public class User extends BaseTimeEntity {
 
     private String name;
 
-    @Convert(converter = RoleTypeListConverter.class)
-    private List<RoleType> roles;
+    @Convert(converter = RoleListConverter.class)
+    private List<Role> roles;
 
     @Column(name = "profile_image_url")
     private String profileImageUrl;
@@ -46,4 +45,17 @@ public class User extends BaseTimeEntity {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+    @Builder
+    public User(
+        String username,
+        String name,
+        String profileImageUrl,
+        String githubUrl
+    ) {
+        // TODO: null 인 경우 default 값 설정
+        this.username = username;
+        this.name = name;
+        this.profileImageUrl = profileImageUrl;
+        this.githubUrl = githubUrl;
+    }
 }
