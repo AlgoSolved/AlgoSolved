@@ -27,11 +27,9 @@ public class Problem extends BaseTimeEntity {
     @JoinColumn(name = "provider_id")
     private Provider provider;
 
-    @OneToMany(mappedBy = "problem")
-    private List<Solution> solutions = new ArrayList<>();
-
-    @OneToOne(mappedBy = "problem", fetch = FetchType.LAZY)
-    private BaekjoonProblemDetail baekjoonProblemDetail;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "problem_id")
+    private List<Solution> solutions;
 
     public Problem(String title, String content) {
         this.title = title;

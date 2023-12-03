@@ -3,6 +3,7 @@ package com.example.backend.domain;
 
 import com.example.backend.common.converters.RoleTypeListConverter;
 import com.example.backend.common.enums.RoleType;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
@@ -17,6 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Builder
 @Where(clause = "deleted_at IS NULL")
 @SQLDelete(sql="UPDATE users SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 @Table(name = "users")
@@ -26,9 +28,9 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @MapsId
-    @OneToOne(mappedBy = "user")
-    private GithubRepository repository;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "github_repository_id")
+    private GithubRepository githubRepository;
 
     private String username;
 

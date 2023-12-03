@@ -25,7 +25,7 @@ public class GithubRepository extends BaseTimeEntity {
 
     private String token;
 
-    @OneToMany(mappedBy = "github_repository")
-//    @JoinColumn(name = "github_repository_id")
-    private List<Solution> solutions = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "github_repository_id")
+    private List<Solution> solutions;
 }
