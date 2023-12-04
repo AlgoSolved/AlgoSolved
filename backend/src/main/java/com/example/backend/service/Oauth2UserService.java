@@ -16,8 +16,7 @@ import javax.servlet.http.HttpSession;
 @Service
 @RequiredArgsConstructor
 public class Oauth2UserService implements OAuth2UserService {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
     private HttpSession httpSession;
 
     @Override
