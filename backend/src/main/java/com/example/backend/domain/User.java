@@ -2,10 +2,9 @@ package com.example.backend.domain;
 
 
 import com.example.backend.common.converters.RoleTypeListConverter;
-import com.example.backend.common.enums.RoleType;
+import com.example.backend.common.enums.Role;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -35,7 +34,7 @@ public class User extends BaseTimeEntity {
     private String name;
 
     @Convert(converter = RoleTypeListConverter.class)
-    private List<RoleType> roles;
+    private List<Role> roles;
 
     @Column(name = "profile_image_url")
     private String profileImageUrl;
