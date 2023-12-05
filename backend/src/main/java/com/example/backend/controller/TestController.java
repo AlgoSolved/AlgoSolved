@@ -1,5 +1,7 @@
 package com.example.backend.controller;
 
+import com.example.backend.common.enums.ExceptionStatus;
+import com.example.backend.common.exception.NotFoundException;
 import com.example.backend.domain.Problem;
 import com.example.backend.domain.Solution;
 import com.example.backend.repository.ProblemRepository;
@@ -21,12 +23,6 @@ public class TestController {
 
     @GetMapping("/test")
     public void createProblem() {
-        Problem problem = new Problem("title", "content");
-        problemRepository.save(problem);
-
-        Solution solution = new Solution();
-        solution.setProblem(problem);
-
-        solutionRepository.save(solution);
+        throw new NotFoundException(ExceptionStatus.USER_NOT_FOUND);
     }
 }

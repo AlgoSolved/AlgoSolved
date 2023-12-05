@@ -1,5 +1,6 @@
 package com.example.backend.common.exception;
 
+import com.example.backend.common.enums.ExceptionStatus;
 import com.example.backend.dto.ErrorDto;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,11 +16,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorDto> handleNotFoundException(NotFoundException e) {
-        ErrorDto errorDto = ErrorDto.builder()
-                .code(e.getCode())
-                .message(e.getMessage())
-                .build();
+    public ResponseEntity<ErrorDto> handleNotFoundException(NotFoundException notFoundException) {
+        ErrorDto errorDto = new ErrorDto(notFoundException.getExceptionStatus());
 
         return new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
     }

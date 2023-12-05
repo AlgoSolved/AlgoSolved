@@ -6,14 +6,13 @@ import lombok.Getter;
 
 
 @Getter
-@Builder
 public class ErrorDto {
-    private String code;
-    private String message;
+    private final String code;
+    private final String message;
 
     public ErrorDto(ExceptionStatus exceptionStatus) {
         this.code = exceptionStatus.getCode();
-        this.code = exceptionStatus.getMessage();
+        this.message = exceptionStatus.getMessage();
     }
 
 }
