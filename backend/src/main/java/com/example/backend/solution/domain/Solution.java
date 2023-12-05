@@ -1,5 +1,8 @@
-package com.example.backend.domain;
+package com.example.backend.solution.domain;
 
+import com.example.backend.common.BaseTimeEntity;
+import com.example.backend.github.domain.GithubRepository;
+import com.example.backend.problem.domain.Problem;
 import lombok.Getter;
 import lombok.Setter;
 

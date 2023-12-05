@@ -1,6 +1,6 @@
-package com.example.backend.repository;
+package com.example.backend.problem.repository;
 
-import com.example.backend.domain.Problem;
+import com.example.backend.problem.domain.Problem;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

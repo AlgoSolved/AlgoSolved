@@ -1,6 +1,6 @@
-package com.example.backend.common.converters;
+package com.example.backend.user.common.converters;
 
-import com.example.backend.common.enums.Role;
+import com.example.backend.user.common.enums.Role;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;

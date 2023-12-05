@@ -1,5 +1,7 @@
-package com.example.backend.domain;
+package com.example.backend.problem.domain;
 
+import com.example.backend.common.BaseTimeEntity;
+import com.example.backend.solution.domain.Solution;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

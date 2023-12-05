@@ -1,8 +1,10 @@
-package com.example.backend.domain;
+package com.example.backend.user.domain;
 
 
-import com.example.backend.common.converters.RoleTypeListConverter;
-import com.example.backend.common.enums.Role;
+import com.example.backend.user.common.converters.RoleTypeListConverter;
+import com.example.backend.user.common.enums.Role;
+import com.example.backend.common.BaseTimeEntity;
+import com.example.backend.github.domain.GithubRepository;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
