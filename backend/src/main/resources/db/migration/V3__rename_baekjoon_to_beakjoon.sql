@@ -1,1 +1,0 @@
-ALTER TABLE baekjoon_problem_details RENAME TO beakjoon_problem_details;

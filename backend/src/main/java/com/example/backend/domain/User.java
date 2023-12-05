@@ -28,6 +28,8 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long uuid;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "github_repository_id")
     private GithubRepository githubRepository;

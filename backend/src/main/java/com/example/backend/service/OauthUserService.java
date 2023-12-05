@@ -24,11 +24,26 @@ public class OauthUserService implements OAuth2UserService {
         DefaultOAuth2UserService service = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = service.loadUser(userRequest);
 
-        User user = User.builder()
-                .name(oAuth2User.getAttribute("name"))
-                .username(oAuth2User.getAttribute("login"))
-                .profileImageUrl(oAuth2User.getAttribute("avatar_url"))
-                .githubUrl(oAuth2User.getAttribute("github_url")).build();
+        if(oAuth2User == null){
+            throw new RuntimeException();
+        }
+
+        Integer github_id = oAuth2User.getAttribute("id");
+
+        Long uuid = Long.valueOf(github_id);
+
+        User user = userRepository.findUserByUuid(uuid).orElse(null);
+
+        if (user == null) {
+            user = User.builder()
+                    .uuid(uuid)
+                    .name(oAuth2User.getAttribute("name"))
+                    .username(oAuth2User.getAttribute("login"))
+                    .profileImageUrl(oAuth2User.getAttribute("avatar_url"))
+                    .githubUrl(oAuth2User.getAttribute("url"))
+                    .build();
+
+        }
 
         userRepository.save(user);
 
