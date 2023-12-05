@@ -1,5 +1,5 @@
 package com.example.backend.common.enums;
 
-public enum RoleType {
+public enum Role {
     ADMIN
 }
