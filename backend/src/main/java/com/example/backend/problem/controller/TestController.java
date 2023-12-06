@@ -19,14 +19,14 @@ public class TestController {
     @Autowired
     private SolutionRepository solutionRepository;
 
-    @GetMapping("/test")
-    public void createProblem() {
-        Problem problem = new Problem("title", "content");
-        problemRepository.save(problem);
-
-        Solution solution = new Solution();
-        solution.setProblem(problem);
-
-        solutionRepository.save(solution);
-    }
+//    @GetMapping("/test")
+//    public void createProblem() {
+//        Problem problem = new Problem("title", "content");
+//        problemRepository.save(problem);
+//
+//        Solution solution = new Solution();
+//        solution.setProblem(problem);
+//
+//        solutionRepository.save(solution);
+//    }
 }
