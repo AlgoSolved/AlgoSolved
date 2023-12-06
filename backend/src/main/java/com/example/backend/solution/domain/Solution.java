@@ -19,7 +19,7 @@ public class Solution extends BaseTimeEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "github_repository_id")
-  private GithubRepository github_repository;
+  private GithubRepository githubRepository;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "problem_id")

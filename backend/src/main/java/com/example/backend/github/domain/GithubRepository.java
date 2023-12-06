@@ -28,7 +28,6 @@ public class GithubRepository extends BaseTimeEntity {
 
     private String token;
 
-    @OneToMany(mappedBy = "github_repository")
-//    @JoinColumn(name = "github_repository_id")
+    @OneToMany(mappedBy = "githubRepository")
     private List<Solution> solutions = new ArrayList<>();
 }
