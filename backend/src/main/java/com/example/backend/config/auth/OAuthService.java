@@ -3,7 +3,6 @@ package com.example.backend.config.auth;
 import com.example.backend.user.domain.User;
 import com.example.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -24,15 +23,12 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
       OAuth2User oAuth2User = service.loadUser(userRequest); //OAuth 서비스에서 가져온 유저 정보 담김
 
       String username = oAuth2User.getAttribute("login");
-      User user = userRepository.findByUsername(username);
+      User user = userRepository.findByUsername(username).orElse(null);
 
-      if (user == null) {
-        user = User.builder()
-            .username(username)
-            .name(oAuth2User.getAttribute("name"))
-            .profileImageUrl(oAuth2User.getAttribute("avatar_url"))
-            .githubUrl(oAuth2User.getAttribute("html_url"))
-            .build();
+      if(user == null) {
+        user = createUserFromOAuth(oAuth2User);
+      } else {
+        updateUserFromOAuth(user, oAuth2User);
       }
 
       userRepository.save(user);
@@ -41,6 +37,22 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
     } catch (OAuth2AuthenticationException e) {
       throw new RuntimeException("[Error] Failed to load OAuth2 user" + e.getMessage(), e);
     }
+  }
+
+  private User createUserFromOAuth(OAuth2User oAuth2User) {
+    return User.builder()
+        .username(oAuth2User.getAttribute("login"))
+        .name(oAuth2User.getAttribute("name"))
+        .profileImageUrl(oAuth2User.getAttribute("avatar_url"))
+        .githubUrl(oAuth2User.getAttribute("html_url"))
+        .build();
+  }
+
+  private void updateUserFromOAuth(User user, OAuth2User oAuth2User) {
+    user.updateFromOAuth(
+        oAuth2User.getAttribute("name"),
+        oAuth2User.getAttribute("avatar_url")
+    );
   }
 }
 
