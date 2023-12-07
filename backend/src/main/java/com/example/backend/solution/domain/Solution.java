@@ -1,5 +1,8 @@
-package com.example.backend.domain;
+package com.example.backend.solution.domain;
 
+import com.example.backend.common.BaseTimeEntity;
+import com.example.backend.github.domain.GithubRepository;
+import com.example.backend.problem.domain.Problem;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,7 +19,7 @@ public class Solution extends BaseTimeEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "github_repository_id")
-  private GithubRepository github_repository;
+  private GithubRepository githubRepository;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "problem_id")
