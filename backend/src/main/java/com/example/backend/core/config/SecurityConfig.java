@@ -1,5 +1,6 @@
-package com.example.backend.config.auth;
+package com.example.backend.core.config;
 
+import com.example.backend.user.service.OAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

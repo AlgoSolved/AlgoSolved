@@ -1,4 +1,4 @@
-package com.example.backend.config.auth;
+package com.example.backend.user.service;
 
 import com.example.backend.user.domain.User;
 import com.example.backend.user.repository.UserRepository;
@@ -22,14 +22,14 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
       DefaultOAuth2UserService service = new DefaultOAuth2UserService();
       OAuth2User oAuth2User = service.loadUser(userRequest); //OAuth 서비스에서 가져온 유저 정보 담김
 
+      System.out.println(oAuth2User);
       String username = oAuth2User.getAttribute("login");
-      User user = userRepository.findByUsername(username).orElse(null);
 
-      if(user == null) {
-        user = createUserFromOAuth(oAuth2User);
-      } else {
-        updateUserFromOAuth(user, oAuth2User);
+      if (isExistUser(username)) {
+        return oAuth2User;
       }
+
+      User user = createUserFromOAuth(oAuth2User);
 
       userRepository.save(user);
 
@@ -39,6 +39,11 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
     }
   }
 
+  public boolean isExistUser(String username) {
+    // TODO: 유저가 username 을 변경 시 주의
+    return userRepository.existsByUsername(username);
+  }
+
   private User createUserFromOAuth(OAuth2User oAuth2User) {
     return User.builder()
         .username(oAuth2User.getAttribute("login"))
@@ -46,13 +51,6 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
         .profileImageUrl(oAuth2User.getAttribute("avatar_url"))
         .githubUrl(oAuth2User.getAttribute("html_url"))
         .build();
-  }
-
-  private void updateUserFromOAuth(User user, OAuth2User oAuth2User) {
-    user.updateFromOAuth(
-        oAuth2User.getAttribute("name"),
-        oAuth2User.getAttribute("avatar_url")
-    );
   }
 }
 
