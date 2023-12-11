@@ -4,13 +4,11 @@ CREATE TABLE users
     name              VARCHAR(255) NOT NULL,
     github_url        VARCHAR(255) NOT NULL,
     profile_image_url VARCHAR(255) NOT NULL,
-    repository_id     BIGINT       NOT NULL,
     username          VARCHAR(255) NOT NULL,
     roles             VARCHAR(255) NOT NULL,
-    content           VARCHAR(255) NOT NULL,
     created_at        timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at        timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    deleted_at        timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP
+    deleted_at        timestamp(6)
 );
 
 CREATE TABLE github_repositories
@@ -69,3 +67,6 @@ CREATE TABLE solutions
     CONSTRAINT solutions_github_repository_id_fk FOREIGN KEY (github_repository_id) REFERENCES github_repositories (id),
     CONSTRAINT solutions_problem_id_fk FOREIGN KEY (problem_id) REFERENCES problems (id)
 );
+
+CREATE UNIQUE INDEX users_username_uindex ON users (username);
+
