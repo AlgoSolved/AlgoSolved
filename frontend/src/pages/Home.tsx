@@ -1,13 +1,14 @@
-import Footer from '@/components/common/Footer';
-import Seo from '@/components/common/Seo';
+import NavBar from '../components/common/Nav';
+import Footer from '../components/common/Footer';
 
 
 
 const Home = () => {
     return (
         <div>
-            <Seo />
-            
+            <NavBar />
+            test
+            {/* <CurrentList /> */}
             <Footer />
         </div>
     );
