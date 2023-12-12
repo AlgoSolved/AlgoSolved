@@ -38,6 +38,9 @@ dependencies {
 	developmentOnly "org.springframework.boot:spring-boot-devtools"
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// dotenv
+	implementation "me.paulschwarz:spring-dotenv:4.0.0"
 }
 
 tasks.named('bootBuildImage') {
