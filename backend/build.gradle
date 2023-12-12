@@ -64,3 +64,8 @@ task buildAndReload {
 		new File(".", ".restart").text = "${System.currentTimeMillis()}" // update trigger file in root folder for hot reload
 	}
 }
+
+bootRun {
+	String activeProfile = System.properties['spring.profiles.active']
+	systemProperty "spring.profiles.active", activeProfile
+}
