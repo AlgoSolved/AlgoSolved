@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, List, ListItem, ListItemText } from '@mui/material';
 import { solutionList } from '../../apis/v1/solutions';
 import { Solution } from '../../types/solution/Solution';
+import { alignProperty } from '@mui/material/styles/cssUtils';
 
 const dummyDataList : Solution[] = [{
     id: 0,
@@ -34,7 +35,8 @@ const CurrentList = () => {
     return (
         <div>
             <Container>
-            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+            <div style={{width: 'fit-content', textDecoration: 'bold'}}>최근 항목</div>
+            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
                 {solution_list?.map((solution) => (
                     <ListItem
                     key={solution.id}
@@ -43,7 +45,7 @@ const CurrentList = () => {
                         solution.author
                       }
                     >
-                    <ListItemText primary={solution.number +' ' + solution.provider +' '+ solution.title} />
+                    <ListItemText primary={solution.number +' ' + solution.provider +' - '+ solution.title} />
                     </ListItem>
                 ))}
             </List>

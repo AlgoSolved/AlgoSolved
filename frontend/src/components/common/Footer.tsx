@@ -6,6 +6,7 @@ const Footer = () => {
 
     return (
         <div>
+            copyright : AlgoSolved
         </div>
 
     );
