@@ -1,6 +1,8 @@
 import NavBar from '../components/common/Nav';
 import Footer from '../components/common/Footer';
 
+import CurrentList from '../components/home/CurrentList';
+
 
 
 const Home = () => {
@@ -8,7 +10,7 @@ const Home = () => {
         <div>
             <NavBar />
             test
-            {/* <CurrentList /> */}
+            <CurrentList />
             <Footer />
         </div>
     );
