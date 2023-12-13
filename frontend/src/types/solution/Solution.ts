@@ -3,7 +3,7 @@ export interface Solution {
     title: string;
     provider: string;
     number: number;
-    author: string;
+    username: string;
 }
 
 export interface SolutionList {

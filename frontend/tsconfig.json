@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    // "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ],
     },
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
@@ -21,6 +23,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["src", "**/*.ts", "**/*.tsx"],
+  "include": ["src","src/**/*", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules", "build"]
 }

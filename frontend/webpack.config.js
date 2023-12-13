@@ -39,6 +39,13 @@ const config = {
 
       // Add your rules for custom modules here
       // Learn more about loaders from https://webpack.js.org/loaders/
+      {
+        test: /\.css$/i,
+        use: [
+         {loader: "style-loader"},
+         {loader: 'css-loader', options:{url: false}}
+        ]
+      }
     ],
   },
   resolve: {
