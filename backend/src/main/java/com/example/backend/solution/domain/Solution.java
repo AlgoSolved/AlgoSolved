@@ -21,7 +21,24 @@ public class Solution extends BaseTimeEntity {
   @JoinColumn(name = "github_repository_id")
   private GithubRepository githubRepository;
 
+  private String language;
+
+  @Column(name = "source_code")
+  private String sourceCode;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "problem_id")
   private Problem problem;
+
+  public Solution(
+    GithubRepository githubRepository,
+    String language,
+    String sourceCode,
+    Problem problem
+  ) {
+      this.githubRepository = githubRepository;
+      this.language = language;
+      this.sourceCode = sourceCode;
+      this.problem = problem;
+  }
 }

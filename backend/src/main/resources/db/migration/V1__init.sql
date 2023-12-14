@@ -5,7 +5,7 @@ CREATE TABLE users
     github_url        VARCHAR(255) NOT NULL,
     profile_image_url VARCHAR(255) NOT NULL,
     username          VARCHAR(255) NOT NULL,
-    roles             VARCHAR(255) NOT NULL,
+    roles             VARCHAR(255) NOT NULL DEFAULT '',
     created_at        timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at        timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     deleted_at        timestamp(6)
@@ -19,7 +19,7 @@ CREATE TABLE github_repositories
     user_id    BIGINT       NOT NULL,
     created_at timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT repositories_user_id_fk FOREIGN KEY (user_id) REFERENCES users (id)
+    CONSTRAINT github_repositories_user_id_fk FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
 CREATE TABLE providers
@@ -62,6 +62,8 @@ CREATE TABLE solutions
     id                   BIGSERIAL PRIMARY KEY,
     github_repository_id BIGINT       NOT NULL,
     problem_id           BIGINT       NOT NULL,
+    language             VARCHAR(64) NOT NULL,
+    source_code          TEXT         NOT NULL,
     created_at           timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at           timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT solutions_github_repository_id_fk FOREIGN KEY (github_repository_id) REFERENCES github_repositories (id),
