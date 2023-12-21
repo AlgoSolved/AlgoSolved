@@ -8,7 +8,7 @@ start_dev_server() {
 }
 
 start_prod_server() {
-  ./gradlew bootRun -Pprofile=prod
+  ./gradlew bootRun -Dspring.profiles.active=dev
 }
 
 start_server() {
