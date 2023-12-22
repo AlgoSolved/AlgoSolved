@@ -54,6 +54,9 @@ services:
     ports:
       - "3000:3000"
     restart: always
+    volumes:
+      - ./frontend:/usr/app/frontend
+
     depends_on:
       - backend
     networks:
