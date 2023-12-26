@@ -16,6 +16,7 @@ import javax.websocket.server.PathParam;
 @RestController
 @RequiredArgsConstructor
 public class SolutionController {
+	// TODO: 테스트 구현 필요
 	private final SolutionService solutionService;
 
 	@GetMapping("/solutions")
