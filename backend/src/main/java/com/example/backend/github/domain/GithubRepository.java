@@ -3,7 +3,9 @@ package com.example.backend.github.domain;
 import com.example.backend.common.BaseTimeEntity;
 import com.example.backend.solution.domain.Solution;
 import com.example.backend.user.domain.User;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -14,8 +16,8 @@ import java.util.List;
 @Getter
 @Entity
 @Table(name = "github_repositories")
+@NoArgsConstructor
 public class GithubRepository extends BaseTimeEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,4 +32,11 @@ public class GithubRepository extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "githubRepository")
     private List<Solution> solutions = new ArrayList<>();
+
+    @Builder
+    public GithubRepository(User user, String url, String token) {
+        this.user = user;
+        this.url = url;
+        this.token = token;
+    }
 }
