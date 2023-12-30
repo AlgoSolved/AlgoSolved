@@ -3,18 +3,29 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.19",
+    "@mui/material": "^5.14.20",
+    "@mui/styled-engine-sc": "^6.0.0-alpha.7",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@types/styled-components": "^5.1.34",
+    "axios": "^1.6.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.1",
     "react-scripts": "^5.0.1",
+    "styled-components": "^6.1.1",
     "typescript": "^5.2.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
+    "start:dev": "cp env.dev ./.env && react-scripts start",
     "build": "react-scripts build",
+    "build:dev": "cp env.dev ./.env && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "coverage": "react-scripts test --env=jsdom --watchAll=false --coverage",
@@ -41,13 +52,14 @@
     ]
   },
   "devDependencies": {
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-prettier": "^5.0.1",
-    "html-webpack-plugin": "^5.5.3",
     "@types/jest": "^29.5.8",
     "@types/node": "^20.9.2",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
+    "css-loader": "^6.8.1",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "html-webpack-plugin": "^5.5.3",
     "prettier": "3.1.0",
     "ts-loader": "^9.5.1",
     "webpack": "^5.89.0",
@@ -58,5 +70,6 @@
     "react-scripts": {
       "typescript": "^5"
     }
-  }
+  },
+  "proxy": "http://127.0.0.1:8080/"
 }
