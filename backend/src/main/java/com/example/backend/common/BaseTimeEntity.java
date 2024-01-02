@@ -23,7 +23,6 @@ public abstract class BaseTimeEntity {
     @Column(name = "created_at")
     @JsonFormat(shape = Shape.STRING)
     private LocalDateTime createdAt;
-
     @LastModifiedDate
     @Column(name = "updated_at")
     @JsonFormat(shape = Shape.STRING)
