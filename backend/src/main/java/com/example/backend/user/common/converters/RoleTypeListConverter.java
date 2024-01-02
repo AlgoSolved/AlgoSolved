@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.Collections;
 import javax.persistence.AttributeConverter;
 import java.io.IOException;
 import java.util.List;
@@ -27,10 +28,9 @@ public class RoleTypeListConverter implements AttributeConverter<List<Role>, Str
     @Override
     public List<Role> convertToEntityAttribute(String dbData) {
         try {
-            return mapper.readValue(dbData, new TypeReference<>() {
-            });
+            return mapper.readValue(dbData, new TypeReference<>() {});
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Error converting JSON to List<Role>", e);
         }
     }
 }
