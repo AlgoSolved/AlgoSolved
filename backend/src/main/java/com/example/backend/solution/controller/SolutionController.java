@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.websocket.server.PathParam;
-
 @RestController
 @RequiredArgsConstructor
 public class SolutionController {
@@ -30,7 +28,7 @@ public class SolutionController {
 
 	@GetMapping("/solutions/{id}")
 	public ResponseEntity<Object> getSolutionById(
-		@PathParam(value = "id") @PathVariable Long id
+		@PathVariable("id") Long id
 	) {
 		Solution solution = solutionService.getSolutionById(id);
 		return new ResponseHandler().solution(solution);

@@ -13,13 +13,20 @@ import java.util.Map;
 
 public class ResponseHandler {
 	public ResponseEntity<Object> solutionsWithUser(Page<Solution> solutions) {
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> response = new HashMap<String, Object>();
+		if (solutions.isEmpty()) {
+			response.put("page", 0);
+			response.put("totalPages", 0);
+			response.put("elements", new JSONArray());
+			return new ResponseEntity<Object> (response, HttpStatus.OK);
+		}
+
 		int page = solutions.getPageable().getPageNumber();
 		int totalPages = solutions.getTotalPages();
 		List<Solution> solutionElements = solutions.getContent();
 
-		map.put("page", page);
-		map.put("totalPages", totalPages);
+		response.put("page", page);
+		response.put("totalPages", totalPages);
 
 		JSONArray elements = new JSONArray();
 		for (Solution solution : solutionElements) {
@@ -31,20 +38,20 @@ public class ResponseHandler {
 			obj.put("repositoryUrl", solution.getGithubRepository().getUrl());
 			elements.add(obj);
 		}
-		map.put("elements", elements);
+		response.put("elements", elements);
 
-		return new ResponseEntity<Object> (map, HttpStatus.OK);
+		return new ResponseEntity<Object> (response, HttpStatus.OK);
 	}
 
 	public ResponseEntity<Object> solution(Solution solution) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("id", solution.getId());
-		map.put("problemProvider", solution.getProblem().getProvider().getName());
-		map.put("problemTitle", solution.getProblem().getTitle());
-		map.put("language", solution.getLanguage());
-		map.put("sourceCode", solution.getSourceCode());
-		map.put("createdAt", solution.getCreatedAt());
-		map.put("repositoryUrl", solution.getGithubRepository().getUrl());
-		return new ResponseEntity<Object> (map, HttpStatus.OK);
+		Map<String, Object> response = new HashMap<String, Object>();
+		response.put("id", solution.getId());
+		response.put("problemProvider", solution.getProblem().getProvider().getName());
+		response.put("problemTitle", solution.getProblem().getTitle());
+		response.put("language", solution.getLanguage());
+		response.put("sourceCode", solution.getSourceCode());
+		response.put("createdAt", solution.getCreatedAt());
+		response.put("repositoryUrl", solution.getGithubRepository().getUrl());
+		return new ResponseEntity<Object> (response, HttpStatus.OK);
 	}
 }
