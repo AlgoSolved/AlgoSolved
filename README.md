@@ -22,5 +22,11 @@ DB 데이터 덤프파일은 backend/db_dump_files 에 sql 포맷으로 있습�
 ./scripts/db_dump.sh
 ```
 
+## Test
+```bash
+# backend container 를 띄운 다음 아래 커맨드를 실행합니다
+docker exec -it backend ./gradlew test
+```
+
 ## TODO
 - DB 백업 파일위치를 S3 로 옮길것
