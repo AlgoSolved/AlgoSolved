@@ -7,6 +7,8 @@ import com.example.backend.solution.dto.response.SolutionsResponse;
 import com.example.backend.solution.service.SolutionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,12 +26,17 @@ public class SolutionController {
 
 	@GetMapping("/solutions")
 	public ResponseEntity<SolutionsResponse> getAllSolutions(
-		@RequestParam(value = "page", defaultValue = "0") int page,
+		@PageableDefault(size = Solution.PER_PAGE) Pageable pageable,
 		@RequestParam(value = "order", defaultValue = "desc") String order
 	) {
 		int size = 10;
-		Page<Solution> allSolutions = solutionService.getAllSolutions(page, order);
-		PageInfo pageInfo = new PageInfo(page, size, allSolutions.getTotalPages(), allSolutions.getTotalElements());
+		Page<Solution> allSolutions = solutionService.getAllSolutions(pageable, order);
+		PageInfo pageInfo = new PageInfo(
+			allSolutions.getPageable().getPageNumber(),
+			size,
+			allSolutions.getTotalPages(),
+			allSolutions.getTotalElements()
+		);
 
 		List<SolutionResponse> solutionResponses = allSolutions.stream().map(SolutionResponse::from).toList();
 

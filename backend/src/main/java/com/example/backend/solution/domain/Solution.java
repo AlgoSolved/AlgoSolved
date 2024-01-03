@@ -15,6 +15,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter @Setter
 public class Solution extends BaseTimeEntity {
+  public static final int PER_PAGE = 10;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -13,10 +13,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SolutionService {
 	private final SolutionRepository solutionRepository;
-	private final int perPage = 10;
 
-	public Page<Solution> getAllSolutions(int page, String order) {
-		Pageable pageRequest = PageRequest.of(page, perPage, Sort.by(Sort.Direction.fromString(order), "id"));
+	public Page<Solution> getAllSolutions(Pageable pageable, String order) {
+		Pageable pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.Direction.fromString(order), "id");
 		Page<Solution> allSolutions =  solutionRepository.findAll(pageRequest);
 		return allSolutions;
 	}
