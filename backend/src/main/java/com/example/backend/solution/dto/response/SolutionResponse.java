@@ -7,6 +7,7 @@ import lombok.Builder;
 public record SolutionResponse(
 	Long id,
 	String problemProvider,
+	Long problemId,
 	String problemTitle,
 	String repositoryUrl
 ) {
@@ -15,6 +16,7 @@ public record SolutionResponse(
 		return SolutionResponse.builder()
 			.id(solution.getId())
 			.problemProvider(solution.getProblem().getProvider().getName())
+			.problemId(solution.getProblem().getId())
 			.problemTitle(solution.getProblem().getTitle())
 			.repositoryUrl(solution.getGithubRepository().getUrl())
 			.build();
