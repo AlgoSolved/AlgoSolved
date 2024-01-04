@@ -452,7 +452,7 @@ COPY public.solutions (id, github_repository_id, problem_id, language, source_co
 --
 
 COPY public.users (id, name, github_url, profile_image_url, username, roles, created_at, updated_at, deleted_at) FROM stdin;
-1	장기하	https://github.com/giha	https://i.namu.wiki/i/ZnBMAAGJaiFKqDmASXCt-977Xuq6gLA-G8AsD4K1BKCVBEzrjISoW9QyfcSKPnacwuBpCGSSyBtCJv8E-UocNQ.webp	giha0123	''	2023-12-12 22:09:29.365717	2023-12-12 22:09:29.365717	\N
+1	장기하	https://github.com/giha	https://i.namu.wiki/i/ZnBMAAGJaiFKqDmASXCt-977Xuq6gLA-G8AsD4K1BKCVBEzrjISoW9QyfcSKPnacwuBpCGSSyBtCJv8E-UocNQ.webp	giha0123	["ADMIN"]	2023-12-12 22:09:29.365717	2023-12-12 22:09:29.365717	\N
 \.
 
 
