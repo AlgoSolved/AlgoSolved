@@ -1,29 +1,30 @@
 package com.example.backend.user.domain;
 
-
-import com.example.backend.user.common.converters.RoleTypeListConverter;
-import com.example.backend.user.common.enums.Role;
 import com.example.backend.common.BaseTimeEntity;
 import com.example.backend.github.domain.GithubRepository;
+import com.example.backend.user.common.converters.RoleTypeListConverter;
+import com.example.backend.user.common.enums.Role;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.*;
 
 @Getter
 @Setter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Where(clause = "deleted_at IS NULL")
-@SQLDelete(sql="UPDATE users SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLDelete(sql = "UPDATE users SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 @Table(name = "users")
 public class User extends BaseTimeEntity {
 
