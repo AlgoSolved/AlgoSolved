@@ -1,7 +1,6 @@
 package com.example.backend.dto;
 
-import com.example.backend.common.enums.ExceptionStatus;
-import lombok.Builder;
+import com.example.backend.common.exception.ExceptionStatus;
 import lombok.Getter;
 
 
@@ -14,5 +13,4 @@ public class ErrorDto {
         this.code = exceptionStatus.getCode();
         this.message = exceptionStatus.getMessage();
     }
-
 }
