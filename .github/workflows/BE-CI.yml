@@ -2,22 +2,33 @@ name: BE Test
 
 on:
   pull_request:
-      branches: [ "main" ]
+    branches: [ "main" ]
 
 jobs:
   lint:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
 
-      - name: Google Java Formatting
-        uses: axel-op/googlejavaformat-action@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
         with:
-          args: "--replace"
-          skip-commit: true
+          distribution: 'zulu'
+          java-version: '17'
+          cache: gradle
+
+      - name: Download google-java-format
+        run: |
+          curl -L -o google-java-format.jar https://github.com/google/google-java-format/releases/download/v1.19.1/google-java-format-1.19.1-all-deps.jar
+
+      - name: Check Java formatting
+        run: |
+          files=$(git ls-tree -r HEAD --name-only src | grep -E '.*\.java')
+          java -jar google-java-format.jar --dry-run --aosp --set-exit-if-changed $files
 
   test:
     runs-on: ubuntu-latest
