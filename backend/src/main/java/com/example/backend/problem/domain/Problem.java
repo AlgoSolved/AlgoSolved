@@ -2,7 +2,6 @@ package com.example.backend.problem.domain;
 
 import com.example.backend.common.BaseTimeEntity;
 import com.example.backend.solution.domain.Solution;
-import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

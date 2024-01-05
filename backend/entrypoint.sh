@@ -2,13 +2,13 @@
 
 start_dev_server() {
   (sleep 30; ./gradlew buildAndReload --continuous -PskipDownload=true -x Test) &
-  ./gradlew bootRun -PskipDownload=true -Dspring.profiles.active=dev
+  ./gradlew bootRun -PskipDownload=true -Dspring.profiles.active=dev -Dfile.encoding=UTF-8
 
 
 }
 
 start_prod_server() {
-  ./gradlew bootRun -Dspring.profiles.active=dev
+  ./gradlew bootRun -Dspring.profiles.active=dev -Dfile.encoding=UTF-8
 }
 
 start_server() {
