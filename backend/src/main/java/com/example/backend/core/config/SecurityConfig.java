@@ -13,19 +13,20 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  private final OAuthService oAuthService;
+    //  private final OAuthService oAuthService;
+    private final OAuthService oAuthService;
 
-  @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http.cors()
-        .and()
-        .csrf().disable()
-        .oauth2Login()
-        .authorizationEndpoint()
-        .baseUri("/login")
-        .and()
-        .userInfoEndpoint()
-        .userService(oAuthService);
-    return http.build();
-  }
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.cors()
+                .and()
+                .csrf().disable()
+                .oauth2Login()
+                .authorizationEndpoint()
+                .baseUri("/login")
+                .and()
+                .userInfoEndpoint()
+                .userService(oAuthService);
+        return http.build();
+    }
 }
