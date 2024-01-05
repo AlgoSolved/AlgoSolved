@@ -1,6 +1,5 @@
 package com.example.backend.problem.domain;
 
-import com.example.backend.problem.domain.Problem;
 import lombok.*;
 
 import javax.persistence.*;
@@ -8,7 +7,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "programmers_problem_details")
 @Getter
-public class ProgrammersProblemDetail  {
+public class ProgrammersProblemDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
