@@ -1,8 +1,10 @@
 package com.example.backend.solution.controller;
 
-import com.example.backend.common.response.Response;
+import com.example.backend.common.exception.ResponseStatus;
+import com.example.backend.common.response.BaseResponse;
 import com.example.backend.solution.dto.SolutionDTO;
 import com.example.backend.solution.service.SolutionService;
+import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,15 +15,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/solutions")
+@RequestMapping("v1/solutions")
 public class SolutionController {
 
   private final SolutionService solutionService;
 
   @GetMapping("/recent-list")
   public ResponseEntity<List<SolutionDTO>> getRecentSolutions() {
-    List<SolutionDTO> solutionDTOList = solutionService.getRecentSolutions();
+    List<SolutionDTO> solutionAllList = solutionService.getRecentSolutions();
 
-    return new ResponseEntity(Response.success(solutionDTOList), HttpStatus.OK);
+    if (solutionAllList.isEmpty()) {
+      return new ResponseEntity(
+          BaseResponse.success(ResponseStatus.SUCCESS_EMPTY_VALUE, Collections.emptyList()),
+          HttpStatus.OK);
+    } else {
+      return new ResponseEntity(
+          BaseResponse.success(ResponseStatus.SUCCESS, solutionAllList),
+          HttpStatus.OK);
+    }
   }
 }
