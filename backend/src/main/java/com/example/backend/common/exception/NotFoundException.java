@@ -4,11 +4,12 @@ import lombok.Getter;
 
 @Getter
 public class NotFoundException extends RuntimeException {
-    private ExceptionStatus exceptionStatus;
+
+  private ResponseStatus responseStatus;
 
 
-    public NotFoundException(ExceptionStatus exceptionStatus) {
-        this.exceptionStatus = exceptionStatus;
-    }
+  public NotFoundException(ResponseStatus responseStatus) {
+    this.responseStatus = responseStatus;
+  }
 
 }
