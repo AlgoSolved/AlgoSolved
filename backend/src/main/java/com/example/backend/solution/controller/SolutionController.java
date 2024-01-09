@@ -1,7 +1,7 @@
 package com.example.backend.solution.controller;
 
-import com.example.backend.common.exception.ResponseStatus;
 import com.example.backend.common.response.BaseResponse;
+import com.example.backend.common.response.ResponseStatus;
 import com.example.backend.solution.dto.SolutionDTO;
 import com.example.backend.solution.service.SolutionService;
 import java.util.Collections;

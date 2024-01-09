@@ -1,6 +1,5 @@
 package com.example.backend.common.response;
 
-import com.example.backend.common.exception.ResponseStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
