@@ -1,40 +1,35 @@
 package com.example.backend.common.response;
 
+import com.example.backend.common.exception.ResponseStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class Response<T> {
+public class BaseResponse<T> {
 
-  private int code;
+  private String code;
   private String message;
   private T data;
 
   @Builder
-  public Response(ResponseType responseType, T data) {
-    this.code = responseType.getCode();
-    this.message = responseType.getMessage();
+  public BaseResponse(ResponseStatus responseStatus, T data) {
+    this.code = responseStatus.getCode();
+    this.message = responseStatus.getMessage();
     this.data = data;
   }
 
-  public static <T> Response<T> success() {
-    return Response.<T>builder()
-        .responseType(ResponseType.SUCCESS)
+  public static <T> BaseResponse<T> success(ResponseStatus responseStatus) {
+    return BaseResponse.<T>builder()
+        .responseStatus(responseStatus)
         .build();
   }
 
-  public static <T> Response<T> success(T data) {
-    return Response.<T>builder()
-        .responseType(ResponseType.SUCCESS)
+  public static <T> BaseResponse<T> success(ResponseStatus responseStatus, T data) {
+    return BaseResponse.<T>builder()
+        .responseStatus(responseStatus)
         .data(data)
-        .build();
-  }
-
-  public static Response failure() {
-    return Response.builder()
-        .responseType(ResponseType.FAILURE)
         .build();
   }
 }
