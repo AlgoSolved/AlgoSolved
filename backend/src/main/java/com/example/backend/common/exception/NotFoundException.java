@@ -1,16 +1,16 @@
 package com.example.backend.common.exception;
 
-import com.example.backend.common.enums.ExceptionStatus;
+import com.example.backend.common.response.ResponseStatus;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 @Getter
 public class NotFoundException extends RuntimeException {
-    private ExceptionStatus exceptionStatus;
+
+  private ResponseStatus responseStatus;
 
 
-    public NotFoundException(ExceptionStatus exceptionStatus) {
-        this.exceptionStatus = exceptionStatus;
-    }
+  public NotFoundException(ResponseStatus responseStatus) {
+    this.responseStatus = responseStatus;
+  }
 
 }
