@@ -1,5 +1,8 @@
 package com.example.backend.common;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,9 +24,11 @@ public abstract class BaseTimeEntity {
 
     @CreatedDate
     @Column(name = "created_at")
+    @JsonFormat(shape = Shape.STRING)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
     @Column(name = "updated_at")
+    @JsonFormat(shape = Shape.STRING)
     private LocalDateTime updatedAt;
 }

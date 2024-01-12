@@ -1,19 +1,21 @@
-import NavBar from '../components/common/Nav';
-import Footer from '../components/common/Footer';
-import Banner from '../components/common/Banner';
-import CurrentList from '../components/home/CurrentList';
-
-
+import NavBar from "../components/common/Nav";
+import Footer from "../components/common/Footer";
+import Banner from "../components/common/Banner";
+import CurrentList from "../components/home/CurrentList";
 
 const Home = () => {
-    return (
-        <div>
-            <NavBar />
-            <Banner />
-            <CurrentList />
-            <Footer />
-        </div>
-    );
-}
+  return (
+    <div>
+      <div>
+        <NavBar />
+        <Banner />
+        <CurrentList />
+      </div>
+      <div>
+        <Footer />
+      </div>
+    </div>
+  );
+};
 
 export default Home;

@@ -4,13 +4,24 @@ import com.example.backend.common.BaseTimeEntity;
 import com.example.backend.github.domain.GithubRepository;
 import com.example.backend.problem.domain.Problem;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "solutions")
+@NoArgsConstructor
 @Getter
 @Setter
 public class Solution extends BaseTimeEntity {
@@ -32,6 +43,7 @@ public class Solution extends BaseTimeEntity {
     @JoinColumn(name = "problem_id")
     private Problem problem;
 
+    @Builder
     public Solution(
             GithubRepository githubRepository,
             String language,

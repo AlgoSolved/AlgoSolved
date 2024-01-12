@@ -31,7 +31,7 @@ public class RoleTypeListConverter implements AttributeConverter<List<Role>, Str
         try {
             return mapper.readValue(dbData, new TypeReference<>() {});
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Error converting JSON to List<Role>", e);
         }
     }
 }
