@@ -1,6 +1,5 @@
 package com.example.backend.dto;
 
-
 import com.example.backend.common.response.ResponseStatus;
 
 import lombok.Getter;
