@@ -39,3 +39,6 @@ application-prod.properties
 
 ### Spring Boot devtools ###
 .restart
+
+### Google Java Format
+backend/google-java-format.jar
