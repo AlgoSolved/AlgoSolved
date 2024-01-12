@@ -1,7 +1,7 @@
 import NavBar from "../components/common/Nav";
 import Footer from "../components/common/Footer";
 import Banner from "../components/common/Banner";
-import CurrentList from "../components/home/CurrentList";
+import SolutionList from "../components/home/SolutionList";
 
 const Home = () => {
   return (
@@ -9,7 +9,7 @@ const Home = () => {
       <div>
         <NavBar />
         <Banner />
-        <CurrentList />
+        <SolutionList />
       </div>
       <div>
         <Footer />

@@ -4,22 +4,9 @@ import { Container, List, ListItem, ListItemText } from "@mui/material";
 import { solutionList } from "../../apis/v1/solutions";
 import { Solution } from "../../types/solution/Solution";
 
-// const dummyDataList : Solution[] = [];
-
-// for(let idx = 0; idx < 10; idx++){
-//     dummyDataList.push({
-//         id: idx + 1,
-//         title: 'dummy',
-//         provider: 'BOJ',
-//         number: idx + 100,
-//         username: 'test1'
-//     });
-// }
-
 const CurrentList = () => {
   const [solution_list, setSolutionList] = useState<Solution[] | null>(null);
 
-  // TODO: api 연동
   useEffect(() => {
     const initSolutionList = async () => {
       const list = await solutionList();
