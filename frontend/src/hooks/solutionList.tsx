@@ -3,12 +3,12 @@ import { Solution } from "@/types/solution/Solution";
 import { useEffect, useState } from "react";
 
 export default function useSolutionList() {
-  const [solution_list, setSolutionList] = useState<Solution[] | null>(null);
+  const [solution_list, setSolutionList] = useState<Solution[] | undefined>([]);
 
   useEffect(() => {
     const initSolutionList = async () => {
       const list = await solutionList();
-      setSolutionList(list || null);
+      setSolutionList(list?.body?.data);
     };
     initSolutionList();
   }, []);
