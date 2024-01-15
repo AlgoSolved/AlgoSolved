@@ -1,6 +1,7 @@
 export interface BaseResponse<T> {
   code: string;
   data: T;
+  message: string;
   error?: {
     code: string;
     message: string;
