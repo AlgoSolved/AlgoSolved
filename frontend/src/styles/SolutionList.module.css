@@ -1,0 +1,13 @@
+.title {
+  width: fit-content;
+  font-weight: bold;
+}
+
+.blank_list {
+  text-align: left;
+}
+
+.list_container {
+  width: 100%;
+  background-color: "background.paper";
+}

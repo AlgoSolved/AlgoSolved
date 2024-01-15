@@ -2,10 +2,10 @@
   "compilerOptions": {
     // "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
+      "@/*": ["./src/*"],
+      "style/*": ["./src/style/*"]
     },
+    "plugins": [{ "name": "typescript-plugin-css-modules" }],
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
     "module": "ESNext",
@@ -23,6 +23,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["src","src/**/*", "**/*.ts", "**/*.tsx"],
+  "include": ["src", "src/**/*", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules", "build"]
 }

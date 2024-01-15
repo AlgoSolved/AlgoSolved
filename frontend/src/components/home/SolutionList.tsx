@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Container, List, ListItem, ListItemText } from "@mui/material";
 import { solutionList } from "../../apis/v1/solutions";
 import { Solution } from "../../types/solution/Solution";
+import styles from "../../styles/SolutionList.module.css";
 
 const CurrentList = () => {
   const [solution_list, setSolutionList] = useState<Solution[] | null>(null);
@@ -18,13 +19,11 @@ const CurrentList = () => {
   return (
     <div>
       <Container>
-        <div style={{ width: "fit-content", textDecoration: "bold" }}>
-          최근 문제 풀이
-        </div>
+        <div className={styles.title}>최근 문제 풀이</div>
         {solution_list === null ? (
-          <div style={{ textAlign: "left" }}>최근 문제 풀이가 없습니다.</div>
+          <div className={styles.blank_list}>최근 문제 풀이가 없습니다.</div>
         ) : (
-          <List sx={{ width: "100%", bgcolor: "background.paper" }}>
+          <List className={styles.list_container}>
             {solution_list?.map((solution) => (
               <ListItem
                 key={solution.id}

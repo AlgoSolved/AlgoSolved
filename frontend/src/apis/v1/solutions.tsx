@@ -8,8 +8,8 @@ export const solutionList = async () => {
       await ApiClient.get<Solution[]>(`api/v1/solutions`);
     return data;
   } catch (error: AxiosErrorClass | any) {
-    if(error.response.data) {
-        
+    if (error.response.data) {
+      console.log(error);
     }
   }
 };
