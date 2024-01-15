@@ -8,18 +8,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ErrorResponse {
 
-  private String code;
-  private String message;
+    private String code;
+    private String message;
 
-  @Builder
-  public ErrorResponse(ResponseStatus responseStatus) {
-    this.code = responseStatus.getCode();
-    this.message = responseStatus.getMessage();
-  }
+    @Builder
+    public ErrorResponse(ResponseStatus responseStatus) {
+        this.code = responseStatus.getCode();
+        this.message = responseStatus.getMessage();
+    }
 
-  public static BaseResponse failure(ResponseStatus responseStatus) {
-    return BaseResponse.builder()
-        .responseStatus(responseStatus)
-        .build();
-  }
+    public static BaseResponse failure(ResponseStatus responseStatus) {
+        return BaseResponse.builder().responseStatus(responseStatus).build();
+    }
 }
