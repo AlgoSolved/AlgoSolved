@@ -3,6 +3,7 @@ package com.example.backend.problem.domain;
 import com.example.backend.common.BaseTimeEntity;
 import com.example.backend.solution.domain.Solution;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -36,4 +37,11 @@ public class Problem extends BaseTimeEntity {
 
     @OneToOne(mappedBy = "problem", fetch = FetchType.LAZY)
     private BaekjoonProblemDetail baekjoonProblemDetail;
+
+    @Builder
+    public Problem(String title, String content, Provider provider) {
+        this.title = title;
+        this.content = content;
+        this.provider = provider;
+    }
 }
