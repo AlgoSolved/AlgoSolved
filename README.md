@@ -34,3 +34,13 @@ DB 데이터 덤프파일은 backend/db_dump_files 에 sql 포맷으로 있습�
 ## TODO
 - DB 백업 파일위치를 S3 로 옮길것
 
+## 포맷팅
+```
+java -jar google-java-format.jar --replace **/*.java
+```
+
+## 테스트
+```
+./gradlew test
+```
+
