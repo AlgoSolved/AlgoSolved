@@ -39,6 +39,7 @@ dependencies {
 	developmentOnly "org.springdoc:springdoc-openapi-ui:1.5.12"
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'net.datafaker:datafaker:2.1.0'
 
 	// dotenv
 	implementation "me.paulschwarz:spring-dotenv:4.0.0"
@@ -50,6 +51,9 @@ tasks.named('bootBuildImage') {
 
 tasks.named('test') {
 	useJUnitPlatform()
+	testLogging {
+		events "failed", "passed", "skipped", "standardError","standardOut", "started"
+	}
 }
 
 task getDeps(type: Copy) {
