@@ -39,9 +39,9 @@ jobs:
       postgres:
         image: postgres:15-alpine
         env:
-          POSTGRES_DB: algosolved
+          POSTGRES_DB: algosolved-test
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
         options: >-
