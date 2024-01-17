@@ -1,7 +1,7 @@
-import { Solution } from "@/types/solution/Solution";
+import { Solution } from "../../types/solution/Solution";
 import { ApiClient } from "../ApiClient";
-import { AxiosErrorClass } from "@/types/common/error/Error";
-import { ApiResponseProps } from "@/types/common/BaseResponse";
+import { AxiosErrorClass } from "../../types/common/error/Error";
+import { ApiResponseProps } from "../../types/common/BaseResponse";
 
 export const solutionList = async () => {
   try {

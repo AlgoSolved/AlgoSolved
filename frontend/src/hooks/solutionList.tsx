@@ -1,5 +1,5 @@
 import { solutionList } from "../apis/v1/solutions";
-import { Solution } from "@/types/solution/Solution";
+import { Solution } from "../types/solution/Solution";
 import { useEffect, useState } from "react";
 
 export default function useSolutionList() {
