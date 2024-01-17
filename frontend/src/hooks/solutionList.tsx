@@ -7,8 +7,8 @@ export default function useSolutionList() {
 
   useEffect(() => {
     const initSolutionList = async () => {
-      const list = await solutionList();
-      setSolutionList(list?.body?.data);
+      const data = await solutionList();
+      setSolutionList(data);
     };
     initSolutionList();
   }, []);
