@@ -11,7 +11,7 @@ export const solutionList = async () => {
 
     return res.body.data;
   } catch (error: AxiosErrorClass | any) {
-    if (error.response.data) {
+    if (error.data) {
       console.log(error);
     }
   }
