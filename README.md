@@ -36,7 +36,7 @@ DB 데이터 덤프파일은 backend/db_dump_files 에 sql 포맷으로 있습�
 
 ## 포맷팅
 ```
-java -jar google-java-format.jar --replace **/*.java
+java -jar google-java-format.jar --aosp --replace **/*.java
 ```
 
 ## 테스트
