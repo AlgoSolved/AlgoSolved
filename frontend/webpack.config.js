@@ -44,10 +44,10 @@ const config = {
         loaders: ["style", "css"],
         include: `${__dirname}/public/css`,
         use: [
-         {loader: "style-loader"},
-         {loader: 'css-loader', options:{url: false}}
-        ]
-      }
+          { loader: "style-loader" },
+          { loader: "css-loader", options: { url: false } },
+        ],
+      },
     ],
   },
   resolve: {
