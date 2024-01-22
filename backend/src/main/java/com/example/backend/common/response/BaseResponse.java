@@ -8,22 +8,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BaseResponse<T> {
 
-    private String code;
-    private String message;
-    private T data;
+  private String code;
+  private String message;
+  private T data;
 
-    @Builder
-    public BaseResponse(ResponseStatus responseStatus, T data) {
-        this.code = responseStatus.getCode();
-        this.message = responseStatus.getMessage();
-        this.data = data;
-    }
+  @Builder
+  public BaseResponse(final String code, final String message, T data) {
+    this.code = code;
+    this.message = message;
+    this.data = null;
+  }
 
-    public static <T> BaseResponse<T> success(ResponseStatus responseStatus) {
-        return BaseResponse.<T>builder().responseStatus(responseStatus).build();
-    }
+  public static <T> BaseResponse<T> success(final String code, final String message) {
+    return success(code, message, null);
+  }
 
-    public static <T> BaseResponse<T> success(ResponseStatus responseStatus, T data) {
-        return BaseResponse.<T>builder().responseStatus(responseStatus).data(data).build();
-    }
+  public static <T> BaseResponse<T> success(final String code, final String message, final T data) {
+    return new BaseResponse<>(code, message, data);
+  }
+
+
 }
