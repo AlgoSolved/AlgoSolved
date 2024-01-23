@@ -8,13 +8,13 @@ import style from "../styles/pages/Home.module.css";
 
 const Home = () => {
   return (
-    <div className={style.wrapper}>
-      <div className={style.content}>
+    <div>
+      <div className={style.wrapper}>
         <NavBar />
         <Banner />
         <SolutionList list={useSolutionList()} />
       </div>
-      <div>
+      <div className={style.footer}>
         <Footer />
       </div>
     </div>
