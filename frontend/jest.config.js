@@ -6,12 +6,6 @@ module.exports = {
   testMatch: ["**/?(*)+(spec).tsx"],
   resetMocks: true,
   clearMocks: true,
-
-  // moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
-  //   // rootDir is the root of the directory containing `jest config file` or the `package.json`
-  //   prefix: "<rootDir>",
-  // }),
-
   roots: ["<rootDir>"],
   transform: {
     "^.+\\.(t|j)sx?$": "ts-jest",
