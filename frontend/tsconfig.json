@@ -20,7 +20,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react", //https://stackoverflow.com/questions/56806193/jest-syntaxerror-unexpected-token
     "incremental": true
   },
   "include": ["src", "src/**/*", "**/*.ts", "**/*.tsx"],
