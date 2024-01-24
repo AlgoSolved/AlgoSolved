@@ -10,7 +10,7 @@ module.exports = {
   transform: {
     "^.+\\.(t|j)sx?$": "ts-jest",
   },
-  moduleFileExtensions: ["ts", "js", "tsx", "json", "node"],
+  moduleFileExtensions: ["ts", "js", "tsx", "json", "node", "css"],
   collectCoverage: true,
   clearMocks: true,
   coverageDirectory: "coverage",
