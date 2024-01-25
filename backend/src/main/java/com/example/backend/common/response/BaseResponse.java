@@ -13,17 +13,17 @@ public class BaseResponse<T> {
   private T data;
 
   @Builder
-  public BaseResponse(final String code, final String message, T data) {
+  public BaseResponse(String code, String message, T data) {
     this.code = code;
     this.message = message;
     this.data = null;
   }
 
-  public static <T> BaseResponse<T> success(final String code, final String message) {
-    return success(code, message, null);
+  public static <T> BaseResponse<T> success(String code, String message) {
+    return new BaseResponse<>(code, message, null);
   }
 
-  public static <T> BaseResponse<T> success(final String code, final String message, final T data) {
+  public static <T> BaseResponse<T> success(String code, String message, T data) {
     return new BaseResponse<>(code, message, data);
   }
 
