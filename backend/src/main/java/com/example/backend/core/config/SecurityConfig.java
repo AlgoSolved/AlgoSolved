@@ -24,7 +24,7 @@ public class SecurityConfig {
                 .disable()
                 .oauth2Login()
                 .authorizationEndpoint()
-                .baseUri("/login")
+                .baseUri("/api/login")
                 .and()
                 .userInfoEndpoint()
                 .userService(oAuthService);
