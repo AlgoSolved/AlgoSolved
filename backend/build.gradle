@@ -34,6 +34,9 @@ dependencies {
 	implementation 'org.flywaydb:flyway-core:5.2.0'
 	//runtimeOnly 'org.postgresql:postgresql'
 
+	implementation 'io.github.cdimascio:dotenv-java:3.0.0'
+	implementation 'org.kohsuke:github-api:1.318'
+
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly "org.springframework.boot:spring-boot-devtools"
 	developmentOnly "org.springdoc:springdoc-openapi-ui:1.5.12"
