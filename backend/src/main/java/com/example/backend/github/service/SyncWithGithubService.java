@@ -4,7 +4,6 @@ import com.example.backend.github.domain.GithubRepository;
 import com.example.backend.github.repository.GithubRepositoryRepository;
 import com.example.backend.lib.GithubClient;
 import com.example.backend.problem.repository.ProblemRepository;
-import com.example.backend.solution.domain.Solution;
 import com.example.backend.solution.repository.SolutionRepository;
 import com.example.backend.user.domain.User;
 import com.example.backend.user.repository.UserRepository;
@@ -56,23 +55,13 @@ public class SyncWithGithubService {
             String repo = githubRepository.getRepo();
 
             List<String> files = githubClient.getAllFiles(repo);
+            files = files.stream().filter(file -> file.endsWith(".py")).toList();
+            // TODO: solution 파일만 가져오도록 한다.
             files.forEach(
                     file -> {
-                        // TODO: solution 파일 이름 정규식으로 확인할 것
-                        if (file.endsWith("main.py")) {
-                            String sourceCode = githubClient.getContent(repo, file);
-                            Solution solution =
-                                    Solution.builder()
-                                            .githubRepository(githubRepository)
-                                            .language("python")
-                                            .sourceCode(sourceCode)
-                                            .problem(
-                                                    problemRepository
-                                                            .findById(2L)
-                                                            .get()) // dummy problem
-                                            .build();
-                            solutionRepository.save(solution);
-                        }
+                        String sourceCode = githubClient.getContent(repo, file);
+                        System.out.println(file);
+                        System.out.println(sourceCode);
                     });
             return true;
         } catch (Exception e) {

@@ -38,8 +38,6 @@ public class GithubRepositoryController {
     @PostMapping("/sync")
     public ResponseEntity<Boolean> sync(@RequestBody Map<String, Object> payload) {
         // TODO: 현재 유저와 동일한지 확인필요
-        // github repository 스키마 변경해야될 듯
-        // token 필요없을 듯
 
         Integer githubRepositoryId = (Integer) payload.get("githubRepositoryId");
 
