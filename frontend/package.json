@@ -30,7 +30,7 @@
     "build:dev": "cp env.dev ./.env && react-scripts build",
     "test": "jest -c jest.config.js",
     "eject": "react-scripts eject",
-    "coverage": "jest --coverage",
+    "coverage": "jest -c jest.config.js --coverage",
     "prettier": "prettier --write **/*.{ts,tsx}",
     "lint": "eslint --fix ./src/**/*.{js,ts,tsx}",
     "tsc": "tsc"
