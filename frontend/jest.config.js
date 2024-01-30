@@ -14,4 +14,12 @@ module.exports = {
   collectCoverage: true,
   clearMocks: true,
   coverageDirectory: "coverage",
+  testEnvironmentOptions: {
+    customExportConditions: [""],
+  },
+
+  //css unexpected token
+  moduleNameMapper: {
+    "\\.(css|less|scss|sass)$": "identity-obj-proxy",
+  },
 };
