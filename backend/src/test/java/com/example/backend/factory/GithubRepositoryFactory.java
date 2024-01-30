@@ -16,7 +16,7 @@ public class GithubRepositoryFactory {
     public GithubRepository createGithubRepository(TestEntityManager testEntityManager) {
         User user = userFactory.createUser(testEntityManager);
         GithubRepository githubRepository =
-                GithubRepository.builder().user(user).repo(faker.name().lastName()).build();
+                GithubRepository.builder().user(user).repo(user.getUsername()).build();
         githubRepository.setCreatedAt(LocalDateTime.now());
         githubRepository.setUpdatedAt(LocalDateTime.now());
         testEntityManager.persist(githubRepository);
