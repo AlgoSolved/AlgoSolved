@@ -1,9 +1,9 @@
 import React from "react";
 
 import { render, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom/extend-expect";
 import { rest } from "msw";
 
-import useSolutionList from "../../hooks/solutionList";
 import SolutionList from "../../components/home/SolutionList";
 
 describe("메인 페이지 통합테스트", () => {
@@ -22,14 +22,12 @@ describe("메인 페이지 통합테스트", () => {
       },
     );
 
-    const { container } = render(<SolutionList list={useSolutionList()} />);
+    const { container } = render(<SolutionList list={[]} />);
 
     await waitFor(() => {
-      expect(container).toHaveTextContent("최근 문제 풀이가 없습니다.");
+      expect(
+        container.getElementsByClassName("blank_list")[0].textContent,
+      ).toEqual("최근 문제 풀이가 없습니다.");
     });
   });
 });
-
-// function composeStories(): { SolutionComponent: any; } {
-//     throw new Error("Function not implemented.");
-// }
