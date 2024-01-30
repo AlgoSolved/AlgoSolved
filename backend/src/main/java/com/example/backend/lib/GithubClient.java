@@ -1,7 +1,11 @@
 package com.example.backend.lib;
 
+import com.example.backend.util.JWTGenerator;
+
 import io.github.cdimascio.dotenv.Dotenv;
 
+import org.kohsuke.github.GHAppInstallation;
+import org.kohsuke.github.GHAppInstallationToken;
 import org.kohsuke.github.GHTreeEntry;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
@@ -10,6 +14,13 @@ import java.util.List;
 
 public class GithubClient {
     private GitHub github;
+    private final String githubAppId = Dotenv.load().get("GITHUB_APP_ID");
+    private final String githubAppPrivateKeyPath =
+            Dotenv.load().get("GITHUB_APP_PRIVATE_FILE_PATH");
+    private final Long githubAppInstallationId =
+            Long.parseLong(Dotenv.load().get("GITHUB_APP_INSTALLATION_ID"));
+    private final long ttlMillis = 600000;
+    private JWTGenerator jwtGenerator = new JWTGenerator();
 
     public GithubClient() {
         try {
@@ -28,10 +39,20 @@ public class GithubClient {
         }
     }
 
+    public String getDefaultBranch(String repo) {
+        try {
+            return github.getRepository(repo).getDefaultBranch();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public List<String> getAllFiles(String repo) {
         try {
+            String defaultBranch = getDefaultBranch(repo);
             List<GHTreeEntry> ghTreeEntries =
-                    github.getRepository(repo).getTreeRecursive("master", 1).getTree();
+                    github.getRepository(repo).getTreeRecursive(defaultBranch, 1).getTree();
             List<String> result = ghTreeEntries.stream().map(GHTreeEntry::getPath).toList();
             return result;
 
@@ -51,50 +72,13 @@ public class GithubClient {
     }
 
     private GitHub buildGithub() throws Exception {
-        Dotenv dotenv = Dotenv.load();
-        String token = dotenv.get("GITHUB_TOKEN");
-        return new GitHubBuilder().withOAuthToken(token).build();
+        String jwtToken = jwtGenerator.createJWT(githubAppPrivateKeyPath, githubAppId, ttlMillis);
+        GitHub gitHubApp = new GitHubBuilder().withJwtToken(jwtToken).build();
+        GHAppInstallation appInstallation =
+                gitHubApp.getApp().getInstallationById(githubAppInstallationId);
+        GHAppInstallationToken appInstallationToken = appInstallation.createToken().create();
+        return new GitHubBuilder()
+                .withAppInstallationToken(appInstallationToken.getToken())
+                .build();
     }
-
-    // JWT token을 생성하는 메소드입니다
-    // 이후 personal token 이 아닌 Github App을 이용하여 API를 호출하도록 수정해야 합니다
-    //    private GitHub buildGithub() throws Exception {
-    //        String jwtToken = getJwtToken();
-    //        return new GitHubBuilder().withJwtToken(jwtToken).build();
-    //    }
-    //
-    //    private String getJwtToken() throws Exception {
-    //        String appId = System.getenv("GITHUB_APP_CLIENT_ID");
-    //        long ttlMillis = 600000;
-    //
-    //        KeyFactory factory = KeyFactory.getInstance("RSA");
-    //
-    //        FileReader keyReader = new FileReader("algosolved.private-key.pem");
-    //        PemReader pemReader = new PemReader(keyReader);
-    //
-    //        PemObject pemObject = pemReader.readPemObject();
-    //        byte[] content = pemObject.getContent();
-    //        PKCS8EncodedKeySpec privKeySpec = new PKCS8EncodedKeySpec(content);
-    //        PrivateKey privateKey = factory.generatePrivate(privKeySpec);
-    //
-    //
-    //        SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.RS256;
-    //
-    //        long nowMillis = System.currentTimeMillis();
-    //        Date now = new Date(nowMillis);
-    //
-    //        Key signingKey = privateKey;
-    //
-    //        JwtBuilder builder = Jwts.builder()
-    //            .issuedAt(now)
-    //            .issuer(appId)
-    //            .signWith(signingKey, signatureAlgorithm);
-    //
-    //        if (ttlMillis > 0) {
-    //            long expMillis = nowMillis + ttlMillis;
-    //            Date exp = new Date(expMillis);
-    //            builder.expiration(exp);
-    //        }
-    //        return builder.compact();
-    //    }
 }
