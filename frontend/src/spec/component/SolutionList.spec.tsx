@@ -2,27 +2,17 @@ import React from "react";
 
 import { render, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import { rest } from "msw";
 
+import { getBlankSolutionList } from "../../mock/api/solution_list";
+import { server } from "../../mock/server";
 import SolutionList from "../../components/home/SolutionList";
+import { solutionList } from "../../apis/v1/solutions";
 
 describe("메인 페이지 통합테스트", () => {
   it("solution list api 가 빈값일 때 풀이가 없다고 나온다.", async () => {
-    rest.get(
-      "api/v1/solutions/recent-list",
-      (_req: any, _res: any, ctx: any) => {
-        return ctx.json(
-          {
-            code: "4001",
-            data: [],
-            message: "",
-          },
-          { status: 200 },
-        );
-      },
-    );
+    server.use(getBlankSolutionList(true));
 
-    const { container } = render(<SolutionList list={[]} />);
+    const { container } = render(<SolutionList list={solutionList} />);
 
     await waitFor(() => {
       expect(

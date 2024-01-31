@@ -87,5 +87,8 @@
   },
   "jest": {
     "testEnvironment": "jsdom"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }
