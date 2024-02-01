@@ -1,8 +1,8 @@
 package com.example.backend.solution.controller;
 
 import com.example.backend.common.response.BaseResponse;
-import com.example.backend.common.response.ResponseStatus;
 import com.example.backend.solution.dto.SolutionDTO;
+import com.example.backend.solution.response.SolutionStatus;
 import com.example.backend.solution.service.SolutionService;
 
 import lombok.RequiredArgsConstructor;
@@ -30,11 +30,17 @@ public class SolutionController {
         if (solutionAllList.isEmpty()) {
             return new ResponseEntity(
                     BaseResponse.success(
-                            ResponseStatus.SUCCESS_EMPTY_VALUE, Collections.emptyList()),
+                            SolutionStatus.SUCCESS_EMPTY_VALUE.getCode(),
+                            SolutionStatus.SUCCESS_EMPTY_VALUE.getMessage(),
+                            Collections.emptyList()),
                     HttpStatus.OK);
         } else {
             return new ResponseEntity(
-                    BaseResponse.success(ResponseStatus.SUCCESS, solutionAllList), HttpStatus.OK);
+                    BaseResponse.success(
+                            SolutionStatus.SUCCESS.getCode(),
+                            SolutionStatus.SUCCESS.getMessage(),
+                            solutionAllList),
+                    HttpStatus.OK);
         }
     }
 }
