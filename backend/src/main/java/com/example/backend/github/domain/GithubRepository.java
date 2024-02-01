@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,17 +30,16 @@ public class GithubRepository extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String url;
-
-    private String token;
+    private String repo;
 
     @OneToMany(mappedBy = "githubRepository")
     private List<Solution> solutions = new ArrayList<>();
 
     @Builder
-    public GithubRepository(User user, String url, String token) {
+    public GithubRepository(User user, String repo) {
         this.user = user;
-        this.url = url;
-        this.token = token;
+        this.repo = repo;
+        this.setCreatedAt(LocalDateTime.now());
+        this.setUpdatedAt(LocalDateTime.now());
     }
 }

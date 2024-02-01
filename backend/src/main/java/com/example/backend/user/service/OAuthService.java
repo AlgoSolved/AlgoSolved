@@ -24,7 +24,6 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
             DefaultOAuth2UserService service = new DefaultOAuth2UserService();
             OAuth2User oAuth2User = service.loadUser(userRequest); // OAuth 서비스에서 가져온 유저 정보 담김
 
-            System.out.println(oAuth2User);
             String username = oAuth2User.getAttribute("login");
 
             if (isExistUser(username)) {

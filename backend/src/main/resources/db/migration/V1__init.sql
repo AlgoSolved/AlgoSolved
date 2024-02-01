@@ -14,8 +14,7 @@ CREATE TABLE users
 CREATE TABLE github_repositories
 (
     id         BIGSERIAL PRIMARY KEY,
-    token      VARCHAR(255) NOT NULL,
-    url        VARCHAR(255) NOT NULL,
+    repo       VARCHAR(255) NOT NULL,
     user_id    BIGINT       NOT NULL,
     created_at timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -71,4 +70,5 @@ CREATE TABLE solutions
 );
 
 CREATE UNIQUE INDEX users_username_uindex ON users (username);
+CREATE UNIQUE INDEX github_repositories_repo_uindex ON github_repositories (repo);
 
