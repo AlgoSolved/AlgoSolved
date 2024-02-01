@@ -26,6 +26,4 @@ public class BaseResponse<T> {
   public static <T> BaseResponse<T> success(String code, String message, T data) {
     return new BaseResponse<>(code, message, data);
   }
-
-
 }

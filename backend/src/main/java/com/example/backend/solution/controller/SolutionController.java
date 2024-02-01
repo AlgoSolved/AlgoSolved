@@ -23,19 +23,13 @@ public class SolutionController {
   @GetMapping("/recent-list")
   public ResponseEntity<List<SolutionDTO>> getRecentSolutions() {
     List<SolutionDTO> solutionAllList = solutionService.getRecentSolutions();
-    
+
     if (solutionAllList.isEmpty()) {
-      return new ResponseEntity(
-          // 방법 1: 상수 하드코딩
-          // BaseResponse.success("2001", "최근 문제 풀이가 없습니다.", Collections.emptyList()), HttpStatus.OK);
-          BaseResponse.success(SolutionStatus.SUCCESS_EMPTY_VALUE.getCode(),
-              SolutionStatus.SUCCESS_EMPTY_VALUE.getMessage(), Collections.emptyList()),
-          HttpStatus.OK);
+      return new ResponseEntity(BaseResponse.success(SolutionStatus.SUCCESS_EMPTY_VALUE.getCode(),
+          SolutionStatus.SUCCESS_EMPTY_VALUE.getMessage(), Collections.emptyList()), HttpStatus.OK);
     } else {
-      return new ResponseEntity(
-          //BaseResponse.success("2000", "요청에 성공하였습니다.", solutionAllList), HttpStatus.OK);
-          BaseResponse.success(SolutionStatus.SUCCESS.getCode(),
-              SolutionStatus.SUCCESS.getMessage(), solutionAllList), HttpStatus.OK);
+      return new ResponseEntity(BaseResponse.success(SolutionStatus.SUCCESS.getCode(),
+          SolutionStatus.SUCCESS.getMessage(), solutionAllList), HttpStatus.OK);
     }
   }
 }
