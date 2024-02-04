@@ -57,5 +57,7 @@ public class User extends BaseTimeEntity {
         this.name = name;
         this.profileImageUrl = profileImageUrl;
         this.githubUrl = githubUrl;
+        this.setCreatedAt(LocalDateTime.now());
+        this.setUpdatedAt(LocalDateTime.now());
     }
 }

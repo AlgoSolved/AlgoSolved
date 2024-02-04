@@ -2,7 +2,7 @@ import { solutionList } from "../apis/v1/solutions";
 import { Solution } from "../types/solution/Solution";
 import { useEffect, useState } from "react";
 
-export default function useSolutionList() {
+export function useSolutionList() {
   const [solution_list, setSolutionList] = useState<Solution[] | undefined>([]);
 
   useEffect(() => {

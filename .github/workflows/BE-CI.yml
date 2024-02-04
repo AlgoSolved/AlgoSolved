@@ -72,6 +72,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Copy Env File
+        run: cp .env.sample .env
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 

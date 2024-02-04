@@ -6,13 +6,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum SolutionStatus {
-
-  /**
-   * 2xx : 성공
-   */
-  SUCCESS("2000", "요청에 성공하였습니다."),
-  SUCCESS_EMPTY_VALUE("2001", "최근 문제 풀이가 없습니다.");
-
-  private final String code;
-  private final String message;
+    SUCCESS("2000", "요청에 성공하였습니다."),
+    SUCCESS_EMPTY_VALUE("2001", "최근 문제 풀이가 없습니다.");
+    
+    private final String code;
+    private final String message;
 }

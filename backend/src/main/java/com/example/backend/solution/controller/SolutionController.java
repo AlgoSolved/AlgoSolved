@@ -26,11 +26,19 @@ public class SolutionController {
     List<SolutionDTO> solutionAllList = solutionService.getRecentSolutions();
 
     if (solutionAllList.isEmpty()) {
-      return new ResponseEntity(BaseResponse.success(SolutionStatus.SUCCESS_EMPTY_VALUE.getCode(),
-          SolutionStatus.SUCCESS_EMPTY_VALUE.getMessage(), Collections.emptyList()), HttpStatus.OK);
+      return new ResponseEntity(
+          BaseResponse.success(
+              SolutionStatus.SUCCESS_EMPTY_VALUE.getCode(),
+              SolutionStatus.SUCCESS_EMPTY_VALUE.getMessage(),
+              Collections.emptyList()),
+          HttpStatus.OK);
     } else {
-      return new ResponseEntity(BaseResponse.success(SolutionStatus.SUCCESS.getCode(),
-          SolutionStatus.SUCCESS.getMessage(), solutionAllList), HttpStatus.OK);
+      return new ResponseEntity(
+          BaseResponse.success(
+              SolutionStatus.SUCCESS.getCode(),
+              SolutionStatus.SUCCESS.getMessage(),
+              solutionAllList),
+          HttpStatus.OK);
     }
   }
 
