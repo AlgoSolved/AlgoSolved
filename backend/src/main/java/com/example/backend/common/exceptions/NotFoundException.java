@@ -4,9 +4,9 @@ import com.example.backend.common.enums.ExceptionStatus;
 
 public class NotFoundException extends RuntimeException {
 
-  private ExceptionStatus exceptionStatus;
+    private final ExceptionStatus exceptionStatus;
 
-  public NotFoundException(ExceptionStatus exceptionStatus) {
-    this.exceptionStatus = exceptionStatus;
-  }
+    public NotFoundException(ExceptionStatus exceptionStatus) {
+        this.exceptionStatus = exceptionStatus;
+    }
 }

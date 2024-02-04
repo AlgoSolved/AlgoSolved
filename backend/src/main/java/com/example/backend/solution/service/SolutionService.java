@@ -26,7 +26,7 @@ public class SolutionService {
 
     public SolutionDTO getSolution(Long id) {
         Solution solution = solutionRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException(ExceptionStatus.NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(ExceptionStatus.NOT_FOUND));
 
         return mapToDTO(solution);
     }

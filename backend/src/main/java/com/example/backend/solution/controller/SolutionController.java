@@ -19,35 +19,35 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/solutions")
 public class SolutionController {
 
-  private final SolutionService solutionService;
+    private final SolutionService solutionService;
 
-  @GetMapping("/recent-list")
-  public ResponseEntity<List<SolutionDTO>> getRecentSolutions() {
-    List<SolutionDTO> solutionAllList = solutionService.getRecentSolutions();
+    @GetMapping("/recent-list")
+    public ResponseEntity<List<SolutionDTO>> getRecentSolutions() {
+        List<SolutionDTO> solutionAllList = solutionService.getRecentSolutions();
 
-    if (solutionAllList.isEmpty()) {
-      return new ResponseEntity(
-          BaseResponse.success(
-              SolutionStatus.SUCCESS_EMPTY_VALUE.getCode(),
-              SolutionStatus.SUCCESS_EMPTY_VALUE.getMessage(),
-              Collections.emptyList()),
-          HttpStatus.OK);
-    } else {
-      return new ResponseEntity(
-          BaseResponse.success(
-              SolutionStatus.SUCCESS.getCode(),
-              SolutionStatus.SUCCESS.getMessage(),
-              solutionAllList),
-          HttpStatus.OK);
+        if (solutionAllList.isEmpty()) {
+            return new ResponseEntity(
+                    BaseResponse.success(
+                            SolutionStatus.SUCCESS_EMPTY_VALUE.getCode(),
+                            SolutionStatus.SUCCESS_EMPTY_VALUE.getMessage(),
+                            Collections.emptyList()),
+                    HttpStatus.OK);
+        } else {
+            return new ResponseEntity(
+                    BaseResponse.success(
+                            SolutionStatus.SUCCESS.getCode(),
+                            SolutionStatus.SUCCESS.getMessage(),
+                            solutionAllList),
+                    HttpStatus.OK);
+        }
     }
-  }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<List<SolutionDTO>> getSolution(@PathVariable("id") Long id) {
-    SolutionDTO solutionData = solutionService.getSolution(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<List<SolutionDTO>> getSolution(@PathVariable("id") Long id) {
+        SolutionDTO solutionData = solutionService.getSolution(id);
 
-    return new ResponseEntity(BaseResponse.success(SolutionStatus.SUCCESS.getCode(),
-        SolutionStatus.SUCCESS.getMessage(), solutionData), HttpStatus.OK);
+        return new ResponseEntity(BaseResponse.success(SolutionStatus.SUCCESS.getCode(),
+                SolutionStatus.SUCCESS.getMessage(), solutionData), HttpStatus.OK);
 
-  }
+    }
 }
