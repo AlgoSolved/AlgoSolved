@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,5 +32,14 @@ public class SolutionController {
       return new ResponseEntity(BaseResponse.success(SolutionStatus.SUCCESS.getCode(),
           SolutionStatus.SUCCESS.getMessage(), solutionAllList), HttpStatus.OK);
     }
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<List<SolutionDTO>> getSolution(@PathVariable("id") Long id) {
+    SolutionDTO solutionData = solutionService.getSolution(id);
+
+    return new ResponseEntity(BaseResponse.success(SolutionStatus.SUCCESS.getCode(),
+        SolutionStatus.SUCCESS.getMessage(), solutionData), HttpStatus.OK);
+
   }
 }

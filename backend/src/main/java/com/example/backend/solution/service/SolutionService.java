@@ -1,16 +1,15 @@
 package com.example.backend.solution.service;
 
+import com.example.backend.common.enums.ExceptionStatus;
+import com.example.backend.common.exceptions.NotFoundException;
 import com.example.backend.solution.domain.Solution;
 import com.example.backend.solution.dto.SolutionDTO;
 import com.example.backend.solution.repository.SolutionRepository;
-
-import lombok.RequiredArgsConstructor;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
@@ -23,6 +22,13 @@ public class SolutionService {
         List<Solution> solutions = solutionRepository.findTop10ByOrderByCreatedAtDesc();
 
         return solutions.stream().map(this::mapToDTO).collect(Collectors.toList());
+    }
+
+    public SolutionDTO getSolution(Long id) {
+        Solution solution = solutionRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException(ExceptionStatus.NOT_FOUND));
+
+        return mapToDTO(solution);
     }
 
     private SolutionDTO mapToDTO(Solution solution) {
