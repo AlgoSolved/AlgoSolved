@@ -11,8 +11,7 @@ import com.example.backend.solution.dto.SolutionDTO;
 import com.example.backend.solution.dto.SolutionDetailDTO;
 import com.example.backend.solution.service.SolutionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.List;
-import java.util.Map;
+
 import org.instancio.Instancio;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -24,14 +23,15 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+import java.util.Map;
+
 @WebMvcTest(SolutionController.class)
 public class SolutionControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Autowired private MockMvc mockMvc;
 
-    @MockBean
-    private SolutionService solutionService;
+    @MockBean private SolutionService solutionService;
 
     @Test
     @WithMockUser(username = "jake", roles = "USER")
@@ -124,9 +124,7 @@ public class SolutionControllerTest {
 
             Map<String, Object> resultMap = objectMapper.convertValue(solutionDetailDto, Map.class);
 
-            mockMvc.perform(get(url, 1L))
-                    .andExpect(status().is3xxRedirection());
-
+            mockMvc.perform(get(url, 1L)).andExpect(status().is3xxRedirection());
         }
     }
 }

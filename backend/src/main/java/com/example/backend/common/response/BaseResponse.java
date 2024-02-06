@@ -15,7 +15,6 @@ public class BaseResponse<T> {
     private String message;
     private T data;
 
-
     public static BaseResponse<Object> success(String code, String message) {
         return BaseResponse.builder().code(code).message(message).data(null).build();
     }
