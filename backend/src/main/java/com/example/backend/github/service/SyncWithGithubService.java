@@ -17,7 +17,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SyncWithGithubService {
-    private final GithubClient githubClient = new GithubClient();
+    private final GithubClient githubClient;
     private final GithubRepositoryRepository githubRepositoryRepository;
     private final UserRepository userRepository;
     private final ProblemRepository problemRepository;

@@ -14,7 +14,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Date;
 
 public class JWTGenerator {
-    public String createJWT(String privateKeyPath, String issuer, long ttlMillis) throws Exception {
+    public static String createJWT(String privateKeyPath, String issuer, long ttlMillis) throws Exception {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.RS256;
 
         long nowMillis = System.currentTimeMillis();
@@ -37,7 +37,7 @@ public class JWTGenerator {
         return builder.compact();
     }
 
-    private PrivateKey getPrivateKey(String filename) throws Exception {
+    private static PrivateKey getPrivateKey(String filename) throws Exception {
         byte[] keyBytes = Files.toByteArray(new File(filename));
 
         PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
