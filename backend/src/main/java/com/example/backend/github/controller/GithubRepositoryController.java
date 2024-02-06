@@ -3,14 +3,17 @@ package com.example.backend.github.controller;
 import com.example.backend.common.response.BaseResponse;
 import com.example.backend.github.response.GithubStatus;
 import com.example.backend.github.service.SyncWithGithubService;
-import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,16 +29,15 @@ public class GithubRepositoryController {
 
         if (syncWithGithubService.connect(owner, repo)) {
             return new ResponseEntity(
-                    BaseResponse.success(GithubStatus.SUCCESS.getCode(),
-                            GithubStatus.SUCCESS.getMessage()),
+                    BaseResponse.success(
+                            GithubStatus.SUCCESS.getCode(), GithubStatus.SUCCESS.getMessage()),
                     HttpStatus.OK);
         } else {
             return new ResponseEntity(
-                    BaseResponse.success(GithubStatus.SUCCESS.getCode(),
-                            GithubStatus.SUCCESS.getMessage()),
+                    BaseResponse.success(
+                            GithubStatus.SUCCESS.getCode(), GithubStatus.SUCCESS.getMessage()),
                     HttpStatus.OK);
         }
-
     }
 
     @PostMapping("/sync")
@@ -46,12 +48,14 @@ public class GithubRepositoryController {
 
         if (syncWithGithubService.fetch(githubRepositoryId.longValue())) {
             return new ResponseEntity(
-                    BaseResponse.success(GithubStatus.SUCCESS.getCode(),
-                            GithubStatus.SUCCESS.getMessage()), HttpStatus.OK);
+                    BaseResponse.success(
+                            GithubStatus.SUCCESS.getCode(), GithubStatus.SUCCESS.getMessage()),
+                    HttpStatus.OK);
         } else {
             return new ResponseEntity(
-                    BaseResponse.success(GithubStatus.SUCCESS.getCode(),
-                            GithubStatus.SUCCESS.getMessage()), HttpStatus.OK);
+                    BaseResponse.success(
+                            GithubStatus.SUCCESS.getCode(), GithubStatus.SUCCESS.getMessage()),
+                    HttpStatus.OK);
         }
     }
 }

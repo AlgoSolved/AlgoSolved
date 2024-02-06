@@ -1,6 +1,7 @@
 package com.example.backend.solution.dto;
 
 import com.example.backend.solution.domain.Solution;
+
 import lombok.Getter;
 import lombok.Setter;
 

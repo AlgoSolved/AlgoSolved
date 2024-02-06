@@ -6,11 +6,14 @@ import com.example.backend.solution.domain.Solution;
 import com.example.backend.solution.dto.SolutionDTO;
 import com.example.backend.solution.dto.SolutionDetailDTO;
 import com.example.backend.solution.repository.SolutionRepository;
-import java.util.List;
-import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -26,8 +29,10 @@ public class SolutionService {
     }
 
     public SolutionDetailDTO getSolution(Long id) {
-        Solution solution = solutionRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(ExceptionStatus.NOT_FOUND));
+        Solution solution =
+                solutionRepository
+                        .findById(id)
+                        .orElseThrow(() -> new NotFoundException(ExceptionStatus.NOT_FOUND));
 
         return SolutionDetailDTO.mapToDTO(solution);
     }
