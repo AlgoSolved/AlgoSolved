@@ -4,6 +4,7 @@ import com.example.backend.common.enums.ExceptionStatus;
 import com.example.backend.common.exceptions.NotFoundException;
 import com.example.backend.solution.domain.Solution;
 import com.example.backend.solution.dto.SolutionDTO;
+import com.example.backend.solution.dto.SolutionDetailDTO;
 import com.example.backend.solution.repository.SolutionRepository;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,11 +25,11 @@ public class SolutionService {
         return solutions.stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
-    public SolutionDTO getSolution(Long id) {
+    public SolutionDetailDTO getSolution(Long id) {
         Solution solution = solutionRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(ExceptionStatus.NOT_FOUND));
 
-        return mapToDTO(solution);
+        return SolutionDetailDTO.mapToDTO(solution);
     }
 
     private SolutionDTO mapToDTO(Solution solution) {

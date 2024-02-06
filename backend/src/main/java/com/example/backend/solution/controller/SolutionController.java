@@ -2,6 +2,7 @@ package com.example.backend.solution.controller;
 
 import com.example.backend.common.response.BaseResponse;
 import com.example.backend.solution.dto.SolutionDTO;
+import com.example.backend.solution.dto.SolutionDetailDTO;
 import com.example.backend.solution.response.SolutionStatus;
 import com.example.backend.solution.service.SolutionService;
 import java.util.Collections;
@@ -43,11 +44,12 @@ public class SolutionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<SolutionDTO>> getSolution(@PathVariable("id") Long id) {
-        SolutionDTO solutionData = solutionService.getSolution(id);
+    public ResponseEntity<SolutionDetailDTO> getSolutionDetail(@PathVariable("id") Long id) {
+        SolutionDetailDTO solutionDetailDto = solutionService.getSolution(id);
 
+        System.out.println(solutionDetailDto.getProblemName());
         return new ResponseEntity(BaseResponse.success(SolutionStatus.SUCCESS.getCode(),
-                SolutionStatus.SUCCESS.getMessage(), solutionData), HttpStatus.OK);
+                SolutionStatus.SUCCESS.getMessage(), solutionDetailDto), HttpStatus.OK);
 
     }
 }
