@@ -1,7 +1,7 @@
 package com.example.backend.lib;
 
 import com.example.backend.util.JWTGenerator;
-import java.util.List;
+
 import org.kohsuke.github.GHAppInstallation;
 import org.kohsuke.github.GHAppInstallationToken;
 import org.kohsuke.github.GHTreeEntry;
@@ -10,14 +10,19 @@ import org.kohsuke.github.GitHubBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class GithubClient {
     @Value("${github.app.id}")
     private String githubAppId;
+
     @Value("${github.app.privateKey}")
     private String githubAppPrivateKey;
+
     @Value("${github.app.installationId}")
     private Long githubAppInstallationId;
+
     private final long ttlMillis = 600000;
 
     public Boolean isPathExist(String repo) {
@@ -45,7 +50,7 @@ public class GithubClient {
             GitHub github = buildGithub();
             String defaultBranch = getDefaultBranch(repo);
             List<GHTreeEntry> ghTreeEntries =
-                github.getRepository(repo).getTreeRecursive(defaultBranch, 1).getTree();
+                    github.getRepository(repo).getTreeRecursive(defaultBranch, 1).getTree();
             List<String> result = ghTreeEntries.stream().map(GHTreeEntry::getPath).toList();
             return result;
 
@@ -69,10 +74,10 @@ public class GithubClient {
         String jwtToken = JWTGenerator.createJWT(githubAppPrivateKey, githubAppId, ttlMillis);
         GitHub gitHubApp = new GitHubBuilder().withJwtToken(jwtToken).build();
         GHAppInstallation appInstallation =
-            gitHubApp.getApp().getInstallationById(githubAppInstallationId);
+                gitHubApp.getApp().getInstallationById(githubAppInstallationId);
         GHAppInstallationToken appInstallationToken = appInstallation.createToken().create();
         return new GitHubBuilder()
-            .withAppInstallationToken(appInstallationToken.getToken())
-            .build();
+                .withAppInstallationToken(appInstallationToken.getToken())
+                .build();
     }
 }

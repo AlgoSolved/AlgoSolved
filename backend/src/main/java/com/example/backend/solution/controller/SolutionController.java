@@ -5,15 +5,18 @@ import com.example.backend.lib.GithubClient;
 import com.example.backend.solution.dto.SolutionDTO;
 import com.example.backend.solution.response.SolutionStatus;
 import com.example.backend.solution.service.SolutionService;
-import java.util.Collections;
-import java.util.List;
+
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.beans.factory.annotation.Value;
+
+import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
