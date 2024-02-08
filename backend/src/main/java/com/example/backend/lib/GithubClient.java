@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 public class GithubClient {
     @Value("${github.app.id}")
     private String githubAppId;
-    @Value("${github.app.privateFilePath}")
-    private String githubAppPrivateKeyPath;
+    @Value("${github.app.privateKey}")
+    private String githubAppPrivateKey;
     @Value("${github.app.installationId}")
     private Long githubAppInstallationId;
     private final long ttlMillis = 600000;
@@ -66,7 +66,7 @@ public class GithubClient {
     }
 
     private GitHub buildGithub() throws Exception {
-        String jwtToken = JWTGenerator.createJWT(githubAppPrivateKeyPath, githubAppId, ttlMillis);
+        String jwtToken = JWTGenerator.createJWT(githubAppPrivateKey, githubAppId, ttlMillis);
         GitHub gitHubApp = new GitHubBuilder().withJwtToken(jwtToken).build();
         GHAppInstallation appInstallation =
                 gitHubApp.getApp().getInstallationById(githubAppInstallationId);
