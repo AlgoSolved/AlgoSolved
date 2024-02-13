@@ -2,36 +2,32 @@ package com.example.backend.lib;
 
 import com.example.backend.util.JWTGenerator;
 
-import io.github.cdimascio.dotenv.Dotenv;
-
 import org.kohsuke.github.GHAppInstallation;
 import org.kohsuke.github.GHAppInstallationToken;
 import org.kohsuke.github.GHTreeEntry;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class GithubClient {
-    private GitHub github;
-    private final String githubAppId = Dotenv.load().get("GITHUB_APP_ID");
-    private final String githubAppPrivateKeyPath =
-            Dotenv.load().get("GITHUB_APP_PRIVATE_FILE_PATH");
-    private final Long githubAppInstallationId =
-            Long.parseLong(Dotenv.load().get("GITHUB_APP_INSTALLATION_ID"));
-    private final long ttlMillis = 600000;
-    private JWTGenerator jwtGenerator = new JWTGenerator();
+    @Value("${github.app.id}")
+    private String githubAppId;
 
-    public GithubClient() {
-        try {
-            this.github = buildGithub();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    @Value("${github.app.privateKey}")
+    private String githubAppPrivateKey;
+
+    @Value("${github.app.installationId}")
+    private Long githubAppInstallationId;
+
+    private final long ttlMillis = 600000;
 
     public Boolean isPathExist(String repo) {
         try {
+            GitHub github = buildGithub();
             return github.getRepository(repo) != null;
         } catch (Exception e) {
             e.printStackTrace();
@@ -41,6 +37,7 @@ public class GithubClient {
 
     public String getDefaultBranch(String repo) {
         try {
+            GitHub github = buildGithub();
             return github.getRepository(repo).getDefaultBranch();
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,6 +47,7 @@ public class GithubClient {
 
     public List<String> getAllFiles(String repo) {
         try {
+            GitHub github = buildGithub();
             String defaultBranch = getDefaultBranch(repo);
             List<GHTreeEntry> ghTreeEntries =
                     github.getRepository(repo).getTreeRecursive(defaultBranch, 1).getTree();
@@ -64,6 +62,7 @@ public class GithubClient {
 
     public String getContent(String repo, String path) {
         try {
+            GitHub github = buildGithub();
             return github.getRepository(repo).getFileContent(path).getContent();
         } catch (Exception e) {
             e.printStackTrace();
@@ -72,7 +71,7 @@ public class GithubClient {
     }
 
     private GitHub buildGithub() throws Exception {
-        String jwtToken = jwtGenerator.createJWT(githubAppPrivateKeyPath, githubAppId, ttlMillis);
+        String jwtToken = JWTGenerator.createJWT(githubAppPrivateKey, githubAppId, ttlMillis);
         GitHub gitHubApp = new GitHubBuilder().withJwtToken(jwtToken).build();
         GHAppInstallation appInstallation =
                 gitHubApp.getApp().getInstallationById(githubAppInstallationId);
