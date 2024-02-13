@@ -1,5 +1,7 @@
 package com.example.backend.problem.domain;
 
+import lombok.Getter;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import lombok.Getter;
 
 @Entity
 @Table(name = "programmers_problem_details")

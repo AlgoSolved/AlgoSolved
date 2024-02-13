@@ -5,6 +5,7 @@ import com.example.backend.common.exceptions.NotFoundException;
 import com.example.backend.problem.domain.BaekjoonProblemDetail;
 import com.example.backend.problem.domain.Problem;
 import com.example.backend.solution.domain.Solution;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,9 +29,10 @@ public class SolutionDetailDTO {
             throw new NotFoundException(ExceptionStatus.NOT_FOUND);
         }
 
-        link = switch (problem.getProvider().getName()) {
-            default -> problem.getBaekjoonProblemDetail().getLink();
-        };
+        link =
+                switch (problem.getProvider().getName()) {
+                    default -> problem.getBaekjoonProblemDetail().getLink();
+                };
 
         if (problem.getProvider().getName().equals(BaekjoonProblemDetail.class.toString())) {
             link = problem.getBaekjoonProblemDetail().getLink();
