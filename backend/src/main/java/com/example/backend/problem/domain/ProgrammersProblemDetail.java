@@ -1,5 +1,6 @@
 package com.example.backend.problem.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.CascadeType;
@@ -18,17 +19,25 @@ import javax.persistence.Table;
 @Getter
 public class ProgrammersProblemDetail {
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, targetEntity = Problem.class)
+    @JoinColumn(name = "problem_id")
+    private final Problem problem;
+
+    @Column(name = "link")
+    private final String link;
+
+    @Column(name = "level")
+    private final Integer level;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, targetEntity = Problem.class)
-    @JoinColumn(name = "problem_id")
-    private Problem problem;
+    @Builder
+    public ProgrammersProblemDetail(Problem problem, String link, Integer level) {
 
-    @Column(name = "link")
-    private String link;
-
-    @Column(name = "level")
-    private Integer level;
+        this.problem = problem;
+        this.link = link;
+        this.level = level;
+    }
 }

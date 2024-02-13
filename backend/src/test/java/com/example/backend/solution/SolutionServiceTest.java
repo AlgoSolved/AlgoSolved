@@ -4,6 +4,9 @@ import static org.mockito.Mockito.when;
 
 import com.example.backend.common.exceptions.NotFoundException;
 import com.example.backend.problem.domain.Problem;
+import com.example.backend.problem.domain.ProgrammersProblemDetail;
+import com.example.backend.problem.domain.Provider;
+import com.example.backend.problem.repository.ProgrammersProblemDetailRepository;
 import com.example.backend.solution.domain.Solution;
 import com.example.backend.solution.dto.SolutionDetailDTO;
 import com.example.backend.solution.repository.SolutionRepository;
@@ -32,18 +35,33 @@ public class SolutionServiceTest {
 
     @Mock private SolutionRepository solutionRepository;
 
+    @Mock private ProgrammersProblemDetailRepository programmersProblemDetailRepository;
+
     @Nested
     @DisplayName("getSolution 테스트")
     class GetSolutionTest {
 
         private Problem problem;
 
+        private ProgrammersProblemDetail programmersProblemDetail;
+
         @BeforeEach
         public void setUp() {
+            Provider provider =
+                    Provider.builder().name(ProgrammersProblemDetail.class.getSimpleName()).build();
+
             problem =
                     Problem.builder()
                             .title(faker.book().title())
                             .content(faker.book().title())
+                            .provider(provider)
+                            .build();
+
+            programmersProblemDetail =
+                    ProgrammersProblemDetail.builder()
+                            .problem(problem)
+                            .link("test-url")
+                            .level(1)
                             .build();
         }
 
@@ -55,9 +73,12 @@ public class SolutionServiceTest {
                             .language(faker.programmingLanguage().name())
                             .problem(problem)
                             .build();
-            SolutionDetailDTO expectedSolutionDto = SolutionDetailDTO.mapToDTO(solution);
+            SolutionDetailDTO expectedSolutionDto =
+                    SolutionDetailDTO.mapToDTO(solution, "test-url", "1");
 
             when(solutionRepository.findById(solution.getId())).thenReturn(Optional.of(solution));
+            when(programmersProblemDetailRepository.findByProblem(problem))
+                    .thenReturn(Optional.of(programmersProblemDetail));
 
             SolutionDetailDTO solutionDetailDto = solutionService.getSolution(solution.getId());
             Assertions.assertEquals(

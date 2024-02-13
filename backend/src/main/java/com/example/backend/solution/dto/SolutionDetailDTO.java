@@ -1,8 +1,5 @@
 package com.example.backend.solution.dto;
 
-import com.example.backend.common.enums.ExceptionStatus;
-import com.example.backend.common.exceptions.NotFoundException;
-import com.example.backend.problem.domain.BaekjoonProblemDetail;
 import com.example.backend.problem.domain.Problem;
 import com.example.backend.solution.domain.Solution;
 
@@ -20,23 +17,10 @@ public class SolutionDetailDTO {
     private String problemName;
     private Long problemNumber;
     private String link;
+    private String rank;
 
-    public static SolutionDetailDTO mapToDTO(Solution solution) {
+    public static SolutionDetailDTO mapToDTO(Solution solution, String link, String rank) {
         Problem problem = solution.getProblem();
-        String link;
-
-        if (problem == null || problem.getProvider() == null) {
-            throw new NotFoundException(ExceptionStatus.NOT_FOUND);
-        }
-
-        link =
-                switch (problem.getProvider().getName()) {
-                    default -> problem.getBaekjoonProblemDetail().getLink();
-                };
-
-        if (problem.getProvider().getName().equals(BaekjoonProblemDetail.class.toString())) {
-            link = problem.getBaekjoonProblemDetail().getLink();
-        }
 
         return SolutionDetailDTO.builder()
                 .language(solution.getLanguage())
