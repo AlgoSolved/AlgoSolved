@@ -1,7 +1,7 @@
 package com.example.backend.github.controller;
 
 import com.example.backend.common.response.BaseResponse;
-import com.example.backend.common.response.ResponseStatus;
+import com.example.backend.github.response.GithubRepositoryStatus;
 import com.example.backend.github.service.SyncWithGithubService;
 
 import lombok.RequiredArgsConstructor;
@@ -28,10 +28,18 @@ public class GithubRepositoryController {
 
         if (syncWithGithubService.connect(owner, repo)) {
             return new ResponseEntity(
-                    BaseResponse.success(ResponseStatus.SUCCESS, true), HttpStatus.OK);
+                    BaseResponse.success(
+                            GithubRepositoryStatus.SUCCESS.getCode(),
+                            GithubRepositoryStatus.SUCCESS.getMessage(),
+                            true),
+                    HttpStatus.OK);
         } else {
             return new ResponseEntity(
-                    BaseResponse.success(ResponseStatus.SUCCESS, false), HttpStatus.OK);
+                    BaseResponse.success(
+                            GithubRepositoryStatus.SUCCESS.getCode(),
+                            GithubRepositoryStatus.SUCCESS.getMessage(),
+                            false),
+                    HttpStatus.OK);
         }
     }
 
@@ -43,10 +51,18 @@ public class GithubRepositoryController {
 
         if (syncWithGithubService.fetch(githubRepositoryId.longValue())) {
             return new ResponseEntity(
-                    BaseResponse.success(ResponseStatus.SUCCESS, true), HttpStatus.OK);
+                    BaseResponse.success(
+                            GithubRepositoryStatus.SUCCESS.getCode(),
+                            GithubRepositoryStatus.SUCCESS.getMessage(),
+                            true),
+                    HttpStatus.OK);
         } else {
             return new ResponseEntity(
-                    BaseResponse.success(ResponseStatus.SUCCESS, false), HttpStatus.OK);
+                    BaseResponse.success(
+                            GithubRepositoryStatus.SUCCESS.getCode(),
+                            GithubRepositoryStatus.SUCCESS.getMessage(),
+                            false),
+                    HttpStatus.OK);
         }
     }
 }
