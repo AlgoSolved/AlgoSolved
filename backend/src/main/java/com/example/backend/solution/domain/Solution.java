@@ -3,6 +3,7 @@ package com.example.backend.solution.domain;
 import com.example.backend.common.BaseTimeEntity;
 import com.example.backend.github.domain.GithubRepository;
 import com.example.backend.problem.domain.Problem;
+import com.example.backend.solution.common.enums.LanguageType;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +14,8 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -36,7 +39,8 @@ public class Solution extends BaseTimeEntity {
     @JoinColumn(name = "github_repository_id")
     private GithubRepository githubRepository;
 
-    private String language;
+    @Enumerated(EnumType.STRING)
+    private LanguageType language;
 
     @Column(name = "source_code")
     private String sourceCode;
@@ -48,7 +52,7 @@ public class Solution extends BaseTimeEntity {
     @Builder
     public Solution(
             GithubRepository githubRepository,
-            String language,
+            LanguageType language,
             String sourceCode,
             Problem problem) {
         this.githubRepository = githubRepository;
