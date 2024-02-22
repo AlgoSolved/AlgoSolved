@@ -4,6 +4,7 @@ import com.example.backend.github.domain.GithubRepository;
 import com.example.backend.github.repository.GithubRepositoryRepository;
 import com.example.backend.lib.GithubClient;
 import com.example.backend.problem.repository.ProblemRepository;
+import com.example.backend.solution.common.enums.LanguageType;
 import com.example.backend.solution.repository.SolutionRepository;
 import com.example.backend.user.domain.User;
 import com.example.backend.user.repository.UserRepository;
@@ -17,7 +18,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SyncWithGithubService {
-    private final GithubClient githubClient = new GithubClient();
+    private final GithubClient githubClient;
     private final GithubRepositoryRepository githubRepositoryRepository;
     private final UserRepository userRepository;
     private final ProblemRepository problemRepository;
@@ -54,10 +55,13 @@ public class SyncWithGithubService {
                     githubRepositoryRepository.findById(githubRepositoryId).get();
             String repo = githubRepository.getRepo();
 
-            List<String> files = githubClient.getAllFiles(repo);
-            files = files.stream().filter(file -> file.endsWith(".py")).toList();
-            // TODO: solution 파일만 가져오도록 한다.
-            files.forEach(
+            List<String> solutionFiles =
+                    githubClient.getAllFiles(repo).stream()
+                            .filter(file -> file.startsWith("백준") || file.startsWith("프로그래머스"))
+                            .filter(LanguageType::containsExtension)
+                            .toList();
+
+            solutionFiles.forEach(
                     file -> {
                         String sourceCode = githubClient.getContent(repo, file);
                         System.out.println(file);
