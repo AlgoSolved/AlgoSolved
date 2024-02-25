@@ -1,7 +1,7 @@
 package com.example.backend.github.controller;
 
 import com.example.backend.common.response.BaseResponse;
-import com.example.backend.common.response.ResponseStatus;
+import com.example.backend.github.response.GithubStatus;
 import com.example.backend.github.service.SyncWithGithubService;
 
 import lombok.RequiredArgsConstructor;
@@ -19,6 +19,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/v1/github-repositories")
 public class GithubRepositoryController {
+
     private final SyncWithGithubService syncWithGithubService;
 
     @PostMapping("/connect")
@@ -28,10 +29,14 @@ public class GithubRepositoryController {
 
         if (syncWithGithubService.connect(owner, repo)) {
             return new ResponseEntity(
-                    BaseResponse.success(ResponseStatus.SUCCESS, true), HttpStatus.OK);
+                    BaseResponse.success(
+                            GithubStatus.SUCCESS.getCode(), GithubStatus.SUCCESS.getMessage()),
+                    HttpStatus.OK);
         } else {
             return new ResponseEntity(
-                    BaseResponse.success(ResponseStatus.SUCCESS, false), HttpStatus.OK);
+                    BaseResponse.success(
+                            GithubStatus.SUCCESS.getCode(), GithubStatus.SUCCESS.getMessage()),
+                    HttpStatus.OK);
         }
     }
 
@@ -43,10 +48,14 @@ public class GithubRepositoryController {
 
         if (syncWithGithubService.fetch(githubRepositoryId.longValue())) {
             return new ResponseEntity(
-                    BaseResponse.success(ResponseStatus.SUCCESS, true), HttpStatus.OK);
+                    BaseResponse.success(
+                            GithubStatus.SUCCESS.getCode(), GithubStatus.SUCCESS.getMessage()),
+                    HttpStatus.OK);
         } else {
             return new ResponseEntity(
-                    BaseResponse.success(ResponseStatus.SUCCESS, false), HttpStatus.OK);
+                    BaseResponse.success(
+                            GithubStatus.SUCCESS.getCode(), GithubStatus.SUCCESS.getMessage()),
+                    HttpStatus.OK);
         }
     }
 }
