@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -29,7 +28,7 @@ import javax.persistence.Table;
 public class Problem extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "problem")
-    private final List<Solution> solutions = new ArrayList<>();
+    private List<Solution> solutions;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

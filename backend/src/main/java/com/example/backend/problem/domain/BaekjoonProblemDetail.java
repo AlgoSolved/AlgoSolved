@@ -1,5 +1,6 @@
 package com.example.backend.problem.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,4 +34,11 @@ public class BaekjoonProblemDetail {
 
     @Column(name = "tier")
     private String tier;
+
+    @Builder
+    public BaekjoonProblemDetail(Problem problem, String link, String tier) {
+        this.problem = problem;
+        this.link = link;
+        this.tier = tier;
+    }
 }

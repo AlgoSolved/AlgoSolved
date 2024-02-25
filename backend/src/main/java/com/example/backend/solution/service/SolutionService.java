@@ -47,28 +47,11 @@ public class SolutionService {
             throw new NotFoundException(ExceptionStatus.NOT_FOUND);
         }
 
-        String link = "";
-        String rank = "";
-
         if (problem.getProvider().getName().equals(BaekjoonProblemDetail.class.getSimpleName())) {
-            BaekjoonProblemDetail baekjoonProblemDetail =
-                    baekjoonProblemDetailRepository
-                            .findByProblem(problem)
-                            .orElseThrow(() -> new NotFoundException(ExceptionStatus.NOT_FOUND));
-
-            link = baekjoonProblemDetail.getLink();
-            rank = baekjoonProblemDetail.getTier();
+            return baekjoonProblemDetailToDTO(solution);
         } else {
-            ProgrammersProblemDetail programmersProblemDetail =
-                    programmersProblemDetailRepository
-                            .findByProblem(problem)
-                            .orElseThrow(() -> new NotFoundException(ExceptionStatus.NOT_FOUND));
-
-            link = programmersProblemDetail.getLink();
-            rank = programmersProblemDetail.getLevel().toString();
+            return programmersProblemDetailToDTO(solution);
         }
-
-        return SolutionDetailDTO.mapToDTO(solution, link, rank);
     }
 
     private SolutionDTO mapToDTO(Solution solution) {
@@ -78,5 +61,27 @@ public class SolutionService {
         solutionDTO.setProblemName(solution.getProblem().getTitle());
         solutionDTO.setUserName(solution.getGithubRepository().getUser().getUsername());
         return solutionDTO;
+    }
+
+    private SolutionDetailDTO programmersProblemDetailToDTO(Solution solution) {
+        ProgrammersProblemDetail programmersProblemDetail =
+                programmersProblemDetailRepository
+                        .findByProblem(solution.getProblem())
+                        .orElseThrow(() -> new NotFoundException(ExceptionStatus.NOT_FOUND));
+
+        return SolutionDetailDTO.mapToDTO(
+                solution,
+                programmersProblemDetail.getLink(),
+                programmersProblemDetail.getLevel().toString());
+    }
+
+    private SolutionDetailDTO baekjoonProblemDetailToDTO(Solution solution) {
+        BaekjoonProblemDetail baekjoonProblemDetail =
+                baekjoonProblemDetailRepository
+                        .findByProblem(solution.getProblem())
+                        .orElseThrow(() -> new NotFoundException(ExceptionStatus.NOT_FOUND));
+
+        return SolutionDetailDTO.mapToDTO(
+                solution, baekjoonProblemDetail.getLink(), baekjoonProblemDetail.getTier());
     }
 }

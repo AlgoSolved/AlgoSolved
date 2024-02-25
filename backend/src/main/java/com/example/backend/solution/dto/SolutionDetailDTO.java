@@ -28,6 +28,7 @@ public class SolutionDetailDTO {
                 .problemName(problem.getTitle())
                 .problemNumber(problem.getNumber())
                 .link(link)
+                .rank(rank)
                 .build();
     }
 }
