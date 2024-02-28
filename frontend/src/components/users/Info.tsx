@@ -1,9 +1,9 @@
 import React from "react";
-import { Container, List, ListItem, ListItemText } from "@mui/material";
+import { Container } from "@mui/material";
 import styles from "../../styles/components/users/Info.module.css";
-import { Solution } from "../../types/solution/Solution";
 
-const Info = (props: any) => {
+const AccountInfo = (props: any) => {
+  console.log(props.user?.username);
   return (
     <div>
       <Container>
@@ -11,9 +11,15 @@ const Info = (props: any) => {
 
         <div className={styles.main_container}>
           <div className={styles.user_container}>
-            <div>이름 : {}</div>
-            <div>공유한 풀이 수 : {}</div>
-            <div>공유된 레포지토리 링크 : {}</div>
+            {props.user === undefined || props.user?.username === undefined ? (
+              <div>유저 정보를 가져올 수 없습니다.</div>
+            ) : (
+              <div>
+                <div>이름 : {props.user?.username}</div>
+                <div>공유한 풀이 수 : {props.user?.sharedCount}</div>
+                <div>공유된 레포지토리 링크 : {props.user?.link}</div>
+              </div>
+            )}
           </div>
         </div>
       </Container>
@@ -21,4 +27,4 @@ const Info = (props: any) => {
   );
 };
 
-export default Info;
+export default AccountInfo;

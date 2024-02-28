@@ -2,17 +2,17 @@ import React from "react";
 
 import NavBar from "../components/common/Nav";
 import Footer from "../components/common/Footer";
-import UserInfo from "../components/users/Info";
+import AccountInfo from "../components/users/Info";
 import Repository from "../components/users/Repository";
-import { useSolutionList } from "../hooks/solutionList";
+import { useUserInfo } from "../hooks/userInfo";
 import style from "../styles/pages/Home.module.css";
 
-const Users = () => {
+const UserInfo = () => {
   return (
     <div>
       <div className={style.wrapper}>
         <NavBar />
-        <UserInfo />
+        <AccountInfo user={useUserInfo()} />
         <Repository />
       </div>
       <div className={style.footer}>
@@ -22,4 +22,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default UserInfo;
