@@ -1,11 +1,9 @@
 .wrapper {
   height: auto;
   min-height: 100%;
-  padding-bottom: 10rem;
 }
 
 .footer {
   height: 10rem;
   position: relative;
-  transform: translateY(-100%);
 }
