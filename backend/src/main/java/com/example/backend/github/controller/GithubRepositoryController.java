@@ -1,7 +1,11 @@
 package com.example.backend.github.controller;
 
 import com.example.backend.common.response.BaseResponse;
+
 import com.example.backend.github.response.GithubRepositoryStatus;
+
+import com.example.backend.github.response.GithubStatus;
+
 import com.example.backend.github.service.SyncWithGithubService;
 
 import lombok.RequiredArgsConstructor;
@@ -19,6 +23,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/v1/github-repositories")
 public class GithubRepositoryController {
+
     private final SyncWithGithubService syncWithGithubService;
 
     @PostMapping("/connect")

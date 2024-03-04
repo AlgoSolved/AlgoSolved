@@ -32,6 +32,7 @@ CREATE TABLE providers
 CREATE TABLE problems
 (
     id          BIGSERIAL PRIMARY KEY,
+    number      BIGINT       NOT NULL,
     provider_id BIGINT       NOT NULL,
     title       VARCHAR(255) NOT NULL,
     content     VARCHAR(255) NOT NULL,
@@ -44,6 +45,7 @@ CREATE TABLE programmers_problem_details
 (
     id         BIGSERIAL PRIMARY KEY,
     problem_id BIGINT  NOT NULL,
+    link       VARCHAR(255) NOT NULL,
     level      INTEGER NOT NULL,
     CONSTRAINT programmers_problem_details_problem_id_fk FOREIGN KEY (problem_id) REFERENCES problems (id)
 );
@@ -52,6 +54,7 @@ CREATE TABLE baekjoon_problem_details
 (
     id         BIGSERIAL PRIMARY KEY,
     problem_id BIGINT       NOT NULL,
+    link       VARCHAR(255) NOT NULL,
     tier       VARCHAR(255) NOT NULL,
     CONSTRAINT baekjoon_problem_details_problem_id_fk FOREIGN KEY (problem_id) REFERENCES problems (id)
 );

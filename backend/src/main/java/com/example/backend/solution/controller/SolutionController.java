@@ -3,6 +3,7 @@ package com.example.backend.solution.controller;
 import com.example.backend.common.response.BaseResponse;
 import com.example.backend.lib.GithubClient;
 import com.example.backend.solution.dto.SolutionDTO;
+import com.example.backend.solution.dto.SolutionDetailDTO;
 import com.example.backend.solution.response.SolutionStatus;
 import com.example.backend.solution.service.SolutionService;
 
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -55,5 +57,18 @@ public class SolutionController {
                             solutionAllList),
                     HttpStatus.OK);
         }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BaseResponse<SolutionDetailDTO>> getSolutionDetail(
+            @PathVariable("id") Long id) {
+        SolutionDetailDTO solutionDetailDto = solutionService.getSolution(id);
+
+        return new ResponseEntity(
+                BaseResponse.success(
+                        SolutionStatus.SUCCESS.getCode(),
+                        SolutionStatus.SUCCESS.getMessage(),
+                        solutionDetailDto),
+                HttpStatus.OK);
     }
 }

@@ -7,10 +7,19 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "problems")
@@ -18,9 +27,15 @@ import javax.persistence.*;
 @RequiredArgsConstructor
 public class Problem extends BaseTimeEntity {
 
+    @OneToMany(mappedBy = "problem")
+    private List<Solution> solutions;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "number")
+    private Long number;
 
     @Column(name = "title", length = 100, nullable = false)
     private String title;
@@ -31,9 +46,6 @@ public class Problem extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "provider_id")
     private Provider provider;
-
-    @OneToMany(mappedBy = "problem")
-    private List<Solution> solutions = new ArrayList<>();
 
     @OneToOne(mappedBy = "problem", fetch = FetchType.LAZY)
     private BaekjoonProblemDetail baekjoonProblemDetail;
