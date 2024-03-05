@@ -1,9 +1,10 @@
 import React from "react";
 import { Container } from "@mui/material";
 import styles from "../../styles/components/users/Info.module.css";
+import { UserInfo } from "../../types/users/Info";
 
 const AccountInfo = (props: any) => {
-  console.log(props.user?.username);
+  console.log(props.user);
   return (
     <div>
       <Container>
@@ -11,7 +12,7 @@ const AccountInfo = (props: any) => {
 
         <div className={styles.main_container}>
           <div className={styles.user_container}>
-            {props.user === undefined || props.user?.username === undefined ? (
+            {props.user === undefined || props.user.username === undefined ? (
               <div>유저 정보를 가져올 수 없습니다.</div>
             ) : (
               <div>
