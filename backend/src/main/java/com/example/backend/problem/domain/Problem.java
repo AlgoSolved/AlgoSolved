@@ -25,7 +25,7 @@ import javax.persistence.Table;
 @Getter
 @RequiredArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "type")
+@DiscriminatorColumn(name = "type", columnDefinition = "CHAR")
 public abstract class Problem extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
