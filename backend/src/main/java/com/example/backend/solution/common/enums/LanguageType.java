@@ -3,7 +3,7 @@ package com.example.backend.solution.common.enums;
 import lombok.Getter;
 
 public enum LanguageType {
-    // 표시 언어, DB 저장 언어, 파일 확장자
+    // TODO: 파일 확장명으로 python 과 python3 을 구분해야 됩니다.
     c("C", ".c"),
     cpp("C++", ".cpp"),
     java("Java", ".java"),
