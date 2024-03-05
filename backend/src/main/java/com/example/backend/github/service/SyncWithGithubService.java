@@ -3,9 +3,7 @@ package com.example.backend.github.service;
 import com.example.backend.github.domain.GithubRepository;
 import com.example.backend.github.repository.GithubRepositoryRepository;
 import com.example.backend.lib.GithubClient;
-import com.example.backend.problem.repository.ProblemRepository;
 import com.example.backend.solution.common.enums.LanguageType;
-import com.example.backend.solution.repository.SolutionRepository;
 import com.example.backend.user.domain.User;
 import com.example.backend.user.repository.UserRepository;
 
@@ -13,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,8 +20,6 @@ public class SyncWithGithubService {
     private final GithubClient githubClient;
     private final GithubRepositoryRepository githubRepositoryRepository;
     private final UserRepository userRepository;
-    private final ProblemRepository problemRepository;
-    private final SolutionRepository solutionRepository;
 
     public boolean connect(String userName, String repositoryName) {
         try {
@@ -49,10 +46,9 @@ public class SyncWithGithubService {
         }
     }
 
-    public boolean fetch(Long githubRepositoryId) {
+    public List<String[]> fetch(GithubRepository githubRepository) {
         try {
-            GithubRepository githubRepository =
-                    githubRepositoryRepository.findById(githubRepositoryId).get();
+            List<String[]> result = new ArrayList<>();
             String repo = githubRepository.getRepo();
 
             List<String> solutionFiles =
@@ -61,16 +57,15 @@ public class SyncWithGithubService {
                             .filter(LanguageType::containsExtension)
                             .toList();
 
-            solutionFiles.forEach(
-                    file -> {
-                        String sourceCode = githubClient.getContent(repo, file);
-                        System.out.println(file);
-                        System.out.println(sourceCode);
-                    });
-            return true;
+            for (String file : solutionFiles) {
+                String sourceCode = githubClient.getContent(repo, file);
+                result.add(new String[] {file, sourceCode});
+            }
+
+            return result;
         } catch (Exception e) {
             System.out.println(e);
-            return false;
+            return null;
         }
     }
 }
