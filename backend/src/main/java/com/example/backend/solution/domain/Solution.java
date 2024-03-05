@@ -4,6 +4,7 @@ import com.example.backend.common.BaseTimeEntity;
 import com.example.backend.github.domain.GithubRepository;
 import com.example.backend.problem.domain.Problem;
 import com.example.backend.solution.common.enums.LanguageType;
+import com.example.backend.util.Sha256Generator;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -45,9 +46,12 @@ public class Solution extends BaseTimeEntity {
     @Column(name = "source_code")
     private String sourceCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "problem_id")
     private Problem problem;
+
+    @Column(name = "hash_key")
+    private String hashKey;
 
     @Builder
     public Solution(
@@ -59,7 +63,22 @@ public class Solution extends BaseTimeEntity {
         this.language = language;
         this.sourceCode = sourceCode;
         this.problem = problem;
+        setHashKey();
         this.setCreatedAt(LocalDateTime.now());
         this.setUpdatedAt(LocalDateTime.now());
+    }
+
+    public void setHashKey() {
+        this.hashKey = this.generateHashKey();
+    }
+
+    public String generateHashKey() {
+        Sha256Generator sha256Generator = new Sha256Generator();
+        String message =
+                this.githubRepository.getRepo()
+                        + this.problem.getTitle()
+                        + this.language
+                        + this.sourceCode;
+        return sha256Generator.encrypt(message);
     }
 }
