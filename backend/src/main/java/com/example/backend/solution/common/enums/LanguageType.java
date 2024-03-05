@@ -36,4 +36,13 @@ public enum LanguageType {
         }
         return false;
     }
+
+    public static LanguageType getLanguageType(String fileName) {
+        for (LanguageType type : LanguageType.values()) {
+            if (fileName.endsWith(type.getExtension())) {
+                return type;
+            }
+        }
+        return null;
+    }
 }
