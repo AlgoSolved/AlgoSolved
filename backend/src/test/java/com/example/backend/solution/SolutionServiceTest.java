@@ -3,14 +3,15 @@ package com.example.backend.solution;
 import static org.mockito.Mockito.when;
 
 import com.example.backend.common.exceptions.NotFoundException;
+import com.example.backend.github.domain.GithubRepository;
 import com.example.backend.problem.domain.Problem;
-import com.example.backend.problem.domain.ProgrammersProblemDetail;
-import com.example.backend.problem.domain.Provider;
-import com.example.backend.problem.repository.ProgrammersProblemDetailRepository;
+import com.example.backend.problem.domain.ProgrammersProblem;
+import com.example.backend.solution.common.enums.LanguageType;
 import com.example.backend.solution.domain.Solution;
 import com.example.backend.solution.dto.SolutionDetailDTO;
 import com.example.backend.solution.repository.SolutionRepository;
 import com.example.backend.solution.service.SolutionService;
+import com.example.backend.user.domain.User;
 
 import net.datafaker.Faker;
 
@@ -35,32 +36,28 @@ public class SolutionServiceTest {
 
     @Mock private SolutionRepository solutionRepository;
 
-    @Mock private ProgrammersProblemDetailRepository programmersProblemDetailRepository;
-
     @Nested
     @DisplayName("getSolution 테스트")
     class GetSolutionTest {
 
+        private User user;
+        private GithubRepository githubRepository;
         private Problem problem;
-
-        private ProgrammersProblemDetail programmersProblemDetail;
 
         @BeforeEach
         public void setUp() {
-            Provider provider =
-                    Provider.builder().name(ProgrammersProblemDetail.class.getSimpleName()).build();
-
-            problem =
-                    Problem.builder()
-                            .title(faker.book().title())
-                            .content(faker.book().title())
-                            .provider(provider)
+            user =
+                    User.builder()
+                            .username("uchan")
+                            .name("uchan")
+                            .profileImageUrl("image-url")
+                            .githubUrl("github-url")
                             .build();
-
-            programmersProblemDetail =
-                    ProgrammersProblemDetail.builder()
-                            .problem(problem)
-                            .link("test-url")
+            githubRepository = GithubRepository.builder().user(user).repo("repo").build();
+            problem =
+                    ProgrammersProblem.builder()
+                            .title(faker.book().title())
+                            .lessonNumber(1L)
                             .level(1)
                             .build();
         }
@@ -70,15 +67,13 @@ public class SolutionServiceTest {
         public void solutionIsExistGetTest() {
             Solution solution =
                     Solution.builder()
-                            .language(faker.programmingLanguage().name())
+                            .githubRepository(githubRepository)
+                            .language(LanguageType.c)
                             .problem(problem)
                             .build();
-            SolutionDetailDTO expectedSolutionDto =
-                    SolutionDetailDTO.mapToDTO(solution, "test-url", "1");
+            SolutionDetailDTO expectedSolutionDto = SolutionDetailDTO.mapToDTO(solution);
 
             when(solutionRepository.findById(solution.getId())).thenReturn(Optional.of(solution));
-            when(programmersProblemDetailRepository.findByProblem(problem))
-                    .thenReturn(Optional.of(programmersProblemDetail));
 
             SolutionDetailDTO solutionDetailDto = solutionService.getSolution(solution.getId());
             Assertions.assertEquals(
@@ -87,6 +82,10 @@ public class SolutionServiceTest {
                     expectedSolutionDto.getLanguage(), solutionDetailDto.getLanguage());
             Assertions.assertEquals(
                     expectedSolutionDto.getSourceCode(), solutionDetailDto.getSourceCode());
+            Assertions.assertEquals(
+                    expectedSolutionDto.getProblemNumber(), solutionDetailDto.getProblemNumber());
+            Assertions.assertEquals(expectedSolutionDto.getLink(), solutionDetailDto.getLink());
+            Assertions.assertEquals(expectedSolutionDto.getRank(), solutionDetailDto.getRank());
         }
 
         @Test

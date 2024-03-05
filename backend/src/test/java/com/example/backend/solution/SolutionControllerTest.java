@@ -60,7 +60,7 @@ public class SolutionControllerTest {
         List<Map> elements =
                 List.of(
                         Map.of(
-                                "problemProvider", solutionDto.getProblemProvider(),
+                                "problemType", solutionDto.getProblemType(),
                                 "problemNumber", solutionDto.getProblemNumber(),
                                 "problemName", solutionDto.getProblemName(),
                                 "userName", solutionDto.getUserName()));
