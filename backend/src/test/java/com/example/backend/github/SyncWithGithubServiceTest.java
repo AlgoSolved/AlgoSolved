@@ -8,7 +8,7 @@ import com.example.backend.github.service.SyncWithGithubService;
 import com.example.backend.lib.GithubClient;
 import com.example.backend.user.domain.User;
 import com.example.backend.user.repository.UserRepository;
-import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +18,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class SyncWithGithubServiceTest {
@@ -121,13 +123,9 @@ public class SyncWithGithubServiceTest {
                     .thenReturn("a, b = map(int, input().split()); print(a+b)");
 
             List<String[]> result = syncWithGithubService.fetch(githubRepository);
-            Assertions.assertEquals(
-                    result.get(0)[0], "백준/Bronze/1000. A＋B/A＋B.py");
+            Assertions.assertEquals(result.get(0)[0], "백준/Bronze/1000. A＋B/A＋B.py");
             Assertions.assertEquals(
                     result.get(0)[1], "a, b = map(int, input().split()); print(a+b)");
-
-
-
         }
 
         @Test
@@ -149,11 +147,8 @@ public class SyncWithGithubServiceTest {
                     .thenReturn("def solution(a, b): return a + b");
 
             List<String[]> result = syncWithGithubService.fetch(githubRepository);
-            Assertions.assertEquals(
-                    result.get(0)[0], "프로그래머스/0/1. 두 정수 사이의 합/두 정수 사이의 합.py");
-            Assertions.assertEquals(
-                    result.get(0)[1], "def solution(a, b): return a + b");
-
+            Assertions.assertEquals(result.get(0)[0], "프로그래머스/0/1. 두 정수 사이의 합/두 정수 사이의 합.py");
+            Assertions.assertEquals(result.get(0)[1], "def solution(a, b): return a + b");
         }
     }
 }

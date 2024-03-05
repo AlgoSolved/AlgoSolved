@@ -4,13 +4,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.backend.problem.domain.BaekjoonProblem;
 import com.example.backend.problem.repository.BaekjoonProblemRepository;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -21,7 +21,12 @@ public class BaekjoonProblemRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        baekjoonProblem = BaekjoonProblem.builder().title("title").problemNumber(1000L).tier("Bronze").build();
+        baekjoonProblem =
+                BaekjoonProblem.builder()
+                        .title("title")
+                        .problemNumber(1000L)
+                        .tier("Bronze")
+                        .build();
         baekjoonProblemRepository.save(baekjoonProblem);
     }
 

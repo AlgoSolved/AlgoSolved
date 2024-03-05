@@ -11,6 +11,7 @@ import com.example.backend.problem.domain.ProgrammersProblem;
 import com.example.backend.problem.repository.BaekjoonProblemRepository;
 import com.example.backend.problem.repository.ProgrammersProblemRepository;
 import com.example.backend.problem.service.ProblemService;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -39,8 +40,12 @@ public class ProblemServiceTest {
         @DisplayName("백준 솔루션 파일에 해당하는 문제가 없는 경우 새로운 문제를 생성한다.")
         public void baekjoonProblemIsNotExistTest() {
             String file = "백준/Bronze/1000. A＋B/A＋B.py";
-            problem = BaekjoonProblem.builder().title("A+B").tier("Bronze").problemNumber(1000L)
-                .build();
+            problem =
+                    BaekjoonProblem.builder()
+                            .title("A+B")
+                            .tier("Bronze")
+                            .problemNumber(1000L)
+                            .build();
 
             when(problemFactory.getFromFile(file)).thenReturn(problem);
             when(baekjoonProblemRepository.findByProblemNumber(1000L)).thenReturn(null);
@@ -54,11 +59,16 @@ public class ProblemServiceTest {
         @DisplayName("백준 솔루션 파일에 해당하는 문제가 있는 경우 해당 문제를 리턴한다.")
         public void baekjoonProblemIsExistTest() {
             String file = "백준/Bronze/1000. A＋B/A＋B.py";
-            problem = BaekjoonProblem.builder().title("A+B").tier("Bronze").problemNumber(1000L)
-                .build();
+            problem =
+                    BaekjoonProblem.builder()
+                            .title("A+B")
+                            .tier("Bronze")
+                            .problemNumber(1000L)
+                            .build();
 
             when(problemFactory.getFromFile(file)).thenReturn(problem);
-            when(baekjoonProblemRepository.findByProblemNumber(1000L)).thenReturn((BaekjoonProblem) problem);
+            when(baekjoonProblemRepository.findByProblemNumber(1000L))
+                    .thenReturn((BaekjoonProblem) problem);
 
             Problem result = problemService.getOrCreateFromFile(file);
             Assertions.assertEquals(problem, result);
@@ -69,8 +79,12 @@ public class ProblemServiceTest {
         @DisplayName("프로그래머스 솔루션 파일에 해당하는 문제가 없는 경우 새로운 문제를 생성한다.")
         public void programmersProblemIsNotExistTest() {
             String file = "프로그래머스/1/12903. 가운데 글자 가져오기/가운데 글자 가져오기.py";
-            problem = ProgrammersProblem.builder().title("가운데 글자 가져오기").level(1).lessonNumber(12903L)
-                .build();
+            problem =
+                    ProgrammersProblem.builder()
+                            .title("가운데 글자 가져오기")
+                            .level(1)
+                            .lessonNumber(12903L)
+                            .build();
 
             when(problemFactory.getFromFile(file)).thenReturn(problem);
             when(programmersProblemRepository.findByLessonNumber(12903L)).thenReturn(null);
@@ -84,11 +98,16 @@ public class ProblemServiceTest {
         @DisplayName("프로그래머스 솔루션 파일에 해당하는 문제가 있는 경우 해당 문제를 리턴한다.")
         public void programmersProblemIsExistTest() {
             String file = "프로그래머스/1/12903. 가운데 글자 가져오기/가운데 글자 가져오기.py";
-            problem = ProgrammersProblem.builder().title("가운데 글자 가져오기").level(1).lessonNumber(12903L)
-                .build();
+            problem =
+                    ProgrammersProblem.builder()
+                            .title("가운데 글자 가져오기")
+                            .level(1)
+                            .lessonNumber(12903L)
+                            .build();
 
             when(problemFactory.getFromFile(file)).thenReturn(problem);
-            when(programmersProblemRepository.findByLessonNumber(12903L)).thenReturn((ProgrammersProblem) problem);
+            when(programmersProblemRepository.findByLessonNumber(12903L))
+                    .thenReturn((ProgrammersProblem) problem);
 
             Problem result = problemService.getOrCreateFromFile(file);
             Assertions.assertEquals(problem, result);

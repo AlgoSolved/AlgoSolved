@@ -11,38 +11,54 @@ import com.example.backend.solution.domain.Solution;
 import com.example.backend.solution.repository.SolutionRepository;
 import com.example.backend.user.domain.User;
 import com.example.backend.user.repository.UserRepository;
-import java.util.ArrayList;
-import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class SolutionRepositoryTest {
 
     @Autowired SolutionRepository solutionRepository;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    GithubRepositoryRepository githubRepositoryRepository;
-    @Autowired
-    BaekjoonProblemRepository baekjoonProblemRepository;
+    @Autowired UserRepository userRepository;
+    @Autowired GithubRepositoryRepository githubRepositoryRepository;
+    @Autowired BaekjoonProblemRepository baekjoonProblemRepository;
 
     @Test
     public void findTop10ByOrderByCreatedAtDescTest() {
-        User user = User.builder().username("uchan").name("uchan").profileImageUrl("image-url").githubUrl("github-url").build();
+        User user =
+                User.builder()
+                        .username("uchan")
+                        .name("uchan")
+                        .profileImageUrl("image-url")
+                        .githubUrl("github-url")
+                        .build();
         userRepository.save(user);
-        GithubRepository githubRepository = GithubRepository.builder().user(user).repo("repo").build();
+        GithubRepository githubRepository =
+                GithubRepository.builder().user(user).repo("repo").build();
         githubRepositoryRepository.save(githubRepository);
-        BaekjoonProblem baekjoonProblem = BaekjoonProblem.builder().title("title").tier("Bronze").problemNumber(1000L).build();
+        BaekjoonProblem baekjoonProblem =
+                BaekjoonProblem.builder()
+                        .title("title")
+                        .tier("Bronze")
+                        .problemNumber(1000L)
+                        .build();
         baekjoonProblemRepository.save(baekjoonProblem);
 
         List<Solution> solutions = new ArrayList<>();
         for (int i = 0; i < 11; i++) {
-            Solution solution = Solution.builder().githubRepository(githubRepository).problem(baekjoonProblem).language(
-                LanguageType.c).sourceCode("code" + i).build();
+            Solution solution =
+                    Solution.builder()
+                            .githubRepository(githubRepository)
+                            .problem(baekjoonProblem)
+                            .language(LanguageType.c)
+                            .sourceCode("code" + i)
+                            .build();
             solutionRepository.save(solution);
             solutions.add(solution);
         }
