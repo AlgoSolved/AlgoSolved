@@ -1,7 +1,5 @@
 package com.example.backend.user.controller;
 
-import com.example.backend.common.enums.ExceptionStatus;
-import com.example.backend.common.exceptions.NotFoundException;
 import com.example.backend.common.response.BaseResponse;
 import com.example.backend.user.dto.UserDTO.Profile;
 import com.example.backend.user.response.UserStatus;
@@ -13,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -33,14 +32,13 @@ public class UserController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<BaseResponse<String>> deleteUser(@PathVariable("id") Long id) {
-    if (userService.deleteUser(id)) {
-      return new ResponseEntity(
-          BaseResponse.success(
-              UserStatus.SUCCESS.getCode(), UserStatus.SUCCESS.getMessage()),
-          HttpStatus.OK);
-    } else {
-      throw new NotFoundException(ExceptionStatus.USER_NOT_FOUND);
-    }
+  public ResponseEntity<BaseResponse<String>> deleteUser(@PathVariable("id") Long id,
+      @RequestParam String inputUsername) {
+    userService.deleteUser(id, inputUsername);
+
+    return new ResponseEntity(
+        BaseResponse.success(
+            UserStatus.SUCCESS.getCode(), UserStatus.SUCCESS.getMessage()),
+        HttpStatus.OK);
   }
 }
