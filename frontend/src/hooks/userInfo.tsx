@@ -9,14 +9,13 @@ export function useUserInfo(id: number) {
     const initUserInfo = async () => {
       try {
         const data = await getUserInfo(id);
-        console.log("data: ", data);
         setUserInfo(data);
       } catch {
         console.log("error!");
       }
     };
     initUserInfo();
-  }, [id]);
+  }, []);
 
   return user_info;
 }

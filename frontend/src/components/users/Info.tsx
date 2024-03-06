@@ -4,7 +4,6 @@ import styles from "../../styles/components/users/Info.module.css";
 import { UserInfo } from "../../types/users/Info";
 
 const AccountInfo = (props: any) => {
-  console.log(props.user);
   return (
     <div>
       <Container>

@@ -8,7 +8,6 @@ export const getUserInfo = async (id: number) => {
   try {
     const res: any = await ApiClient.get<UserInfo>(`api/v1/users/${id}`);
 
-    console.log("result: ", res.data);
     return res.data.data;
   } catch (error: AxiosErrorClass | any) {
     if (error.data) {
