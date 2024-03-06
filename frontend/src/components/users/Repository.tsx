@@ -1,8 +1,8 @@
 import React from "react";
-import { Container, List, ListItem, ListItemText } from "@mui/material";
+import { Container } from "@mui/material";
 import styles from "../../styles/components/users/Repository.module.css";
-import { Solution } from "../../types/solution/Solution";
 
+// TODO: 레포지토리 연동 API 연결
 const Repository = (props: any) => {
   return (
     <div>

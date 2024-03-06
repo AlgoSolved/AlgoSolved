@@ -11,15 +11,15 @@ const AccountInfo = (props: any) => {
 
         <div className={styles.main_container}>
           <div className={styles.user_container}>
-            {props.user === undefined || props.user.username === undefined ? (
+            {/* {props.user === undefined || props.user.username === undefined ? (
               <div>유저 정보를 가져올 수 없습니다.</div>
-            ) : (
-              <div>
-                <div>이름 : {props.user?.username}</div>
-                <div>공유한 풀이 수 : {props.user?.sharedCount}</div>
-                <div>공유된 레포지토리 링크 : {props.user?.link}</div>
-              </div>
-            )}
+            ) : ( */}
+            <div>
+              <div>이름 : test</div>
+              <div>공유한 풀이 수 : 100</div>
+              <div>공유된 레포지토리 링크 : link</div>
+            </div>
+            {/* )} */}
           </div>
         </div>
       </Container>
