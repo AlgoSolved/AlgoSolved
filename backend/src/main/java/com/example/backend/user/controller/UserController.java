@@ -3,7 +3,7 @@ package com.example.backend.user.controller;
 import com.example.backend.common.enums.ExceptionStatus;
 import com.example.backend.common.exceptions.NotFoundException;
 import com.example.backend.common.response.BaseResponse;
-import com.example.backend.user.dto.UserDTO;
+import com.example.backend.user.dto.UserDTO.Profile;
 import com.example.backend.user.response.UserStatus;
 import com.example.backend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,12 +23,12 @@ public class UserController {
   private final UserService userService;
 
   @GetMapping("/{id}")
-  public ResponseEntity<BaseResponse<UserDTO>> getUserInfo(@PathVariable("id") Long id) {
-    UserDTO userDTO = userService.getUserInfo(id);
+  public ResponseEntity<BaseResponse<Profile>> getUserInfo(@PathVariable("id") Long id) {
+    Profile userInfo = userService.getUserProfile(id);
 
     return new ResponseEntity(
         BaseResponse.success(
-            UserStatus.SUCCESS.getCode(), UserStatus.SUCCESS.getMessage(), userDTO),
+            UserStatus.SUCCESS.getCode(), UserStatus.SUCCESS.getMessage(), userInfo),
         HttpStatus.OK);
   }
 

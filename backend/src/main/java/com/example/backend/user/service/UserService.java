@@ -4,7 +4,7 @@ import com.example.backend.common.enums.ExceptionStatus;
 import com.example.backend.common.exceptions.NotFoundException;
 import com.example.backend.github.domain.GithubRepository;
 import com.example.backend.user.domain.User;
-import com.example.backend.user.dto.UserDTO;
+import com.example.backend.user.dto.UserDTO.Profile;
 import com.example.backend.user.repository.UserRepository;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +16,12 @@ public class UserService {
 
   private final UserRepository userRepository;
 
-  public UserDTO getUserInfo(Long id) {
+  public Profile getUserProfile(Long id) {
     User user = userRepository
         .findById(id)
         .orElseThrow(() -> new NotFoundException(ExceptionStatus.NOT_FOUND));
 
-    return UserDTO.mapToDTO(user, getSolutionCount(user.getGithubRepository()));
+    return Profile.mapToDTO(user, getSolutionCount(user.getGithubRepository()));
   }
 
   public Long getSolutionCount(GithubRepository githubRepository) {
