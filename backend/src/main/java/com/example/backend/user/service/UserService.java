@@ -26,6 +26,9 @@ public class UserService {
   }
 
   public Long getSolutionCount(GithubRepository githubRepository) {
+    if (githubRepository == null) {
+      return 0L;
+    }
     return githubRepository.getSolutions().stream().count();
   }
 
