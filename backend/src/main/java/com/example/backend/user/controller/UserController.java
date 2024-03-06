@@ -4,7 +4,9 @@ import com.example.backend.common.response.BaseResponse;
 import com.example.backend.user.dto.UserDTO.Profile;
 import com.example.backend.user.response.UserStatus;
 import com.example.backend.user.service.UserService;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,26 +21,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/user")
 public class UserController {
 
-  private final UserService userService;
+    private final UserService userService;
 
-  @GetMapping("/{id}")
-  public ResponseEntity<BaseResponse<Profile>> getUserInfo(@PathVariable("id") Long id) {
-    Profile userInfo = userService.getUserProfile(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<BaseResponse<Profile>> getUserInfo(@PathVariable("id") Long id) {
+        Profile userInfo = userService.getUserProfile(id);
 
-    return new ResponseEntity(
-        BaseResponse.success(
-            UserStatus.SUCCESS.getCode(), UserStatus.SUCCESS.getMessage(), userInfo),
-        HttpStatus.OK);
-  }
+        return new ResponseEntity(
+                BaseResponse.success(
+                        UserStatus.SUCCESS.getCode(), UserStatus.SUCCESS.getMessage(), userInfo),
+                HttpStatus.OK);
+    }
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<BaseResponse<String>> deleteUser(@PathVariable("id") Long id,
-      @RequestParam String inputUsername) {
-    userService.deleteUser(id, inputUsername);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<BaseResponse<String>> deleteUser(
+            @PathVariable("id") Long id, @RequestParam String inputUsername) {
+        userService.deleteUser(id, inputUsername);
 
-    return new ResponseEntity(
-        BaseResponse.success(
-            UserStatus.SUCCESS.getCode(), UserStatus.SUCCESS.getMessage()),
-        HttpStatus.OK);
-  }
+        return new ResponseEntity(
+                BaseResponse.success(UserStatus.SUCCESS.getCode(), UserStatus.SUCCESS.getMessage()),
+                HttpStatus.OK);
+    }
 }
