@@ -6,9 +6,7 @@ import com.example.backend.common.response.BaseResponse;
 import com.example.backend.user.dto.UserDTO;
 import com.example.backend.user.response.UserStatus;
 import com.example.backend.user.service.UserService;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,27 +20,27 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/user")
 public class UserController {
 
-    private final UserService userService;
+  private final UserService userService;
 
-    @GetMapping("/{username}")
-    public ResponseEntity<BaseResponse<UserDTO>> getUserInfo(@PathVariable String username) {
-        UserDTO userDTO = userService.getUserByUsername(username);
+  @GetMapping("/{id}")
+  public ResponseEntity<BaseResponse<UserDTO>> getUserInfo(@PathVariable("id") Long id) {
+    UserDTO userDTO = userService.getUserInfo(id);
 
-        return new ResponseEntity(
-                BaseResponse.success(
-                        UserStatus.SUCCESS.getCode(), UserStatus.SUCCESS.getMessage(), userDTO),
-                HttpStatus.OK);
+    return new ResponseEntity(
+        BaseResponse.success(
+            UserStatus.SUCCESS.getCode(), UserStatus.SUCCESS.getMessage(), userDTO),
+        HttpStatus.OK);
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<BaseResponse<String>> deleteUser(@PathVariable("id") Long id) {
+    if (userService.deleteUser(id)) {
+      return new ResponseEntity(
+          BaseResponse.success(
+              UserStatus.SUCCESS.getCode(), UserStatus.SUCCESS.getMessage()),
+          HttpStatus.OK);
+    } else {
+      throw new NotFoundException(ExceptionStatus.USER_NOT_FOUND);
     }
-
-    @DeleteMapping("/{username}")
-    public ResponseEntity<BaseResponse<String>> deleteUser(@PathVariable String username) {
-        if (userService.deleteUser(username)) {
-            return new ResponseEntity(
-                    BaseResponse.success(
-                            UserStatus.SUCCESS.getCode(), UserStatus.SUCCESS.getMessage()),
-                    HttpStatus.OK);
-        } else {
-            throw new NotFoundException(ExceptionStatus.USER_NOT_FOUND);
-        }
-    }
+  }
 }
