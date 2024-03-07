@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SolutionDTO {
-    private String problemProvider;
+    private String problemType;
     private String problemNumber;
     private String problemName;
     private String userName;
