@@ -6,7 +6,7 @@ ENV JAR_FILE_PATH=/home/deploy/app/backend/build/libs/${JAR_FILE_NAME}
 FROM base as builder
 
 RUN apt-get -qq update > /dev/null && \
-    DEBIAN_FRONTEND=noninteractive apt-get -yq --no-install-recommends install build-essential unzip procps > /dev/null
+    DEBIAN_FRONTEND=noninteractive apt-get -yq --no-install-recommends install build-essential unzip procps curl > /dev/null
 
 RUN useradd --uid 1000 --gid users --shell /bin/bash --create-home deploy
 USER deploy
