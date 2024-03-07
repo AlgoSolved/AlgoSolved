@@ -1,8 +1,15 @@
 package com.example.backend.github.controller;
 
 import com.example.backend.common.response.BaseResponse;
-import com.example.backend.github.response.GithubStatus;
+import com.example.backend.github.domain.GithubRepository;
+import com.example.backend.github.repository.GithubRepositoryRepository;
+import com.example.backend.github.response.GithubRepositoryStatus;
 import com.example.backend.github.service.SyncWithGithubService;
+import com.example.backend.problem.domain.Problem;
+import com.example.backend.problem.service.ProblemService;
+import com.example.backend.solution.common.enums.LanguageType;
+import com.example.backend.solution.domain.Solution;
+import com.example.backend.solution.service.SolutionService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -13,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -21,41 +29,55 @@ import java.util.Map;
 public class GithubRepositoryController {
 
     private final SyncWithGithubService syncWithGithubService;
+    private final ProblemService problemService;
+    private final GithubRepositoryRepository githubRepositoryRepository;
+    private final SolutionService solutionService;
 
     @PostMapping("/connect")
     public ResponseEntity<Boolean> connect(@RequestBody Map<String, Object> payload) {
         String owner = (String) payload.get("owner");
         String repo = (String) payload.get("repo");
+        Boolean result = syncWithGithubService.connect(owner, repo);
 
-        if (syncWithGithubService.connect(owner, repo)) {
-            return new ResponseEntity(
-                    BaseResponse.success(
-                            GithubStatus.SUCCESS.getCode(), GithubStatus.SUCCESS.getMessage()),
-                    HttpStatus.OK);
-        } else {
-            return new ResponseEntity(
-                    BaseResponse.success(
-                            GithubStatus.SUCCESS.getCode(), GithubStatus.SUCCESS.getMessage()),
-                    HttpStatus.OK);
-        }
+        return new ResponseEntity(
+                BaseResponse.success(
+                        GithubRepositoryStatus.SUCCESS.getCode(),
+                        GithubRepositoryStatus.SUCCESS.getMessage(),
+                        result),
+                HttpStatus.OK);
     }
 
     @PostMapping("/sync")
-    public ResponseEntity<Boolean> sync(@RequestBody Map<String, Object> payload) {
+    public ResponseEntity<Integer> sync(@RequestBody Map<String, Object> payload) {
         // TODO: 현재 유저와 동일한지 확인필요
 
-        Integer githubRepositoryId = (Integer) payload.get("githubRepositoryId");
+        int count = 0;
 
-        if (syncWithGithubService.fetch(githubRepositoryId.longValue())) {
-            return new ResponseEntity(
-                    BaseResponse.success(
-                            GithubStatus.SUCCESS.getCode(), GithubStatus.SUCCESS.getMessage()),
-                    HttpStatus.OK);
-        } else {
-            return new ResponseEntity(
-                    BaseResponse.success(
-                            GithubStatus.SUCCESS.getCode(), GithubStatus.SUCCESS.getMessage()),
-                    HttpStatus.OK);
+        Long githubRepositoryId = Long.parseLong(String.valueOf(payload.get("githubRepositoryId")));
+        GithubRepository githubRepository =
+                githubRepositoryRepository.findById(githubRepositoryId).get();
+
+        List<String[]> solutionFiles = syncWithGithubService.fetch(githubRepository);
+
+        for (String[] fileAndCode : solutionFiles) {
+            String file = fileAndCode[0];
+            String sourceCode = fileAndCode[1];
+            Problem problem = problemService.getOrCreateFromFile(file);
+
+            LanguageType languageType = LanguageType.getLanguageType(file);
+            Solution solution =
+                    solutionService.createSolution(
+                            githubRepository, problem, languageType, sourceCode);
+            if (solution != null) {
+                count++;
+            }
         }
+
+        return new ResponseEntity(
+                BaseResponse.success(
+                        GithubRepositoryStatus.SUCCESS.getCode(),
+                        GithubRepositoryStatus.SUCCESS.getMessage(),
+                        count),
+                HttpStatus.OK);
     }
 }

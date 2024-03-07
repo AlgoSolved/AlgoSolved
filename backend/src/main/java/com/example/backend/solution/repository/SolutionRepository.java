@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface SolutionRepository extends JpaRepository<Solution, Long> {
     List<Solution> findTop10ByOrderByCreatedAtDesc();
+
+    Boolean existsByHashKey(String hashKey);
 }

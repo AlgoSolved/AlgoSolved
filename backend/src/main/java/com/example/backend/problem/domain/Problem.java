@@ -3,57 +3,49 @@ package com.example.backend.problem.domain;
 import com.example.backend.common.BaseTimeEntity;
 import com.example.backend.solution.domain.Solution;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "problems")
 @Getter
 @RequiredArgsConstructor
-public class Problem extends BaseTimeEntity {
-
-    @OneToMany(mappedBy = "problem")
-    private List<Solution> solutions;
-
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "type", columnDefinition = "CHAR")
+public abstract class Problem extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "number")
-    private Long number;
-
     @Column(name = "title", length = 100, nullable = false)
-    private String title;
+    protected String title;
 
-    @Column(name = "content", length = 10_000, nullable = false)
-    private String content;
+    @OneToMany(mappedBy = "problem")
+    private List<Solution> solutions;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "provider_id")
-    private Provider provider;
-
-    @OneToOne(mappedBy = "problem", fetch = FetchType.LAZY)
-    private BaekjoonProblemDetail baekjoonProblemDetail;
-
-    @Builder
-    public Problem(String title, String content, Provider provider) {
+    public Problem(String title) {
         this.title = title;
-        this.content = content;
-        this.provider = provider;
+        this.setCreatedAt(LocalDateTime.now());
+        this.setUpdatedAt(LocalDateTime.now());
     }
+
+    public abstract String getLink();
+
+    public abstract String getRank();
+
+    public abstract Long getNumber();
 }
