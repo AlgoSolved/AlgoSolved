@@ -29,7 +29,6 @@ public class SolutionController {
     public ResponseEntity<List<SolutionDTO>> getRecentSolutions() {
         List<SolutionDTO> solutionAllList = solutionService.getRecentSolutions();
 
-        System.out.println(solutionAllList.isEmpty());
         if (solutionAllList.isEmpty()) {
             return new ResponseEntity(
                     BaseResponse.success(

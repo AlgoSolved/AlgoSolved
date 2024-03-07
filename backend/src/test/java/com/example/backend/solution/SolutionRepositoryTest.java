@@ -63,7 +63,6 @@ public class SolutionRepositoryTest {
             solutions.add(solution);
         }
         List<Solution> result = solutionRepository.findTop10ByOrderByCreatedAtDesc();
-        System.out.println(result);
 
         assertThat(result).hasSize(10).containsAll(solutions.subList(1, 11));
     }
