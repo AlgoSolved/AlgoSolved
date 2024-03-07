@@ -37,22 +37,14 @@ public class GithubRepositoryController {
     public ResponseEntity<Boolean> connect(@RequestBody Map<String, Object> payload) {
         String owner = (String) payload.get("owner");
         String repo = (String) payload.get("repo");
+        Boolean result = syncWithGithubService.connect(owner, repo);
 
-        if (syncWithGithubService.connect(owner, repo)) {
-            return new ResponseEntity(
-                    BaseResponse.success(
-                            GithubRepositoryStatus.SUCCESS.getCode(),
-                            GithubRepositoryStatus.SUCCESS.getMessage(),
-                            true),
-                    HttpStatus.OK);
-        } else {
-            return new ResponseEntity(
-                    BaseResponse.success(
-                            GithubRepositoryStatus.SUCCESS.getCode(),
-                            GithubRepositoryStatus.SUCCESS.getMessage(),
-                            false),
-                    HttpStatus.OK);
-        }
+        return new ResponseEntity(
+                BaseResponse.success(
+                        GithubRepositoryStatus.SUCCESS.getCode(),
+                        GithubRepositoryStatus.SUCCESS.getMessage(),
+                        result),
+                HttpStatus.OK);
     }
 
     @PostMapping("/sync")
