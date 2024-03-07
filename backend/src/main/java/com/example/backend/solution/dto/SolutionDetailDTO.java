@@ -19,16 +19,16 @@ public class SolutionDetailDTO {
     private String link;
     private String rank;
 
-    public static SolutionDetailDTO mapToDTO(Solution solution, String link, String rank) {
+    public static SolutionDetailDTO mapToDTO(Solution solution) {
         Problem problem = solution.getProblem();
 
         return SolutionDetailDTO.builder()
-                .language(solution.getLanguage())
+                .language(solution.getLanguage().getName())
                 .sourceCode(solution.getSourceCode())
                 .problemName(problem.getTitle())
                 .problemNumber(problem.getNumber())
-                .link(link)
-                .rank(rank)
+                .link(problem.getLink())
+                .rank(problem.getRank())
                 .build();
     }
 }
