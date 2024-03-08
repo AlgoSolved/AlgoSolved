@@ -39,6 +39,7 @@ public class SyncWithGithubServiceTest {
                         .name("uchan")
                         .profileImageUrl("image-url")
                         .githubUrl("github-url")
+                        .accessToken("accesstoken")
                         .build();
     }
 
@@ -114,6 +115,7 @@ public class SyncWithGithubServiceTest {
                             .name("uchan")
                             .profileImageUrl("image-url")
                             .githubUrl("github-url")
+                            .accessToken("accesstoken")
                             .build();
             GithubRepository githubRepository =
                     GithubRepository.builder().user(user).repo("repo").build();
@@ -137,6 +139,7 @@ public class SyncWithGithubServiceTest {
                             .name("uchan")
                             .profileImageUrl("image-url")
                             .githubUrl("github-url")
+                            .accessToken("accesstoken")
                             .build();
             GithubRepository githubRepository =
                     GithubRepository.builder().user(user).repo("repo").build();

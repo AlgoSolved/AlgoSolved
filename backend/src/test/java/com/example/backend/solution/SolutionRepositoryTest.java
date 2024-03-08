@@ -37,6 +37,7 @@ public class SolutionRepositoryTest {
                         .name("uchan")
                         .profileImageUrl("image-url")
                         .githubUrl("github-url")
+                        .accessToken("accesstoken")
                         .build();
         userRepository.save(user);
         GithubRepository githubRepository =
