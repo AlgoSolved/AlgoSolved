@@ -1,9 +1,9 @@
 package com.example.backend.user.service;
 
 import com.example.backend.common.enums.ExceptionStatus;
-import com.example.backend.common.exceptions.BadRequestException;
 import com.example.backend.common.exceptions.NotFoundException;
 import com.example.backend.github.domain.GithubRepository;
+import com.example.backend.lib.GithubClient;
 import com.example.backend.user.domain.User;
 import com.example.backend.user.dto.UserDTO.Profile;
 import com.example.backend.user.repository.UserRepository;
@@ -19,6 +19,7 @@ import javax.transaction.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final GithubClient githubClient;
 
     public Profile getUserProfile(Long id) {
         User user =
@@ -37,20 +38,19 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(Long id, String inputUsername) {
+    public boolean deleteUser(Long id) {
         User user =
                 userRepository
                         .findById(id)
                         .orElseThrow(() -> new NotFoundException(ExceptionStatus.NOT_FOUND));
 
-        if (verifyUsername(user.getUsername(), inputUsername)) {
-            userRepository.delete(user);
-        } else {
-            throw new BadRequestException(ExceptionStatus.USERNAME_MISMATCH);
-        }
+        userRepository.delete(user);
+        githubClient.revokeOauthToken(user.getAccessToken());
+        return true;
     }
 
-    private boolean verifyUsername(String storedUsername, String inputUsername) {
+    public boolean verifyUsername(Long userId, String inputUsername) {
+        String storedUsername = userRepository.findById(userId).get().getUsername();
         return storedUsername.equals(inputUsername);
     }
 }

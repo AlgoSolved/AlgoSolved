@@ -1,5 +1,6 @@
 package com.example.backend.user.controller;
 
+import com.example.backend.common.enums.ExceptionStatus;
 import com.example.backend.common.response.BaseResponse;
 import com.example.backend.user.dto.UserDTO.Profile;
 import com.example.backend.user.response.UserStatus;
@@ -34,12 +35,19 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<BaseResponse<String>> deleteUser(
-            @PathVariable("id") Long id, @RequestParam String inputUsername) {
-        userService.deleteUser(id, inputUsername);
-
+    public ResponseEntity<BaseResponse<Boolean>> deleteUser(
+            @PathVariable("id") Long userId, @RequestParam String inputUsername) {
+        if (!userService.verifyUsername(userId, inputUsername)) {
+            return new ResponseEntity(
+                    BaseResponse.failure(
+                            ExceptionStatus.USERNAME_MISMATCH.getCode(),
+                            ExceptionStatus.USERNAME_MISMATCH.getMessage()),
+                    HttpStatus.BAD_REQUEST);
+        }
+        boolean result = userService.deleteUser(userId);
         return new ResponseEntity(
-                BaseResponse.success(UserStatus.SUCCESS.getCode(), UserStatus.SUCCESS.getMessage()),
+                BaseResponse.success(
+                        UserStatus.SUCCESS.getCode(), UserStatus.SUCCESS.getMessage(), result),
                 HttpStatus.OK);
     }
 }
