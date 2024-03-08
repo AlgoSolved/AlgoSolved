@@ -48,15 +48,24 @@ public class User extends BaseTimeEntity {
     @Column(name = "github_url")
     private String githubUrl;
 
+    @Column(name = "access_token")
+    private String accessToken;
+
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
     @Builder
-    public User(String username, String name, String profileImageUrl, String githubUrl) {
+    public User(
+            String username,
+            String name,
+            String profileImageUrl,
+            String githubUrl,
+            String accessToken) {
         this.username = username;
         this.name = name;
         this.profileImageUrl = profileImageUrl;
         this.githubUrl = githubUrl;
+        this.accessToken = accessToken;
         this.setCreatedAt(LocalDateTime.now());
         this.setUpdatedAt(LocalDateTime.now());
     }
