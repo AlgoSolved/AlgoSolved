@@ -6,10 +6,13 @@ import com.example.backend.lib.GithubClient;
 import com.example.backend.solution.common.enums.LanguageType;
 import com.example.backend.user.domain.User;
 import com.example.backend.user.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +61,7 @@ public class SyncWithGithubService {
             for (String file : solutionFiles) {
                 String sourceCode = githubClient.getContent(repo, file);
                 if (sourceCode != null) {
-                    result.add(new String[]{file, sourceCode});
+                    result.add(new String[] {file, sourceCode});
                 }
             }
 

@@ -23,13 +23,12 @@ import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class SyncWithGithubServiceTest {
+
+    User user;
     @Mock private GithubClient githubClient;
     @Mock private GithubRepositoryRepository githubRepositoryRepository;
     @Mock private UserRepository userRepository;
-
     @InjectMocks private SyncWithGithubService syncWithGithubService;
-
-    User user;
 
     @BeforeEach
     public void setUp() {
@@ -129,6 +128,27 @@ public class SyncWithGithubServiceTest {
         }
 
         @Test
+        @DisplayName("해당 레포지토리에 백준 솔루션 파일이 최대 길이 제한 보다 큰 경우 파일과 null을 반환한다.")
+        public void BackjoonSolutionSizeOverFileTest() {
+            user =
+                    User.builder()
+                            .username("uchan")
+                            .name("uchan")
+                            .profileImageUrl("image-url")
+                            .githubUrl("github-url")
+                            .build();
+            GithubRepository githubRepository =
+                    GithubRepository.builder().user(user).repo("repo").build();
+            when(githubClient.getAllFiles(githubRepository.getRepo()))
+                    .thenReturn(List.of("백준/Bronze/1000. A＋B/A＋B.py"));
+            when(githubClient.getContent(githubRepository.getRepo(), "백준/Bronze/1000. A＋B/A＋B.py"))
+                    .thenReturn(null);
+
+            List<String[]> result = syncWithGithubService.fetch(githubRepository);
+            Assertions.assertTrue(result.isEmpty());
+        }
+
+        @Test
         @DisplayName("해당 레포지토리에 프로그래머스 솔루션 파일이 있는 경우 파일과 코드를 반환한다.")
         public void ProgrammersSolutionFileTest() {
             User user =
@@ -149,6 +169,28 @@ public class SyncWithGithubServiceTest {
             List<String[]> result = syncWithGithubService.fetch(githubRepository);
             Assertions.assertEquals(result.get(0)[0], "프로그래머스/0/1. 두 정수 사이의 합/두 정수 사이의 합.py");
             Assertions.assertEquals(result.get(0)[1], "def solution(a, b): return a + b");
+        }
+
+        @Test
+        @DisplayName("해당 레포지토리에 프로그래머스 솔루션 파일이 최대 길이 제한 보다 큰 경우 파일과 null을 반환한다.")
+        public void ProgrammersSolutionSizeOverFileTest() {
+            User user =
+                    User.builder()
+                            .username("uchan")
+                            .name("uchan")
+                            .profileImageUrl("image-url")
+                            .githubUrl("github-url")
+                            .build();
+            GithubRepository githubRepository =
+                    GithubRepository.builder().user(user).repo("repo").build();
+            when(githubClient.getAllFiles(githubRepository.getRepo()))
+                    .thenReturn(List.of("프로그래머스/0/1. 두 정수 사이의 합/두 정수 사이의 합.py"));
+            when(githubClient.getContent(
+                            githubRepository.getRepo(), "프로그래머스/0/1. 두 정수 사이의 합/두 정수 사이의 합.py"))
+                    .thenReturn(null);
+
+            List<String[]> result = syncWithGithubService.fetch(githubRepository);
+            Assertions.assertTrue(result.isEmpty());
         }
     }
 }
