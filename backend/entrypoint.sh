@@ -1,14 +1,14 @@
 #!/bin/bash
 
+JAR_FILE_NAME=backend-0.0.1-SNAPSHOT.jar
+
 start_dev_server() {
   (sleep 30; ./gradlew buildAndReload --continuous -PskipDownload=true -x Test) &
   ./gradlew bootRun -PskipDownload=true -Dspring.profiles.active=dev
-
-
 }
 
 start_prod_server() {
-  ./gradlew bootRun -Dspring.profiles.active=prod
+  java -jar -Dspring.profiles.active=prod $JAR_FILE_NAME
 }
 
 start_server() {
