@@ -18,16 +18,13 @@ RUN ./gradlew build -x test --parallel
 
 
 FROM base AS production
-RUN useradd --uid 1000 --gid users --shell /bin/bash --create-home deploy
-USER deploy
 
-RUN mkdir -p /home/deploy/app/backend
 WORKDIR /home/deploy/app/backend
 COPY --chown=deploy:users --from=builder ${JAR_FILE_PATH} ${JAR_FILE_PATH}
 COPY --chown=deploy:users entrypoint.sh entrypoint.sh
 EXPOSE 8080
 
-RUN chmod +x entrypoint.sh && ./gradlew getDependencies
+RUN chmod +x entrypoint.sh
 
 ENTRYPOINT ["./entrypoint.sh"]
 

@@ -1,6 +1,8 @@
 package com.example.backend.user;
 
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -70,10 +72,25 @@ public class UserControllerTest {
     }
 
     @Test
-    @DisplayName("사용자가 입력한 유저네임이 일치한 경우 true를 반환한다.")
+    @DisplayName("사용자가 입력한 유저네임이 불일치한 경우 에러를 반환한다.")
+    @WithMockUser(username = "jake", roles = "USER")
+    void 유저_탈퇴_실패() throws Exception {
+        given(userService.deleteUser(1L)).willReturn(false);
+        mockMvc.perform(
+                        delete("/v1/user/{id}", 1)
+                                .param("inputUsername", "incorrectUsername")
+                                .with(csrf()))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("성공적으로 탈퇴한 경우 true를 반환한다.")
     @WithMockUser(username = "jake", roles = "USER")
     void 유저_탈퇴_성공() throws Exception {
-        mockMvc.perform(delete("/v1/user/{id}", 1).param("inputUsername", "jake"))
+        given(userService.verifyUsername(1L, "jake")).willReturn(true);
+        given(userService.deleteUser(1L)).willReturn(true);
+
+        mockMvc.perform(delete("/v1/user/{id}", 1).param("inputUsername", "jake").with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(

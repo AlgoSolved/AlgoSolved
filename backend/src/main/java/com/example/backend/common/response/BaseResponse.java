@@ -22,4 +22,12 @@ public class BaseResponse<T> {
     public static <T> BaseResponse<Object> success(String code, String message, T data) {
         return BaseResponse.builder().code(code).message(message).data(data).build();
     }
+
+    public static BaseResponse<Object> failure(String code, String message) {
+        return BaseResponse.builder().code(code).message(message).data(null).build();
+    }
+
+    public static <T> BaseResponse<Object> failure(String code, String message, T data) {
+        return BaseResponse.builder().code(code).message(message).data(data).build();
+    }
 }
