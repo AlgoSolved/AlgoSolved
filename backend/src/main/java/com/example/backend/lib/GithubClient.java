@@ -1,6 +1,7 @@
 package com.example.backend.lib;
 
 import com.example.backend.util.JWTGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.kohsuke.github.GHAppInstallation;
 import org.kohsuke.github.GHAppInstallationToken;
@@ -8,8 +9,15 @@ import org.kohsuke.github.GHTreeEntry;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
 
 @Component
@@ -22,6 +30,12 @@ public class GithubClient {
 
     @Value("${github.app.installationId}")
     private Long githubAppInstallationId;
+
+    @Value("${github.oauth.client.id}")
+    private String githubAppClientId;
+
+    @Value("${github.oauth.client.secret}")
+    private String githubAppClientSecret;
 
     private final long ttlMillis = 600000;
 
@@ -68,6 +82,51 @@ public class GithubClient {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public Boolean revokeOauthToken(String token) {
+        // github-api 에 구현된게 없어서 직접 구현하였습니다
+        try {
+            HashMap<String, String> params = new HashMap<>();
+            params.put("access_token", token);
+            String auth =
+                    Base64.getEncoder()
+                            .encodeToString(
+                                    String.format("%s:%s", githubAppClientId, githubAppClientSecret)
+                                            .getBytes());
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            byte[] paramBytes = mapper.writeValueAsString(params).getBytes(StandardCharsets.UTF_8);
+
+            HttpURLConnection connection = getHttpURLConnection(auth);
+            connection.getOutputStream().write(paramBytes);
+
+            int status = connection.getResponseCode();
+
+            connection.disconnect();
+
+            return status == HttpStatus.NO_CONTENT.value();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private HttpURLConnection getHttpURLConnection(String auth) throws IOException {
+        URL url =
+                new URL(
+                        String.format(
+                                "https://api.github.com/applications/%s/grant", githubAppClientId));
+
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("DELETE");
+        connection.addRequestProperty("Authorization", "Basic " + auth);
+        connection.addRequestProperty("Accept", "application/vnd.github.v3+json");
+        connection.addRequestProperty(
+                "Content-Type", "application/x-www-form-urlencoded charset=utf-8");
+        connection.setDoOutput(true);
+        return connection;
     }
 
     private GitHub buildGithub() throws Exception {

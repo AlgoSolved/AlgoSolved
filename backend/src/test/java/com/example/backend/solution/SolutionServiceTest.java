@@ -52,6 +52,7 @@ public class SolutionServiceTest {
                             .name("uchan")
                             .profileImageUrl("image-url")
                             .githubUrl("github-url")
+                            .accessToken("accesstoken")
                             .build();
             githubRepository = GithubRepository.builder().user(user).repo("repo").build();
             problem =
