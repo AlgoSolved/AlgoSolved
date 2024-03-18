@@ -23,13 +23,13 @@ import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class SyncWithGithubServiceTest {
+
+    User user;
     @Mock private GithubClient githubClient;
     @Mock private GithubRepositoryRepository githubRepositoryRepository;
     @Mock private UserRepository userRepository;
 
     @InjectMocks private SyncWithGithubService syncWithGithubService;
-
-    User user;
 
     @BeforeEach
     public void setUp() {

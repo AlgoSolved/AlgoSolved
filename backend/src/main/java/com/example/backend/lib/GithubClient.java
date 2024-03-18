@@ -3,8 +3,11 @@ package com.example.backend.lib;
 import com.example.backend.util.JWTGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.kohsuke.github.GHAppInstallation;
 import org.kohsuke.github.GHAppInstallationToken;
+import org.kohsuke.github.GHContent;
 import org.kohsuke.github.GHTreeEntry;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
@@ -20,8 +23,12 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 
+@Slf4j
 @Component
 public class GithubClient {
+
+    private final long ttlMillis = 600000;
+
     @Value("${github.app.id}")
     private String githubAppId;
 
@@ -37,7 +44,8 @@ public class GithubClient {
     @Value("${github.oauth.client.secret}")
     private String githubAppClientSecret;
 
-    private final long ttlMillis = 600000;
+    @Value("${github.app.maxFileSize}")
+    private Long githubAppMaxFileSize;
 
     public Boolean isPathExist(String repo) {
         try {
@@ -77,7 +85,12 @@ public class GithubClient {
     public String getContent(String repo, String path) {
         try {
             GitHub github = buildGithub();
-            return github.getRepository(repo).getFileContent(path).getContent();
+            GHContent content = github.getRepository(repo).getFileContent(path);
+            if (content.getSize() > githubAppMaxFileSize) {
+                log.error("{} file size is over max file size", path);
+                return null;
+            }
+            return content.getContent();
         } catch (Exception e) {
             e.printStackTrace();
             return null;

@@ -23,12 +23,10 @@ import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
+    User user;
     @Mock private GithubClient githubClient;
-
     @InjectMocks private UserService userService;
     @Mock private UserRepository userRepository;
-
-    User user;
 
     @BeforeEach
     public void setUp() {
