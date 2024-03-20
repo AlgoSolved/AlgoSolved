@@ -6,13 +6,24 @@ import com.example.backend.lib.GithubClient;
 import com.example.backend.solution.common.enums.LanguageType;
 import com.example.backend.user.domain.User;
 import com.example.backend.user.repository.UserRepository;
-
-import lombok.RequiredArgsConstructor;
-
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.joda.time.DateTime;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.JobParametersInvalidException;
+import org.springframework.batch.core.configuration.JobRegistry;
+import org.springframework.batch.core.explore.JobExplorer;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.launch.NoSuchJobException;
+import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
+import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+import org.springframework.batch.core.repository.JobRestartException;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +32,9 @@ public class SyncWithGithubService {
     private final GithubClient githubClient;
     private final GithubRepositoryRepository githubRepositoryRepository;
     private final UserRepository userRepository;
+    private final JobLauncher asyncJobLauncher;
+    private final JobRegistry jobRegistry;
+    private final JobExplorer jobExplorer;
 
     public boolean connect(String userName, String repositoryName) {
         try {
@@ -47,6 +61,7 @@ public class SyncWithGithubService {
         }
     }
 
+    @Async
     public List<String[]> fetch(GithubRepository githubRepository) {
         try {
             List<String[]> result = new ArrayList<>();
@@ -71,4 +86,20 @@ public class SyncWithGithubService {
             return null;
         }
     }
+
+    public void fetchJob(GithubRepository githubRepository) {
+        JobParameters jobParameters = new JobParametersBuilder(jobExplorer)
+                .addString("repo", githubRepository.getRepo())
+                .addString("startTime", DateTime.now().toString())
+                .toJobParameters();
+
+        try {
+            Job job = jobRegistry.getJob("githubProblemSyncJob");
+            JobExecution jobExecution = asyncJobLauncher.run(job, jobParameters);
+
+        } catch (JobExecutionAlreadyRunningException | JobInstanceAlreadyCompleteException | JobParametersInvalidException | NoSuchJobException | JobRestartException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
