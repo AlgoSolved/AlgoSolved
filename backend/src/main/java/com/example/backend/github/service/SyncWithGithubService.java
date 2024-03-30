@@ -17,6 +17,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SyncWithGithubService {
+
     private final GithubClient githubClient;
     private final GithubRepositoryRepository githubRepositoryRepository;
     private final UserRepository userRepository;
@@ -59,7 +60,9 @@ public class SyncWithGithubService {
 
             for (String file : solutionFiles) {
                 String sourceCode = githubClient.getContent(repo, file);
-                result.add(new String[] {file, sourceCode});
+                if (sourceCode != null) {
+                    result.add(new String[] {file, sourceCode});
+                }
             }
 
             return result;
