@@ -8,17 +8,20 @@ import com.example.backend.problem.service.ProblemService;
 import com.example.backend.solution.common.enums.LanguageType;
 import com.example.backend.solution.domain.Solution;
 import com.example.backend.solution.repository.SolutionRepository;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.support.ListItemReader;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -40,9 +43,9 @@ public class GithubProblemSyncSteps {
 
         for (String file : solutionFiles) {
             String sourceCode = githubClient.getContent(repo, file);
-            GithubSyncDto githubSyncDto = GithubSyncDto.builder().file(file).sourceCode(sourceCode).build();
+            GithubSyncDto githubSyncDto =
+                    GithubSyncDto.builder().file(file).sourceCode(sourceCode).build();
             githubSyncDtos.add(githubSyncDto);
-
         }
 
         return new ListItemReader<GithubSyncDto>(githubSyncDtos);
@@ -77,7 +80,6 @@ public class GithubProblemSyncSteps {
                 return solution;
             }
         };
-
     }
 
     @StepScope
@@ -90,5 +92,4 @@ public class GithubProblemSyncSteps {
             }
         };
     }
-
 }

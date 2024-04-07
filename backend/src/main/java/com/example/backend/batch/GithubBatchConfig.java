@@ -5,8 +5,10 @@ import com.example.backend.github.domain.GithubRepository;
 import com.example.backend.github.repository.GithubRepositoryRepository;
 import com.example.backend.solution.domain.Solution;
 import com.example.backend.solution.repository.SolutionRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.JobRegistry;
@@ -48,7 +50,6 @@ public class GithubBatchConfig {
         return jobLauncher;
     }
 
-
     @Bean
     public JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor(JobRegistry jobRegistry) {
         JobRegistryBeanPostProcessor postProcessor = new JobRegistryBeanPostProcessor();
@@ -58,23 +59,26 @@ public class GithubBatchConfig {
 
     @Bean
     public Job githubProblemSyncJob() throws Exception {
-        return  jobBuilderFactory.get("githubProblemSyncJob")
+        return jobBuilderFactory
+                .get("githubProblemSyncJob")
                 .incrementer(new RunIdIncrementer())
                 .start(githubProblemSyncStep(null))
                 .build();
-
     }
 
     @JobScope
     @Bean
-    public Step githubProblemSyncStep(@Value("#{jobParameters[repo]}") String repo) throws Exception {
+    public Step githubProblemSyncStep(@Value("#{jobParameters[repo]}") String repo)
+            throws Exception {
 
-        return stepBuilderFactory.get("excelRequestExcute")
+        return stepBuilderFactory
+                .get("excelRequestExcute")
                 .<GithubSyncDto, Solution>chunk(1000)
                 .reader(githubProblemSyncSteps.excelRequestReader(repo))
-                .processor(githubProblemSyncSteps.excelRequestProcessor(solutionRepository, githubRepository))
+                .processor(
+                        githubProblemSyncSteps.excelRequestProcessor(
+                                solutionRepository, githubRepository))
                 .writer(githubProblemSyncSteps.excelRequestWriter(solutionRepository))
                 .build();
     }
-
 }

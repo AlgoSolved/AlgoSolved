@@ -10,15 +10,18 @@ import com.example.backend.problem.service.ProblemService;
 import com.example.backend.solution.common.enums.LanguageType;
 import com.example.backend.solution.domain.Solution;
 import com.example.backend.solution.service.SolutionService;
-import java.util.List;
-import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -77,7 +80,6 @@ public class GithubRepositoryController {
                         count),
                 HttpStatus.OK);
     }
-
 
     @PostMapping("/sync-job")
     public ResponseEntity<Integer> syncJob(@RequestBody Map<String, Object> payload) {

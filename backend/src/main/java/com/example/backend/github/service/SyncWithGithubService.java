@@ -22,7 +22,6 @@ import org.springframework.batch.core.launch.NoSuchJobException;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -61,7 +60,6 @@ public class SyncWithGithubService {
         }
     }
 
-    @Async
     public List<String[]> fetch(GithubRepository githubRepository) {
         try {
             List<String[]> result = new ArrayList<>();
@@ -88,18 +86,22 @@ public class SyncWithGithubService {
     }
 
     public void fetchJob(GithubRepository githubRepository) {
-        JobParameters jobParameters = new JobParametersBuilder(jobExplorer)
-                .addString("repo", githubRepository.getRepo())
-                .addString("startTime", DateTime.now().toString())
-                .toJobParameters();
+        JobParameters jobParameters =
+                new JobParametersBuilder(jobExplorer)
+                        .addString("repo", githubRepository.getRepo())
+                        .addString("startTime", DateTime.now().toString())
+                        .toJobParameters();
 
         try {
             Job job = jobRegistry.getJob("githubProblemSyncJob");
             JobExecution jobExecution = asyncJobLauncher.run(job, jobParameters);
 
-        } catch (JobExecutionAlreadyRunningException | JobInstanceAlreadyCompleteException | JobParametersInvalidException | NoSuchJobException | JobRestartException e) {
+        } catch (JobExecutionAlreadyRunningException
+                | JobInstanceAlreadyCompleteException
+                | JobParametersInvalidException
+                | NoSuchJobException
+                | JobRestartException e) {
             e.printStackTrace();
         }
     }
-
 }
