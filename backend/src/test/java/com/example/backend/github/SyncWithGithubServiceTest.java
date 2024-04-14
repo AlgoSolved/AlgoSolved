@@ -16,7 +16,7 @@ import com.example.backend.solution.repository.SolutionRepository;
 import com.example.backend.solution.service.SolutionService;
 import com.example.backend.user.domain.User;
 import com.example.backend.user.repository.UserRepository;
-import java.util.List;
+
 import org.instancio.Instancio;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,6 +27,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class SyncWithGithubServiceTest {
@@ -130,12 +132,17 @@ public class SyncWithGithubServiceTest {
             when(problemService.getOrCreateFromFile("백준/Bronze/1000. A＋B/A＋B.py"))
                     .thenReturn(problem);
 
-
             syncWithGithubService.fetch(githubRepository);
 
             verify(githubClient).getAllFiles(githubRepository.getRepo());
-            verify(githubClient).getContent(githubRepository.getRepo(), "백준/Bronze/1000. A＋B/A＋B.py");
-            verify(solutionService).createSolution(githubRepository, problem, LanguageType.python, "a, b = map(int, input().split()); print(a+b)");
+            verify(githubClient)
+                    .getContent(githubRepository.getRepo(), "백준/Bronze/1000. A＋B/A＋B.py");
+            verify(solutionService)
+                    .createSolution(
+                            githubRepository,
+                            problem,
+                            LanguageType.python,
+                            "a, b = map(int, input().split()); print(a+b)");
         }
 
         @Test
@@ -161,12 +168,17 @@ public class SyncWithGithubServiceTest {
             when(problemService.getOrCreateFromFile("프로그래머스/0/1. 두 정수 사이의 합/두 정수 사이의 합.py"))
                     .thenReturn(problem);
 
-
             syncWithGithubService.fetch(githubRepository);
 
             verify(githubClient).getAllFiles(githubRepository.getRepo());
-            verify(githubClient).getContent(githubRepository.getRepo(), "프로그래머스/0/1. 두 정수 사이의 합/두 정수 사이의 합.py");
-            verify(solutionService).createSolution(githubRepository, problem, LanguageType.python, "def solution(a, b): return a + b");
+            verify(githubClient)
+                    .getContent(githubRepository.getRepo(), "프로그래머스/0/1. 두 정수 사이의 합/두 정수 사이의 합.py");
+            verify(solutionService)
+                    .createSolution(
+                            githubRepository,
+                            problem,
+                            LanguageType.python,
+                            "def solution(a, b): return a + b");
         }
     }
 }

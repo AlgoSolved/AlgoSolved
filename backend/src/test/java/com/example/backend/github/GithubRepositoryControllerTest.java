@@ -15,8 +15,7 @@ import com.example.backend.problem.service.ProblemService;
 import com.example.backend.solution.common.enums.LanguageType;
 import com.example.backend.solution.domain.Solution;
 import com.example.backend.solution.service.SolutionService;
-import java.util.ArrayList;
-import java.util.List;
+
 import org.instancio.Instancio;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -27,6 +26,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @WebMvcTest(GithubRepositoryController.class)
 public class GithubRepositoryControllerTest {

@@ -10,11 +10,14 @@ import com.example.backend.solution.domain.Solution;
 import com.example.backend.solution.service.SolutionService;
 import com.example.backend.user.domain.User;
 import com.example.backend.user.repository.UserRepository;
-import java.util.ArrayList;
-import java.util.List;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor

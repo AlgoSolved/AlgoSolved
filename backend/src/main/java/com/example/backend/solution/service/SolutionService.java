@@ -12,11 +12,15 @@ import com.example.backend.solution.domain.Solution;
 import com.example.backend.solution.dto.SolutionDTO;
 import com.example.backend.solution.dto.SolutionDetailDTO;
 import com.example.backend.solution.repository.SolutionRepository;
+
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.stream.Collectors;
+
 import javax.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
