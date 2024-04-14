@@ -15,7 +15,8 @@ import com.example.backend.problem.service.ProblemService;
 import com.example.backend.solution.common.enums.LanguageType;
 import com.example.backend.solution.domain.Solution;
 import com.example.backend.solution.service.SolutionService;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -26,9 +27,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @WebMvcTest(GithubRepositoryController.class)
 public class GithubRepositoryControllerTest {
@@ -111,7 +109,6 @@ public class GithubRepositoryControllerTest {
             Solution solution = Instancio.create(Solution.class);
             given(githubRepositoryRepository.findById(1L))
                     .willReturn(java.util.Optional.of(githubRepository));
-            given(syncWithGithubService.fetch(githubRepository)).willReturn(solutionFiles);
             given(problemService.getOrCreateFromFile(file)).willReturn(problem);
             given(
                             solutionService.createSolution(
@@ -137,7 +134,7 @@ public class GithubRepositoryControllerTest {
                     {
                         "code": "2000",
                         "message": "요청에 성공하였습니다.",
-                        "data": 1
+                        "data": ""
                     }
                     """));
         }

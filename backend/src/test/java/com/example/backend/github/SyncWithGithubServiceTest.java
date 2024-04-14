@@ -1,14 +1,23 @@
 package com.example.backend.github;
 
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.example.backend.github.domain.GithubRepository;
 import com.example.backend.github.repository.GithubRepositoryRepository;
 import com.example.backend.github.service.SyncWithGithubService;
 import com.example.backend.lib.GithubClient;
+import com.example.backend.problem.domain.BaekjoonProblem;
+import com.example.backend.problem.domain.ProgrammersProblem;
+import com.example.backend.problem.service.ProblemService;
+import com.example.backend.solution.common.enums.LanguageType;
+import com.example.backend.solution.domain.Solution;
+import com.example.backend.solution.repository.SolutionRepository;
+import com.example.backend.solution.service.SolutionService;
 import com.example.backend.user.domain.User;
 import com.example.backend.user.repository.UserRepository;
-
+import java.util.List;
+import org.instancio.Instancio;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,8 +28,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
-
 @ExtendWith(MockitoExtension.class)
 public class SyncWithGithubServiceTest {
 
@@ -28,6 +35,9 @@ public class SyncWithGithubServiceTest {
     @Mock private GithubClient githubClient;
     @Mock private GithubRepositoryRepository githubRepositoryRepository;
     @Mock private UserRepository userRepository;
+    @Mock private SolutionRepository solutionRepository;
+    @Mock private ProblemService problemService;
+    @Mock private SolutionService solutionService;
 
     @InjectMocks private SyncWithGithubService syncWithGithubService;
 
@@ -98,16 +108,7 @@ public class SyncWithGithubServiceTest {
     class FetchTest {
 
         @Test
-        @DisplayName("해당 레포지토리에 솔루션 파일이 없는 경우 빈 리스트를 반환한다.")
-        public void solutionFilesIsNotExistFetchTest() {
-            GithubRepository githubRepository = GithubRepository.builder().repo("repo").build();
-            when(githubClient.getAllFiles(githubRepository.getRepo())).thenReturn(List.of());
-
-            Assertions.assertEquals(syncWithGithubService.fetch(githubRepository), List.of());
-        }
-
-        @Test
-        @DisplayName("해당 레포지토리에 백준 솔루션 파일이 있는 경우 파일과 코드를 반환한다.")
+        @DisplayName("해당 레포지토리에 백준 솔루션 파일을 가져오고, 소스코드를 solution에 저장하는 메소드들을 호출한다.")
         public void BackjoonSolutionFileTest() {
             user =
                     User.builder()
@@ -119,19 +120,27 @@ public class SyncWithGithubServiceTest {
                             .build();
             GithubRepository githubRepository =
                     GithubRepository.builder().user(user).repo("repo").build();
+
+            BaekjoonProblem problem = Instancio.create(BaekjoonProblem.class);
+            Solution solution = Instancio.create(Solution.class);
             when(githubClient.getAllFiles(githubRepository.getRepo()))
                     .thenReturn(List.of("백준/Bronze/1000. A＋B/A＋B.py"));
             when(githubClient.getContent(githubRepository.getRepo(), "백준/Bronze/1000. A＋B/A＋B.py"))
                     .thenReturn("a, b = map(int, input().split()); print(a+b)");
+            when(problemService.getOrCreateFromFile("백준/Bronze/1000. A＋B/A＋B.py"))
+                    .thenReturn(problem);
 
-            List<String[]> result = syncWithGithubService.fetch(githubRepository);
-            Assertions.assertEquals(result.get(0)[0], "백준/Bronze/1000. A＋B/A＋B.py");
-            Assertions.assertEquals(
-                    result.get(0)[1], "a, b = map(int, input().split()); print(a+b)");
+
+            boolean success = syncWithGithubService.fetch(githubRepository);
+
+            Assertions.assertTrue(success);
+            verify(githubClient).getAllFiles(githubRepository.getRepo());
+            verify(githubClient).getContent(githubRepository.getRepo(), "백준/Bronze/1000. A＋B/A＋B.py");
+            verify(solutionService).createSolution(githubRepository, problem, LanguageType.python, "a, b = map(int, input().split()); print(a+b)");
         }
 
         @Test
-        @DisplayName("해당 레포지토리에 프로그래머스 솔루션 파일이 있는 경우 파일과 코드를 반환한다.")
+        @DisplayName("해당 레포지토리에 프로그래머스 솔루션 파일을 가져오고, 소스코드를 solution에 저장하는 메소드들을 호출한다.")
         public void ProgrammersSolutionFileTest() {
             User user =
                     User.builder()
@@ -143,15 +152,23 @@ public class SyncWithGithubServiceTest {
                             .build();
             GithubRepository githubRepository =
                     GithubRepository.builder().user(user).repo("repo").build();
+            ProgrammersProblem problem = Instancio.create(ProgrammersProblem.class);
+            Solution solution = Instancio.create(Solution.class);
             when(githubClient.getAllFiles(githubRepository.getRepo()))
                     .thenReturn(List.of("프로그래머스/0/1. 두 정수 사이의 합/두 정수 사이의 합.py"));
             when(githubClient.getContent(
                             githubRepository.getRepo(), "프로그래머스/0/1. 두 정수 사이의 합/두 정수 사이의 합.py"))
                     .thenReturn("def solution(a, b): return a + b");
+            when(problemService.getOrCreateFromFile("프로그래머스/0/1. 두 정수 사이의 합/두 정수 사이의 합.py"))
+                    .thenReturn(problem);
 
-            List<String[]> result = syncWithGithubService.fetch(githubRepository);
-            Assertions.assertEquals(result.get(0)[0], "프로그래머스/0/1. 두 정수 사이의 합/두 정수 사이의 합.py");
-            Assertions.assertEquals(result.get(0)[1], "def solution(a, b): return a + b");
+
+            boolean success = syncWithGithubService.fetch(githubRepository);
+
+            Assertions.assertTrue(success);
+            verify(githubClient).getAllFiles(githubRepository.getRepo());
+            verify(githubClient).getContent(githubRepository.getRepo(), "프로그래머스/0/1. 두 정수 사이의 합/두 정수 사이의 합.py");
+            verify(solutionService).createSolution(githubRepository, problem, LanguageType.python, "def solution(a, b): return a + b");
         }
     }
 }
