@@ -52,7 +52,7 @@ public class SyncWithGithubService {
     }
 
     @Async
-    public boolean fetch(GithubRepository githubRepository) {
+    public void fetch(GithubRepository githubRepository) {
         try {
             List<String[]> result = new ArrayList<>();
             String repo = githubRepository.getRepo();
@@ -73,10 +73,8 @@ public class SyncWithGithubService {
                                 githubRepository, problem, languageType, sourceCode);
             }
 
-            return true;
         } catch (Exception e) {
             System.out.println(e);
-            return false;
         }
     }
 }

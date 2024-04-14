@@ -131,9 +131,8 @@ public class SyncWithGithubServiceTest {
                     .thenReturn(problem);
 
 
-            boolean success = syncWithGithubService.fetch(githubRepository);
+            syncWithGithubService.fetch(githubRepository);
 
-            Assertions.assertTrue(success);
             verify(githubClient).getAllFiles(githubRepository.getRepo());
             verify(githubClient).getContent(githubRepository.getRepo(), "백준/Bronze/1000. A＋B/A＋B.py");
             verify(solutionService).createSolution(githubRepository, problem, LanguageType.python, "a, b = map(int, input().split()); print(a+b)");
@@ -163,9 +162,8 @@ public class SyncWithGithubServiceTest {
                     .thenReturn(problem);
 
 
-            boolean success = syncWithGithubService.fetch(githubRepository);
+            syncWithGithubService.fetch(githubRepository);
 
-            Assertions.assertTrue(success);
             verify(githubClient).getAllFiles(githubRepository.getRepo());
             verify(githubClient).getContent(githubRepository.getRepo(), "프로그래머스/0/1. 두 정수 사이의 합/두 정수 사이의 합.py");
             verify(solutionService).createSolution(githubRepository, problem, LanguageType.python, "def solution(a, b): return a + b");
