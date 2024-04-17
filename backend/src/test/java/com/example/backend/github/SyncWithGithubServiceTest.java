@@ -111,15 +111,6 @@ public class SyncWithGithubServiceTest {
   @DisplayName("fetch 테스트")
   class FetchTest {
 
-//    @Test
-//    @DisplayName("해당 레포지토리에 솔루션 파일이 없는 경우 빈 리스트를 반환한다.")
-//    public void solutionFilesIsNotExistFetchTest() {
-//      GithubRepository githubRepository = GithubRepository.builder().repo("repo").build();
-//      when(githubClient.getAllFiles(githubRepository.getRepo())).thenReturn(List.of());
-//
-//      Assertions.assertEquals(syncWithGithubService.fetch(githubRepository), List.of());
-//    } //FETCH메서드의 return이 없으므로 테스트 코드 삭제
-
     @Test
     @DisplayName("해당 레포지토리에 백준 솔루션 파일이 있는 경우 파일과 코드를 반환한다.")
     public void BaekjoonSolutionFileTest() {
