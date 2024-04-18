@@ -3,23 +3,30 @@ package com.example.backend.github.service;
 import com.example.backend.github.domain.GithubRepository;
 import com.example.backend.github.repository.GithubRepositoryRepository;
 import com.example.backend.lib.GithubClient;
+import com.example.backend.problem.domain.Problem;
+import com.example.backend.problem.service.ProblemService;
 import com.example.backend.solution.common.enums.LanguageType;
+import com.example.backend.solution.service.SolutionService;
 import com.example.backend.user.domain.User;
 import com.example.backend.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SyncWithGithubService {
 
     private final GithubClient githubClient;
     private final GithubRepositoryRepository githubRepositoryRepository;
+    private final ProblemService problemService;
+    private final SolutionService solutionService;
     private final UserRepository userRepository;
 
     public boolean connect(String userName, String repositoryName) {
@@ -47,9 +54,9 @@ public class SyncWithGithubService {
         }
     }
 
-    public List<String[]> fetch(GithubRepository githubRepository) {
+    @Async
+    public void fetch(GithubRepository githubRepository) {
         try {
-            List<String[]> result = new ArrayList<>();
             String repo = githubRepository.getRepo();
 
             List<String> solutionFiles =
@@ -60,15 +67,12 @@ public class SyncWithGithubService {
 
             for (String file : solutionFiles) {
                 String sourceCode = githubClient.getContent(repo, file);
-                if (sourceCode != null) {
-                    result.add(new String[] {file, sourceCode});
-                }
+                Problem problem = problemService.getOrCreateFromFile(file);
+                LanguageType languageType = LanguageType.getLanguageType(file);
+                solutionService.createSolution(githubRepository, problem, languageType, sourceCode);
             }
-
-            return result;
         } catch (Exception e) {
             System.out.println(e);
-            return null;
         }
     }
 }

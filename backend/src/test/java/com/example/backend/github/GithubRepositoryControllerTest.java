@@ -43,6 +43,7 @@ public class GithubRepositoryControllerTest {
     @Nested
     @DisplayName("/v1/github-repository/connect 테스트")
     class ConnectTest {
+
         @Test
         @WithMockUser(username = "uchan", roles = "USER")
         @DisplayName("성공적으로 연결됐을 때 테스트")
@@ -60,12 +61,12 @@ public class GithubRepositoryControllerTest {
                             content()
                                     .json(
                                             """
-                        {
-                            "code": "2000",
-                            "message": "요청에 성공하였습니다.",
-                            "data": true
-                        }
-                        """));
+                          {
+                              "code": "2000",
+                              "message": "요청에 성공하였습니다.",
+                              "data": true
+                          }
+                          """));
         }
 
         @Test
@@ -85,12 +86,12 @@ public class GithubRepositoryControllerTest {
                             content()
                                     .json(
                                             """
-                        {
-                            "code": "2000",
-                            "message": "요청에 성공하였습니다.",
-                            "data": false
-                        }
-                        """));
+                          {
+                              "code": "2000",
+                              "message": "요청에 성공하였습니다.",
+                              "data": false
+                          }
+                          """));
         }
     }
 
@@ -106,12 +107,13 @@ public class GithubRepositoryControllerTest {
             String sourceCode = "sourceCode";
             List<String[]> solutionFiles = new ArrayList<>();
             solutionFiles.add(new String[] {file, sourceCode});
+
             GithubRepository githubRepository = Instancio.create(GithubRepository.class);
             BaekjoonProblem problem = Instancio.create(BaekjoonProblem.class);
             Solution solution = Instancio.create(Solution.class);
+
             given(githubRepositoryRepository.findById(1L))
                     .willReturn(java.util.Optional.of(githubRepository));
-            given(syncWithGithubService.fetch(githubRepository)).willReturn(solutionFiles);
             given(problemService.getOrCreateFromFile(file)).willReturn(problem);
             given(
                             solutionService.createSolution(
@@ -123,10 +125,10 @@ public class GithubRepositoryControllerTest {
                                     .contentType(MediaType.APPLICATION_JSON)
                                     .content(
                                             """
-                        {
-                            "githubRepositoryId": 1
-                        }
-                    """)
+                              {
+                                  "githubRepositoryId": 1
+                              }
+                          """)
                                     .with(csrf()))
                     .andExpect(status().isOk())
                     .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -134,12 +136,12 @@ public class GithubRepositoryControllerTest {
                             content()
                                     .json(
                                             """
-                    {
-                        "code": "2000",
-                        "message": "요청에 성공하였습니다.",
-                        "data": 1
-                    }
-                    """));
+                          {
+                              "code": "2000",
+                              "message": "요청에 성공하였습니다.",
+                              "data": ""
+                          }
+                          """));
         }
     }
 }
