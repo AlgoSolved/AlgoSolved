@@ -39,5 +39,8 @@ out/
 ### envfile
 .env
 
+### IaC ###
+.terraform/
+
 ### others
 .DS_Store
