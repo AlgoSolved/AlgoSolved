@@ -71,6 +71,9 @@ dependencies {
 
 	// dotenv
 	implementation "me.paulschwarz:spring-dotenv:4.0.0"
+
+	// background task
+	implementation 'org.jobrunr:jobrunr-spring-boot-2-starter:7.0.0'
 }
 
 tasks.named('bootBuildImage') {

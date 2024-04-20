@@ -135,7 +135,7 @@ public class SyncWithGithubServiceTest {
                             githubRepository, problem, LanguageType.python, sourceCode))
                     .thenReturn(solution);
 
-            syncWithGithubService.fetch(githubRepository);
+            syncWithGithubService.fetch(githubRepository.getId());
 
             verify(githubClient).getAllFiles(githubRepository.getRepo());
             verify(githubClient).getContent(githubRepository.getRepo(), fileName);
@@ -171,7 +171,7 @@ public class SyncWithGithubServiceTest {
                             githubRepository, problem, LanguageType.python, sourceCode))
                     .thenReturn(solution);
 
-            syncWithGithubService.fetch(githubRepository);
+            syncWithGithubService.fetch(githubRepository.getId());
 
             verify(githubClient).getAllFiles(githubRepository.getRepo());
             verify(githubClient).getContent(githubRepository.getRepo(), fileName);

@@ -1,7 +1,6 @@
 package com.example.backend.github.controller;
 
 import com.example.backend.common.response.BaseResponse;
-import com.example.backend.github.domain.GithubRepository;
 import com.example.backend.github.repository.GithubRepositoryRepository;
 import com.example.backend.github.response.GithubRepositoryStatus;
 import com.example.backend.github.service.SyncWithGithubService;
@@ -11,6 +10,7 @@ import com.example.backend.solution.service.SolutionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.jobrunr.scheduling.JobScheduler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -30,6 +30,7 @@ public class GithubRepositoryController {
     private final ProblemService problemService;
     private final GithubRepositoryRepository githubRepositoryRepository;
     private final SolutionService solutionService;
+    private final JobScheduler jobScheduler;
 
     @PostMapping("/connect")
     public ResponseEntity<Boolean> connect(@RequestBody Map<String, Object> payload) {
@@ -48,9 +49,7 @@ public class GithubRepositoryController {
     @PostMapping("/sync")
     public ResponseEntity<Integer> sync(@RequestBody Map<String, Object> payload) {
         Long githubRepositoryId = Long.parseLong(String.valueOf(payload.get("githubRepositoryId")));
-        GithubRepository githubRepository =
-                githubRepositoryRepository.findById(githubRepositoryId).get();
-        syncWithGithubService.fetch(githubRepository);
+        jobScheduler.enqueue(() -> syncWithGithubService.fetch(githubRepositoryId));
 
         return new ResponseEntity(
                 BaseResponse.success(

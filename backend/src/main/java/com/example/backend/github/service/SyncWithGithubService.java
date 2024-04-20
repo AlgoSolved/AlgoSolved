@@ -13,7 +13,7 @@ import com.example.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.scheduling.annotation.Async;
+import org.jobrunr.jobs.annotations.Job;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,9 +54,11 @@ public class SyncWithGithubService {
         }
     }
 
-    @Async
-    public void fetch(GithubRepository githubRepository) {
+    @Job(name = "Fetch solutions from Github repository")
+    public void fetch(Long githubRepositoryId) {
         try {
+            GithubRepository githubRepository =
+                    githubRepositoryRepository.findById(githubRepositoryId).get();
             String repo = githubRepository.getRepo();
 
             List<String> solutionFiles =
