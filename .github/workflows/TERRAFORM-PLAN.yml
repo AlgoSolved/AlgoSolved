@@ -3,7 +3,7 @@ name: "Terraform Plan"
 on:
   pull_request:
     branches: [main]
-    types: [opened, edited, synchronize]
+    types: [opened, edited]
 
 env:
   TF_LOG: INFO
