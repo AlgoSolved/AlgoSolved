@@ -105,7 +105,7 @@ jobs:
 
           </details>
 
-          " > ${{ github.workspace }}/outputs/terraform-${service_name}.txt
+          " > ${{ github.workspace }}/outputs/${service_name}.txt
 
       - uses: actions/upload-artifact@v3
         with:
