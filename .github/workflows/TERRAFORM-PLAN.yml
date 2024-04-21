@@ -25,7 +25,7 @@ jobs:
           fetch-depth: 0
       - id: matrix
         run: |
-          DIFF_DIR=`git --no-pager diff --name-only origin/main HEAD`
+          DIFF_DIR=`git --no-pager diff --name-only origin/main HEAD -- infra`
           DIFF_DIR=`echo "${DIFF_DIR}" | sed 's|/[^/]*$||'`
 
           DIR_ARR=(`echo "${DIFF_DIR}"| awk '!seen[$0]++' | tr ' ' ', '`)
@@ -55,7 +55,7 @@ jobs:
       pull-requests: write
     defaults:
       run:
-        working-directory: ./${{ matrix.value }}
+        working-directory: ${{ matrix.value }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
