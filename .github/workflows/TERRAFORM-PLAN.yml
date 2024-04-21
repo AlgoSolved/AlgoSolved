@@ -1,9 +1,9 @@
 name: "Terraform Plan"
 
-on: 
+on:
   pull_request:
-    branches: [ main ]
-    types: [open]
+    branches: [main]
+    types: [opened, edited, synchronize]
 
 env:
   TF_LOG: INFO
