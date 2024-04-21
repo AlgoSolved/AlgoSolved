@@ -1,0 +1,179 @@
+name: "Terraform Plan"
+
+on: push
+
+env:
+  TF_LOG: INFO
+  TF_INPUT: false
+  TE_VERSION: 1.8.1
+  GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID}}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+  AWS_REGION: ${{ secrets.AWS_REGION}}
+  text: ""
+
+jobs:
+  setup:
+    name: Find Diff Dir
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix.outputs.value }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - id: matrix
+        run: |
+          DIFF_DIR=`git --no-pager diff --name-only origin/main HEAD`
+          DIFF_DIR=`echo "${DIFF_DIR}" | sed 's|/[^/]*$||'`
+
+          DIR_ARR=(`echo "${DIFF_DIR}"| awk '!seen[$0]++' | tr ' ' ', '`)
+
+          ARR=()
+          for dir in ${DIR_ARR[@]}
+          do
+              if [[ "$dir" == "${DIR_ARR[${#DIR_ARR[@]}-1]}" ]]; then
+                  ARR+=(`echo "\"$dir\""`)
+              else
+                  ARR+=(`echo "\"$dir\","`)
+              fi
+              echo $dir
+          done
+          echo "value=[${ARR[@]}]" >> $GITHUB_OUTPUT
+
+  # 병렬로 우분투가 실행됨.
+  terraform-plan:
+    needs: [setup]
+    name: "Terraform Plan"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        value: ${{fromJSON(needs.setup.outputs.matrix)}}
+    permissions:
+      contents: read
+      pull-requests: write
+    defaults:
+      run:
+        working-directory: ./${{ matrix.value }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Check TF File Exist
+        id: check-file
+        run: |
+          if [[ -e "*.tf" ]]; then
+              echo "exist=true" >> $GITHUB_OUTPUT
+          else
+              echo "exist=false" >> $GITHUB_OUTPUT
+          fi
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        if: ${{ steps.check-file.outputs.exist == 'true' }}
+        with:
+          terraform_version: ${{ env.TE_VERSION }}
+      - name: Terraform Init
+        if: ${{ steps.check-file.outputs.exist == 'true' }}
+        id: init
+        run: |
+          terraform init -input=false
+      - name: Terraform Format
+        if: ${{ steps.check-file.outputs.exist == 'true' }}
+        id: fmt
+        run: terraform fmt -check
+      - name: Terraform Plan
+        if: ${{ steps.check-file.outputs.exist == 'true' }}
+        id: plan
+        run: |
+          plan_result=`terraform plan -no-color`
+          service_name=`echo ${{ matrix.value }}`
+          cd ${{ github.workspace }}
+          mkdir outputs
+          echo "${value}
+
+          <details><summary>Show Plan(${{ matrix.value }})</summary>
+
+          \`\`\`
+
+          ${plan_result}
+
+          \`\`\`
+
+          </details>
+
+          " > ${{ github.workspace }}/outputs/terraform-${service_name}.txt
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: outputs
+          path: ${{ github.workspace }}/outputs/*.txt
+          if-no-files-found: warn
+      - name: Result Out
+        if: ${{ steps.check-file.outputs.exist == 'true' }}
+        run: |
+          echo $text
+
+  create-comment:
+    runs-on: ubuntu-latest
+    needs: [setup, terraform-plan]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Download result
+        uses: actions/download-artifact@v3
+        with:
+          name: outputs
+          path: ${{ github.workspace }}/outputs
+      - name: Print the result
+        id: summary
+        shell: bash
+        run: |
+          ls ${{ github.workspace }}/outputs
+          {
+            cat ${{ github.workspace }}/outputs/*.txt
+          } > plan.out
+
+      - name: Create Comments
+        uses: actions/github-script@v6
+        id: comment
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pullRequests = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              head: `${context.repo.owner}:${context.ref.replace('refs/heads/', '')}`
+            })
+
+            const issueNumber = context.issue.number || pullRequests.data[0].number
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+            });
+            const botComment = comments.find(comment => {
+              return comment.user.type === 'Bot' && comment.body.includes("Terraform Cloud Plan Output")
+            });
+            const { readFile } = require("fs/promises")
+            const plan_result = await readFile('plan.out')
+            const output = `
+            **Terraform Cloud Plan Output**
+
+            ${plan_result}
+
+            **Pusher: @${{ github.actor }}**`;
+            if (botComment) {
+              github.rest.issues.deleteComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+              });
+            }
+
+            github.rest.issues.createComment({
+              issue_number: issueNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
