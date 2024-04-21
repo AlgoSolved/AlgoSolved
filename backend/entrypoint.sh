@@ -1,12 +1,11 @@
 #!/bin/bash
 
 start_dev_server() {
-  (sleep 30; ./gradlew buildAndReload --continuous -PskipDownload=true -x Test) &
-  ./gradlew bootRun -PskipDownload=true -Dspring.profiles.active=dev
+  java -jar -Dspring.profiles.active=dev $JAR_FILE_PATH
 }
 
 start_prod_server() {
-  java -jar -Dspring.profiles.active=prod $JAR_FILE_NAME
+  java -jar -Dspring.profiles.active=prod $JAR_FILE_PATH
 }
 
 start_server() {

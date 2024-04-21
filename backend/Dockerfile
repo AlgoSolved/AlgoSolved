@@ -24,17 +24,6 @@ COPY --chown=deploy:users --from=builder ${JAR_FILE_PATH} ${JAR_FILE_PATH}
 COPY --chown=deploy:users entrypoint.sh entrypoint.sh
 EXPOSE 8080
 
-RUN chmod +x entrypoint.sh
-
-ENTRYPOINT ["./entrypoint.sh"]
-
-
-FROM builder AS development
-
-WORKDIR /home/deploy/app/backend
-COPY --chown=deploy:users entrypoint.sh entrypoint.sh
-EXPOSE 8080
-
-RUN chmod +x entrypoint.sh && ./gradlew getDeps
+RUN chmod +x entrypoint.sh ${JAR_FILE_PATH}
 
 ENTRYPOINT ["./entrypoint.sh"]

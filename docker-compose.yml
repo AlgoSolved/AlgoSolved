@@ -27,7 +27,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-      target: development # not production
+      target: production
     container_name: backend
     environment:
       - STAGE=development
@@ -43,6 +43,35 @@ services:
     restart: always
     volumes:
       - ./backend:/home/deploy/app/backend
+    networks:
+      - algosolved-network
+
+  backend-job:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: production
+    container_name: backend-job
+    environment:
+      - STAGE=development
+      - TZ=Asia/Seoul
+      - AWS_REGION=${AWS_REGION}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - ORG_JOBRUNR_BACKGROUND_JOB_SERVER_ENABLED=true
+      - ORG_JOBRUNR_BACKGROUND_JOB_SERVER_PORT=8000
+      - ORG_JOBRUNR_DASHBOARD_ENABLED=true
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - 8000:8000
+    restart: always
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/api/health/ping" ]
+      interval: 5s
+      timeout: 120s
+      retries: 5
     networks:
       - algosolved-network
 
