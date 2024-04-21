@@ -62,11 +62,15 @@ jobs:
       - name: Check TF File Exist
         id: check-file
         run: |
-          if [[ -e "*.tf" ]]; then
-              echo "exist=true" >> $GITHUB_OUTPUT
-          else
+          for filename in *; do
+            extension="${filename##*.}"
+
+            if [ "$extension" = "tf" ]; then
+                echo "exist=true" >> $GITHUB_OUTPUT
+            else
               echo "exist=false" >> $GITHUB_OUTPUT
-          fi
+            fi
+          done
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         if: ${{ steps.check-file.outputs.exist == 'true' }}
