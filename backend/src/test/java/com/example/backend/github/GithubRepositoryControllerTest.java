@@ -17,6 +17,7 @@ import com.example.backend.solution.domain.Solution;
 import com.example.backend.solution.service.SolutionService;
 
 import org.instancio.Instancio;
+import org.jobrunr.scheduling.JobScheduler;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -39,6 +40,7 @@ public class GithubRepositoryControllerTest {
     @MockBean private ProblemService problemService;
     @MockBean private SolutionService solutionService;
     @MockBean private GithubRepositoryRepository githubRepositoryRepository;
+    @MockBean private JobScheduler jobScheduler;
 
     @Nested
     @DisplayName("/v1/github-repository/connect 테스트")

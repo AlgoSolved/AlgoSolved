@@ -124,6 +124,8 @@ public class SyncWithGithubServiceTest {
             String fileName = "백준/Bronze/1000. A＋B/A＋B.py";
             String sourceCode = "a, b = map(int, input().split()); print(a+b)";
 
+            when(githubRepositoryRepository.findById(githubRepository.getId()))
+                    .thenReturn(java.util.Optional.of(githubRepository));
             when(githubClient.getAllFiles(githubRepository.getRepo()))
                     .thenReturn(List.of(fileName));
             when(githubClient.getContent(githubRepository.getRepo(), fileName))
@@ -160,6 +162,8 @@ public class SyncWithGithubServiceTest {
             String fileName = "프로그래머스/0/1. 두 정수 사이의 합/두 정수 사이의 합.py";
             String sourceCode = "def solution(a, b): return a + b";
 
+            when(githubRepositoryRepository.findById(githubRepository.getId()))
+                    .thenReturn(java.util.Optional.of(githubRepository));
             when(githubClient.getAllFiles(githubRepository.getRepo()))
                     .thenReturn(List.of(fileName));
             when(githubClient.getContent(githubRepository.getRepo(), fileName))
