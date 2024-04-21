@@ -141,7 +141,7 @@ jobs:
         uses: actions/github-script@v6
         id: comment
         with:
-          github-token: ${{ env.GITHUB_TOKEN }}
+          # github-token: ${{ env.GITHUB_TOKEN }}
           script: |
             const pullRequests = await github.rest.pulls.list({
               owner: context.repo.owner,
