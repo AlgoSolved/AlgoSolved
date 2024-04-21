@@ -90,7 +90,7 @@ jobs:
         id: plan
         run: |
           plan_result=`terraform plan -no-color`
-          service_name=`echo ${{ matrix.value }}`
+          service_name=`echo $(basename ${{ matrix.value }})`
           cd ${{ github.workspace }}
           mkdir outputs
           echo "${value}
