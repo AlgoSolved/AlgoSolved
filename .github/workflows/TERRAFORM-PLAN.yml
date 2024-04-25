@@ -6,7 +6,7 @@ on:
     types: [opened, edited]
     paths: 
       - /infra**
-      - *.tf
+      - '*.tf'
 
 env:
   TF_LOG: INFO
