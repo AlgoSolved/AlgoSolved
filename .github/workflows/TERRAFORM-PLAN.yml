@@ -4,6 +4,9 @@ on:
   pull_request:
     branches: [main]
     types: [opened, edited]
+    paths: 
+      - /infra**
+      - *.tf
 
 env:
   TF_LOG: INFO
@@ -62,34 +65,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Check TF File Exist
-        id: check-file
-        run: |
-          for filename in *; do
-            extension="${filename##*.}"
-
-            if [ "$extension" = "tf" ]; then
-                echo "exist=true" >> $GITHUB_OUTPUT
-            else
-              echo "exist=false" >> $GITHUB_OUTPUT
-            fi
-          done
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
-        if: ${{ steps.check-file.outputs.exist == 'true' }}
         with:
           terraform_version: ${{ env.TE_VERSION }}
       - name: Terraform Init
-        if: ${{ steps.check-file.outputs.exist == 'true' }}
         id: init
         run: |
           terraform init -input=false
       - name: Terraform Format
-        if: ${{ steps.check-file.outputs.exist == 'true' }}
         id: fmt
         run: terraform fmt -check
       - name: Terraform Plan
-        if: ${{ steps.check-file.outputs.exist == 'true' }}
         id: plan
         run: |
           plan_result=`terraform plan -no-color`
@@ -116,7 +103,6 @@ jobs:
           path: ${{ github.workspace }}/outputs/*.txt
           if-no-files-found: warn
       - name: Result Out
-        if: ${{ steps.check-file.outputs.exist == 'true' }}
         run: |
           echo $text
 
@@ -144,7 +130,6 @@ jobs:
         uses: actions/github-script@v6
         id: comment
         with:
-          # github-token: ${{ env.GITHUB_TOKEN }}
           script: |
             const pullRequests = await github.rest.pulls.list({
               owner: context.repo.owner,

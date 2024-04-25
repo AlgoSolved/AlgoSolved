@@ -3,7 +3,7 @@ terraform {
 
   backend "s3" {
     bucket = "algosolved-terraform-s3"
-    key    = "prod/terraform.tfstate"
+    key    = "infra/prod/terraform.tfstate"
     region = "ap-northeast-2"
   }
 }
