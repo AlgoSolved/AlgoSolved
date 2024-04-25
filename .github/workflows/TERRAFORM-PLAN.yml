@@ -4,9 +4,9 @@ on:
   pull_request:
     branches: [main]
     types: [opened, edited]
-  paths:
-    - "infra/**"
-    - "*.tf"  
+    paths:
+      - 'infra/**'
+      - '**.tf'
 
 env:
   TF_LOG: INFO
