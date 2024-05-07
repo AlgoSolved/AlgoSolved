@@ -23,6 +23,7 @@ WORKDIR /home/deploy/app/backend
 COPY --chown=deploy:users --from=builder ${JAR_FILE_PATH} ${JAR_FILE_PATH}
 COPY --chown=deploy:users entrypoint.sh entrypoint.sh
 EXPOSE 8080
+EXPOSE 8000
 
 RUN chmod +x entrypoint.sh
 
@@ -34,6 +35,7 @@ FROM builder AS development
 WORKDIR /home/deploy/app/backend
 COPY --chown=deploy:users entrypoint.sh entrypoint.sh
 EXPOSE 8080
+EXPOSE 8000
 
 RUN chmod +x entrypoint.sh && ./gradlew getDeps
 
