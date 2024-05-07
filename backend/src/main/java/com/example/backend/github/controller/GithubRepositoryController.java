@@ -62,6 +62,6 @@ public class GithubRepositoryController {
 
     @GetMapping("/test")
     public ResponseEntity<String> test() {
-        return new ResponseEntity("test", HttpStatus.OK);
+        return new ResponseEntity("tessfsat1", HttpStatus.OK);
     }
 }
