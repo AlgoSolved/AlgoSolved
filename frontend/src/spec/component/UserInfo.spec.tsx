@@ -1,6 +1,7 @@
 import React from "react";
 import { render, renderHook, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
+
 import { getUserInfo } from "../../apis/v1/users/info";
 import AccountInfo from "../../components/users/Info";
 import { userApiHandlers } from "../../mock/api/user_info";
