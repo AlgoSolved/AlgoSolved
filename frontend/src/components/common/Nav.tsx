@@ -13,6 +13,8 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 
+import { loginUser } from "../../apis/v1/users/login";
+
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -64,6 +66,10 @@ const isLoggedIn = false;
 
 function NavBar() {
 
+const handleLogin = () => {
+  loginUser();
+}
+
 
   return (
     <Container>
@@ -102,7 +108,7 @@ function NavBar() {
                       variant="contained"
                       aria-label="Disabled elevation buttons"
                     >
-                      <Link to={'/login'}><Button>Login</Button></Link>
+                      <Link to={'/login'}><Button onClick={handleLogin}>Login</Button></Link>
                     </ButtonGroup>
 
                 }
