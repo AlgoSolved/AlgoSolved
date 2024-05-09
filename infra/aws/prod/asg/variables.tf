@@ -17,6 +17,6 @@ variable "ec2_instance_type" {
 #Common Variables
 variable "service" {
   description = "The name of the service"
-  type = string
-  default = "algosolved"
+  type        = string
+  default     = "algosolved"
 }

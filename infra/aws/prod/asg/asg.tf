@@ -2,10 +2,10 @@ resource "aws_launch_template" "algosolved-lt" {
   depends_on = [
     aws_security_group.algosolved-ec2-sg
   ]
-  name = "${var.service}-launch-template"
-  image_id = data.aws_ami.ubuntu.id
-  instance_type = var.ec2_instance_type
-  key_name = "${var.service}-key"
+  name                   = "${var.service}-launch-template"
+  image_id               = data.aws_ami.ubuntu.id
+  instance_type          = var.ec2_instance_type
+  key_name               = "${var.service}-key"
   vpc_security_group_ids = [aws_security_group.algosolved-ec2-sg.id]
 
   block_device_mappings {
@@ -37,16 +37,16 @@ resource "aws_autoscaling_group" "algosolved-ec2-asg" {
     aws_launch_template.algosolved-lt
   ]
 
-  name = "${var.service}-ec2-asg"
-  desired_capacity = 1
-  max_size = 2
-  min_size = 1
+  name                = "${var.service}-ec2-asg"
+  desired_capacity    = 1
+  max_size            = 2
+  min_size            = 1
   vpc_zone_identifier = [var.sub_pub_ex1_id, var.sub_pub_ex2_id]
   #  health_check_grace_period = 300
   #  health_check_type = "EC2"
   force_delete = false
   launch_template {
-    id = aws_launch_template.algosolved-lt.id
+    id      = aws_launch_template.algosolved-lt.id
     version = "$Latest"
   }
 }
