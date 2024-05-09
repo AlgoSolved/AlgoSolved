@@ -1,8 +1,8 @@
 resource "aws_ecr_repository" "algosolved_repository" {
-  name = "algosolved"
+  name = "${var.service}-ecr"
 
   tags_all = {
-    Name  = "algosolved"
-    Stage = "prod"
+    Project = var.project
+    Stage   = var.stage
   }
 }
