@@ -116,3 +116,24 @@ resource "aws_alb_listener" "algosolved-https-listener" {
 }
 
 
+resource "aws_lb_listener_rule" "algosolved-alb-rule" {
+  listener_arn = aws_alb_listener.algosolved-https-listener.arn
+  priority     = 1
+
+  condition {
+    host_header {
+      values = ["algosolved.com"]
+    }
+  }
+
+  action {
+    type = "forward"
+    forward {
+      target_group {
+        arn    = aws_lb_target_group.algosolved-lb-tg.arn
+        weight = 100
+      }
+    }
+  }
+}
+
