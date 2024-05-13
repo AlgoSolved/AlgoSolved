@@ -24,7 +24,7 @@ infra
 
 ```
 # encrypt
-gpg --output terraform.tfvars --decrypt terraform.tfvars.gpg
+gpg --symmetric --cipher-algo AES256 terraform.tfvars
 
 ```
 
