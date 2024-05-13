@@ -54,9 +54,17 @@ resource "aws_lb_target_group" "algosolved-lb-tg" {
     }
 }
 
+// autoscaling - targetGroup
 resource "aws_autoscaling_attachment" "algosolved-asg-attachment" {
   autoscaling_group_name = aws_autoscaling_group.algosolved-ec2-asg.id
   lb_target_group_arn   = aws_lb_target_group.algosolved-lb-tg.arn
+}
+
+// targetGroup - ec2
+resource "aws_lb_target_group_attachment" "algosolved-tg-attachment" {
+  target_group_arn = aws_lb_target_group.algosolved-lb-tg.arn
+  target_id        = aws_instance.algoSolved-ec2.id
+  port             = 80
 }
 
 // 리스너
