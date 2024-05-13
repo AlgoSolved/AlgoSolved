@@ -84,6 +84,7 @@ jobs:
           terraform_version: ${{ env.TF_VERSION }}
 
       - name: Create tfvars file from Encrypted Secrets
+      if: ${{ steps.check-file.outputs.exist == 'true' }}
         env:
           LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
         run: |
