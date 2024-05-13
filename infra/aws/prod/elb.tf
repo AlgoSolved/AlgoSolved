@@ -1,14 +1,9 @@
 resource "aws_lb" "algosolved-lb" {
     name                       = "algosolved-alb"
-    internal                   = false
     load_balancer_type         = "application"
     idle_timeout               = 120
-    enable_deletion_protection = true
-    enable_http2               = true
     ip_address_type            = "ipv4"
 
-
-    drop_invalid_header_fields = false
     security_groups = [
         aws_security_group.algosolved-ec2-sg.id
     ]
@@ -40,12 +35,10 @@ resource "aws_lb_target_group" "algosolved-lb-tg" {
     vpc_id               = var.vpc_id
 
     health_check {
-        enabled             = true
         healthy_threshold   = 2
         interval            = 30
         port                = "traffic-port"
         path                = "/api/health/ping"
-        protocol            = "HTTP"
         unhealthy_threshold = 10
         matcher             = 200
         timeout             = 10
@@ -76,9 +69,9 @@ resource "aws_alb_listener" "algosolved-http-forward" {
         type = "redirect"
 
         redirect {
-        port        = "443"
-        protocol    = "HTTPS"
-        status_code = "HTTP_301"
+            port        = "443"
+            protocol    = "HTTPS"
+            status_code = "HTTP_301"
         }
     }
 
