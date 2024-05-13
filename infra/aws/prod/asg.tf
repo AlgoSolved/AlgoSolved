@@ -93,3 +93,16 @@ resource "aws_autoscaling_group" "algosolved-ec2-asg" {
     propagate_at_launch = true
   }
 }
+
+resource "aws_instance" "algoSolved-ec2" {
+  ami = data.aws_ami.ubuntu.id
+
+  launch_template {
+    id = aws_launch_template.algosolved-lt.id
+  }
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+}
+
