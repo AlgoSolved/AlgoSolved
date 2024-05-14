@@ -33,3 +33,8 @@ variable "ec2_instance_type" {
 variable "ec2_key" {
   type = string
 }
+
+# lambda
+variable "lambda_function_name" {
+  type = string
+}
