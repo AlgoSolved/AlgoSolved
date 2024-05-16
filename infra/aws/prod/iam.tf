@@ -15,9 +15,9 @@ data "aws_iam_policy_document" "lambda_assume_role_policy" {
 
 # RDS
 resource "aws_iam_policy" "rds_management_policy" {
-  name               = "rds-management-policy"
-  description        = "Policy to manage RDS instances"
-  policy             = data.aws_iam_policy_document.rds_management_policy_doc.json
+  name        = "rds-management-policy"
+  description = "Policy to manage RDS instances"
+  policy      = data.aws_iam_policy_document.rds_management_policy_doc.json
 }
 
 data "aws_iam_policy_document" "rds_management_policy_doc" {
