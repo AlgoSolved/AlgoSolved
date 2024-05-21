@@ -91,7 +91,7 @@ resource "aws_alb_listener" "algosolved-https-listener" {
 
   default_action {
     target_group_arn = aws_lb_target_group.algosolved-lb-tg.arn
-    type = "forward"
+    type             = "forward"
   }
 
   timeouts {}
