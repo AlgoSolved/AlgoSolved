@@ -9,10 +9,10 @@ resource "aws_lambda_function" "scale_in_lambda" {
 
   tags = (
     {
-      Name       = "${var.lambda_function_name}"
-      Resource   = "lambda"
-      Project = var.project
-      Stage = var.stage
+      Name     = "${var.lambda_function_name}"
+      Resource = "lambda"
+      Project  = var.project
+      Stage    = var.stage
     }
   )
 
@@ -32,10 +32,10 @@ resource "aws_lambda_function" "scale_out_lambda" {
 
   tags = (
     {
-      Name       = "${var.lambda_function_name}"
-      Resource   = "lambda"
-      Project = var.project
-      Stage = var.stage
+      Name     = "${var.lambda_function_name}"
+      Resource = "lambda"
+      Project  = var.project
+      Stage    = var.stage
     }
   )
 
@@ -75,7 +75,7 @@ resource "aws_cloudwatch_event_rule" "scale_out_rule" {
       "Action" : ["start"]
     },
     "resources" : [
-        // aws_db_instance.algosolved-rdb.arn rds pr 머지 후 변경
+      // aws_db_instance.algosolved-rdb.arn rds pr 머지 후 변경
       "arn:aws:rds:us-west-2:123456789012:db:algosolved-rds"
     ]
   })
