@@ -10,7 +10,9 @@ resource "aws_lb" "algosolved-lb" {
 
   subnets = [
     var.sub_pub_a_id,
-    var.sub_pub_c_id
+    var.sub_pub_b_id,
+    var.sub_pub_c_id,
+    var.sub_pub_d_id,
   ]
 
   timeouts {}
@@ -88,14 +90,8 @@ resource "aws_alb_listener" "algosolved-https-listener" {
   ssl_policy        = "ELBSecurityPolicy-TLS-1-2-2017-01"
 
   default_action {
-    order = 1
-    type  = "fixed-response"
-
-    fixed_response {
-      content_type = "text/plain"
-      message_body = "not found resource"
-      status_code  = "404"
-    }
+    target_group_arn = aws_lb_target_group.algosolved-lb-tg.arn
+    type = "forward"
   }
 
   timeouts {}
@@ -107,28 +103,6 @@ resource "aws_alb_listener" "algosolved-https-listener" {
   tags_all = {
     Project = var.project
     Stage   = var.stage
-  }
-}
-
-// 아래 호스트 해더는 추후 도메인 연결 시 바꿀 것
-resource "aws_lb_listener_rule" "algosolved-alb-rule" {
-  listener_arn = aws_alb_listener.algosolved-https-listener.arn
-  priority     = 1
-
-  condition {
-    host_header {
-      values = ["algosolved.com"]
-    }
-  }
-
-  action {
-    type = "forward"
-    forward {
-      target_group {
-        arn    = aws_lb_target_group.algosolved-lb-tg.arn
-        weight = 100
-      }
-    }
   }
 }
 
