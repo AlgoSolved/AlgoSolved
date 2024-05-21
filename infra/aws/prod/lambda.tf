@@ -11,7 +11,8 @@ resource "aws_lambda_function" "scale_in_lambda" {
     {
       Name       = "${var.lambda_function_name}"
       Resource   = "lambda"
-      CreateDate = "2024-05-14"
+      Project = var.project
+      Stage = var.stage
     }
   )
 
@@ -25,7 +26,7 @@ resource "aws_lambda_function" "scale_out_lambda" {
   function_name    = "scale_out_lambda"
   role             = aws_iam_role.lambda_role.arn
   handler          = "${var.lambda_function_name}.lambda_handler"
-  timeout          = "30"
+  timeout          = "600"
   source_code_hash = filebase64sha256("./scale_out/${var.lambda_function_name}.zip")
   runtime          = "python3.12"
 
@@ -33,7 +34,8 @@ resource "aws_lambda_function" "scale_out_lambda" {
     {
       Name       = "${var.lambda_function_name}"
       Resource   = "lambda"
-      CreateDate = "2024-05-14"
+      Project = var.project
+      Stage = var.stage
     }
   )
 
@@ -52,10 +54,10 @@ resource "aws_cloudwatch_event_rule" "scale_in_rule" {
       "Action" : ["stop"]
     },
     "resources" : [
-      "arn:aws:rds:us-west-2:123456789012:db:algosolved-rds" #예시
+      // aws_db_instance.algosolved-rdb.arn rds pr 머지 후 변경
+      "arn:aws:rds:us-west-2:123456789012:db:algosolved-rds"
     ]
   })
-  # schedule_expression = "cron(0 22 * * ? *)" 매일 오후 22시에 실행
 }
 
 resource "aws_cloudwatch_event_target" "scale_in_target" {
@@ -69,8 +71,13 @@ resource "aws_cloudwatch_event_rule" "scale_out_rule" {
   event_pattern = jsonencode({
     "detail" : {
       "DesiredCapacity" : [1],
-      "AutoScalingGroupName" : ["algosolved-ec2-asg"]
-    }
+      "AutoScalingGroupName" : ["algosolved-ec2-asg"],
+      "Action" : ["start"]
+    },
+    "resources" : [
+        // aws_db_instance.algosolved-rdb.arn rds pr 머지 후 변경
+      "arn:aws:rds:us-west-2:123456789012:db:algosolved-rds"
+    ]
   })
 }
 
