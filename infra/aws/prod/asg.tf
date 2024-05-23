@@ -75,6 +75,7 @@ resource "aws_autoscaling_group" "algosolved-ec2-asg" {
   min_size            = 0
   desired_capacity    = 0
   vpc_zone_identifier = [var.sub_pub_a_id, var.sub_pub_b_id, var.sub_pub_c_id, var.sub_pub_d_id]
+  target_group_arns   = [aws_lb_target_group.algosolved-lb-tg.arn]
 
   launch_template {
     id      = aws_launch_template.algosolved-lt.id
@@ -93,3 +94,4 @@ resource "aws_autoscaling_group" "algosolved-ec2-asg" {
     propagate_at_launch = true
   }
 }
+
