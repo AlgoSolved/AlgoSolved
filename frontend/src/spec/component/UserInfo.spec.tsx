@@ -16,7 +16,7 @@ describe("유저 정보 컴포넌트 테스트", () => {
   });
 
   test("user 정보가 빈값인 경우 빈값을 그대로 보여준다.", async () => {
-    const result = await getUserInfo(0);
+    const result = await getUserInfo();
     const { container } = render(<AccountInfo user={result} />);
 
     await waitFor(() => {
@@ -27,7 +27,7 @@ describe("유저 정보 컴포넌트 테스트", () => {
   });
 
   test("user 정보가 있는 경우 사용자와 관련된 값을 보여준다.", async () => {
-    const result = await getUserInfo(1);
+    const result = await getUserInfo();
     const { container } = render(<AccountInfo user={result} />);
 
     expect(
