@@ -5,5 +5,6 @@ terraform {
     bucket = "algosolved-terraform-s3"
     key    = "infra/prod/terraform.tfstate"
     region = "ap-northeast-2"
+    dynamodb_table = "algosolved-terraform-lock"
   }
 }
