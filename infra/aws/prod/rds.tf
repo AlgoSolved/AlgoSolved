@@ -9,10 +9,11 @@ resource "aws_db_instance" "algosolved-rdb" {
     aws_db_subnet_group.algosovled-subnet-group
   ]
 
-  db_name                = "${var.service}-rdb"
+  db_name                = var.service
+  identifier             = "${var.service}-rdb"
   engine                 = "postgres"
   engine_version         = "16"
-  instance_class         = "db.t2.micro"
+  instance_class         = "db.t4g.micro"
   allocated_storage      = 10
   vpc_security_group_ids = [aws_security_group.algosolved-rds-sg.id]
   db_subnet_group_name   = aws_db_subnet_group.algosovled-subnet-group.name
