@@ -1,6 +1,6 @@
 resource "aws_lambda_function" "scale_in_lambda" {
   filename         = "./scale_in/${var.lambda_function_name}.zip"
-  function_name    = "scale_in_lambda"
+  function_name    = "${var.service}-scale-in-lambda"
   role             = aws_iam_role.lambda_role.arn
   handler          = "${var.lambda_function_name}.lambda_handler"
   timeout          = "600"
@@ -9,8 +9,6 @@ resource "aws_lambda_function" "scale_in_lambda" {
 
   tags = (
     {
-      Name     = "${var.lambda_function_name}"
-      Resource = "lambda"
       Project  = var.project
       Stage    = var.stage
     }
@@ -23,7 +21,7 @@ resource "aws_lambda_function" "scale_in_lambda" {
 
 resource "aws_lambda_function" "scale_out_lambda" {
   filename         = "./scale_out/${var.lambda_function_name}.zip"
-  function_name    = "scale_out_lambda"
+  function_name    = "${var.service}-scale-out-lambda"
   role             = aws_iam_role.lambda_role.arn
   handler          = "${var.lambda_function_name}.lambda_handler"
   timeout          = "600"
@@ -32,8 +30,6 @@ resource "aws_lambda_function" "scale_out_lambda" {
 
   tags = (
     {
-      Name     = "${var.lambda_function_name}"
-      Resource = "lambda"
       Project  = var.project
       Stage    = var.stage
     }
@@ -45,13 +41,12 @@ resource "aws_lambda_function" "scale_out_lambda" {
 }
 
 resource "aws_cloudwatch_event_rule" "scale_in_rule" {
-  name        = "scale-in-rule"
+  name        = "${var.service}-scale-in-rule"
   description = "Event bridge scale-in lambda"
   event_pattern = jsonencode({
     "detail" : {
       "DesiredCapacity" : [0],
-      "AutoScalingGroupName" : ["algosolved-ec2-asg"],
-      "Action" : ["stop"]
+      "AutoScalingGroupName" : ["algosolved-ec2-asg"]
     },
     "resources" : [
       // aws_db_instance.algosolved-rdb.arn rds pr 머지 후 변경
@@ -66,13 +61,12 @@ resource "aws_cloudwatch_event_target" "scale_in_target" {
 }
 
 resource "aws_cloudwatch_event_rule" "scale_out_rule" {
-  name        = "scale-out-rule"
+  name        = "${var.service}-scale-out-rule"
   description = "Event bridge scale-out lambda"
   event_pattern = jsonencode({
     "detail" : {
       "DesiredCapacity" : [1],
       "AutoScalingGroupName" : ["algosolved-ec2-asg"],
-      "Action" : ["start"]
     },
     "resources" : [
       // aws_db_instance.algosolved-rdb.arn rds pr 머지 후 변경
