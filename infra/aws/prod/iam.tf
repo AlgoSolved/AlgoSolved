@@ -1,6 +1,6 @@
 # Lambda iam
 resource "aws_iam_role" "lambda_role" {
-  name = "algosolved-lambda-role"
+  name = "scalable-lambda-role"
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
@@ -30,7 +30,8 @@ resource "aws_iam_policy" "rds_management_policy" {
           "rds: StopDBInstance",
           "rds: DescribeDBInstances"
         ],
-        "Resource" : "*"
+#        "Resource" : "*"
+        "Resource" : "arn:aws:rds:*:*:db:*"
       }
     ]
   })
@@ -45,7 +46,8 @@ resource "aws_iam_policy" "asg_management_policy" {
     "Statement" : [
       {
         "Action" : [
-          "autoscaling: UpdateAutoScalingGroup"
+          "autoscaling: UpdateAutoScalingGroup",
+          "autoscaling: DescribeAutoScalingGroups"
         ],
         "Resource" : "*"
       }
