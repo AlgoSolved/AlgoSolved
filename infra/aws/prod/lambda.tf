@@ -7,12 +7,10 @@ resource "aws_lambda_function" "scale_in_lambda" {
   source_code_hash = filebase64sha256("./scale_in/${var.lambda_function_name}.zip")
   runtime          = "python3.12"
 
-  tags = (
-    {
+  tags = {
       Project  = var.project
       Stage    = var.stage
-    }
-  )
+  }
 
   depends_on = [
     aws_iam_role.lambda_role
@@ -28,12 +26,10 @@ resource "aws_lambda_function" "scale_out_lambda" {
   source_code_hash = filebase64sha256("./scale_out/${var.lambda_function_name}.zip")
   runtime          = "python3.12"
 
-  tags = (
-    {
+  tags = {
       Project  = var.project
       Stage    = var.stage
-    }
-  )
+  }
 
   depends_on = [
     aws_iam_role.lambda_role
@@ -43,13 +39,16 @@ resource "aws_lambda_function" "scale_out_lambda" {
 resource "aws_cloudwatch_event_rule" "scale_in_rule" {
   name                = "${var.service}-scale-in-rule"
   description         = "Event bridge scale-in lambda"
-#  schedule_expression = "cron(0 22 * * ? *)"
   event_pattern = jsonencode({
     "resources" : [
       aws_db_instance.algosolved-rdb.arn,
       aws_autoscaling_group.algosolved-ec2-asg.arn
     ]
   })
+  depends_on = [
+    aws_db_instance.algosolved-rdb,
+    aws_autoscaling_group.algosolved-ec2-asg
+  ]
 }
 
 resource "aws_cloudwatch_event_target" "scale_in_target" {
@@ -66,6 +65,10 @@ resource "aws_cloudwatch_event_rule" "scale_out_rule" {
       aws_autoscaling_group.algosolved-ec2-asg.arn
     ]
   })
+  depends_on = [
+    aws_db_instance.algosolved-rdb,
+    aws_autoscaling_group.algosolved-ec2-asg
+  ]
 }
 
 resource "aws_cloudwatch_event_target" "scale_out_target" {

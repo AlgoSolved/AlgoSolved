@@ -31,7 +31,6 @@ resource "aws_iam_policy" "rds_management_policy" {
           "rds: DescribeDBInstances"
         ],
         "Resource" : "*"
-#        "Resource" : "arn:aws:rds:*:*:db:*"
       }
     ]
   })

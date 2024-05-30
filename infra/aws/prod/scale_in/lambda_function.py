@@ -57,6 +57,6 @@ def lambda_handler(event, context):
         }
 
         return {
-          'statusCode': e.response['ResponseMetadata']['HTTPStatusCode']
+          'statusCode': e.response['ResponseMetadata']['HTTPStatusCode'],
           'body': json.dumps(response)
         }
