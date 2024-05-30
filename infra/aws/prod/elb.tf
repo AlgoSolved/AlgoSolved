@@ -83,26 +83,32 @@ resource "aws_alb_listener" "algosolved-http-forward" {
   }
 }
 
-#resource "aws_alb_listener" "algosolved-https-listener" {
-#  load_balancer_arn = aws_lb.algosolved-lb.arn
-#  port              = 443
-#  protocol          = "HTTPS"
-#  ssl_policy        = "ELBSecurityPolicy-TLS-1-2-2017-01"
-#
-#  default_action {
-#    target_group_arn = aws_lb_target_group.algosolved-lb-tg.arn
-#    type             = "forward"
-#  }
-#
-#  timeouts {}
-#
-#  tags = {
-#    Project = var.project
-#    Stage   = var.stage
-#  }
-#  tags_all = {
-#    Project = var.project
-#    Stage   = var.stage
-#  }
-#}
+// TODO : HTTPS 를 지원하기 위해 인증서가 필요함(domain-CRA)
+# resource "aws_acm_certificate" "algosolved-cert" {
+#   domain_name = "example.com"
+#   validation_method = "DNS"
+# }
+
+# resource "aws_alb_listener" "algosolved-https-listener" {
+#   load_balancer_arn = aws_lb.algosolved-lb.arn
+#   port              = 443
+#   protocol          = "HTTPS"
+#   ssl_policy        = "ELBSecurityPolicy-TLS-1-2-2017-01"
+
+#   default_action {
+#     target_group_arn = aws_lb_target_group.algosolved-lb-tg.arn
+#     type             = "forward"
+#   }
+
+#   timeouts {}
+
+#   tags = {
+#     Project = var.project
+#     Stage   = var.stage
+#   }
+#   tags_all = {
+#     Project = var.project
+#     Stage   = var.stage
+#   }
+# }
 
