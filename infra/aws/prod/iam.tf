@@ -25,10 +25,11 @@ resource "aws_iam_policy" "rds_management_policy" {
     "Version" : "2012-10-17",
     "Statement" : [
       {
+        "Effect" : "Allow",
         "Action" : [
-          "rds: StartDBInstance",
-          "rds: StopDBInstance",
-          "rds: DescribeDBInstances"
+          "rds:StartDBInstance",
+          "rds:StopDBInstance",
+          "rds:DescribeDBInstances"
         ],
         "Resource" : "*"
       }
@@ -44,9 +45,10 @@ resource "aws_iam_policy" "asg_management_policy" {
     "Version" : "2012-10-17",
     "Statement" : [
       {
+        "Effect" : "Allow",
         "Action" : [
-          "autoscaling: UpdateAutoScalingGroup",
-          "autoscaling: DescribeAutoScalingGroups"
+          "autoscaling:UpdateAutoScalingGroup",
+          "autoscaling:DescribeAutoScalingGroups"
         ],
         "Resource" : "*"
       }
