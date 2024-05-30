@@ -41,16 +41,13 @@ resource "aws_lambda_function" "scale_out_lambda" {
 }
 
 resource "aws_cloudwatch_event_rule" "scale_in_rule" {
-  name        = "${var.service}-scale-in-rule"
-  description = "Event bridge scale-in lambda"
+  name                = "${var.service}-scale-in-rule"
+  description         = "Event bridge scale-in lambda"
+#  schedule_expression = "cron(0 22 * * ? *)"
   event_pattern = jsonencode({
-    "detail" : {
-      "DesiredCapacity" : [0],
-      "AutoScalingGroupName" : ["algosolved-ec2-asg"]
-    },
     "resources" : [
-      // aws_db_instance.algosolved-rdb.arn rds pr 머지 후 변경
-      "arn:aws:rds:us-west-2:123456789012:db:algosolved-rds"
+      aws_db_instance.algosolved-rdb.arn,
+      aws_autoscaling_group.algosolved-ec2-asg.arn
     ]
   })
 }
@@ -64,13 +61,9 @@ resource "aws_cloudwatch_event_rule" "scale_out_rule" {
   name        = "${var.service}-scale-out-rule"
   description = "Event bridge scale-out lambda"
   event_pattern = jsonencode({
-    "detail" : {
-      "DesiredCapacity" : [1],
-      "AutoScalingGroupName" : ["algosolved-ec2-asg"],
-    },
     "resources" : [
-      // aws_db_instance.algosolved-rdb.arn rds pr 머지 후 변경
-      "arn:aws:rds:us-west-2:123456789012:db:algosolved-rds"
+      aws_db_instance.algosolved-rdb.arn,
+      aws_autoscaling_group.algosolved-ec2-asg.arn
     ]
   })
 }
