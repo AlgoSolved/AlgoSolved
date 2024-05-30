@@ -7,8 +7,8 @@
 
 <img width="1026" alt="image" src="https://github.com/AlgoSolved/AlgoSolved/assets/57058726/697c114e-b820-409a-a50e-033438ac1d18">
 
-
 ### 폴더 구조
+
 ```
 
 infra
@@ -20,3 +20,16 @@ infra
 
 ```
 
+### terraform tfvars
+
+```
+# encrypt
+gpg --symmetric --cipher-algo AES256 terraform.tfvars
+
+```
+
+```
+# decrypt
+gpg --output terraform.tfvars --decrypt terraform.tfvars.gpg
+
+```

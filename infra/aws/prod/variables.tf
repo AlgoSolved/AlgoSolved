@@ -25,6 +25,19 @@ variable "sub_pub_c_id" {
 variable "sub_pub_d_id" {
   type = string
 }
+variable "sub_pri_a_id" {
+  type = string
+}
+variable "sub_pri_b_id" {
+  type = string
+}
+variable "sub_pri_c_id" {
+  type = string
+}
+variable "sub_pri_d_id" {
+  type = string
+}
+
 
 ## ec2
 variable "ec2_instance_type" {
