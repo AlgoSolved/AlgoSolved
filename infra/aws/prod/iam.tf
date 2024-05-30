@@ -30,8 +30,8 @@ resource "aws_iam_policy" "rds_management_policy" {
           "rds: StopDBInstance",
           "rds: DescribeDBInstances"
         ],
-#        "Resource" : "*"
-        "Resource" : "arn:aws:rds:*:*:db:*"
+        "Resource" : "*"
+#        "Resource" : "arn:aws:rds:*:*:db:*"
       }
     ]
   })
