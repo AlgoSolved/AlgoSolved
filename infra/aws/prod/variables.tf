@@ -56,3 +56,8 @@ variable "ec2_key" {
   type      = string
   sensitive = true
 }
+
+# lambda
+variable "lambda_function_filename" {
+  type = string
+}
