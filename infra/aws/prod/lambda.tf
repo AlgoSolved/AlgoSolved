@@ -8,8 +8,8 @@ resource "aws_lambda_function" "scale_in_lambda" {
   runtime          = "python3.12"
 
   tags = {
-      Project  = var.project
-      Stage    = var.stage
+    Project = var.project
+    Stage   = var.stage
   }
 
   depends_on = [
@@ -27,8 +27,8 @@ resource "aws_lambda_function" "scale_out_lambda" {
   runtime          = "python3.12"
 
   tags = {
-      Project  = var.project
-      Stage    = var.stage
+    Project = var.project
+    Stage   = var.stage
   }
 
   depends_on = [
@@ -37,8 +37,8 @@ resource "aws_lambda_function" "scale_out_lambda" {
 }
 
 resource "aws_cloudwatch_event_rule" "scale_in_rule" {
-  name                = "${var.service}-scale-in-rule"
-  description         = "Event bridge scale-in lambda"
+  name        = "${var.service}-scale-in-rule"
+  description = "Event bridge scale-in lambda"
   event_pattern = jsonencode({
     "resources" : [
       aws_db_instance.algosolved-rdb.arn,
