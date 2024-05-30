@@ -9,6 +9,7 @@ asg = boto3.client('autoscaling', region_name=region)
 rds = boto3.client('rds', region_name=region)
 
 def lambda_handler(event, context):
+  # TODO: scale_in 작성하고 scale_out 복붙해서 수정
   rds_resource = event['resources'][0].split(':')[6]
   asg_resource = event['resources'][1].split(':')[5]
 
@@ -22,7 +23,7 @@ def lambda_handler(event, context):
         'DBInstanceStatus': db['DBInstanceStatus']
       })
       return {
-        'statusCode': 204,
+        'statusCode': 200,
         'body': json.dumps(response)
       }
 

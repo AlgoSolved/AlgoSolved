@@ -9,11 +9,9 @@ asg = boto3.client('autoscaling', region_name=region)
 rds = boto3.client('rds', region_name=region)
 
 def lambda_handler(event, context):
-  rds_resource = event['resources'][0].split(':')[6]
-  asg_resource = event['resources'][1].split(':')[5]
+  dbs = rds.describe_db_instances(DBInstanceIdentifier=event['rds_identifier'][0])['DBInstances']
+  asgs = asg.describe_auto_scaling_groups(AutoScalingGroupNames=event['asg_name'])['AutoScalingGroups']
 
-  dbs = rds.describe_db_instances(DBInstanceIdentifier=[rds_resource])['DBInstances']
-  asgs = asg.describe_auto_scaling_groups(AutoScalingGroupNames=[asg_resource])['AutoScalingGroups']
   for db in dbs:
     if db['DBInstanceStatus'] == 'stopped':
       response = []
@@ -22,9 +20,11 @@ def lambda_handler(event, context):
         'DBInstanceStatus': db['DBInstanceStatus']
       })
       return {
-        'statusCode': 204,
+        'statusCode': 200,
         'body': json.dumps(response)
       }
+
+    # TODO: DB 랑 ASG 분리할 것
 
     if db['DBInstanceStatus'] == 'available':
       try:
@@ -40,7 +40,7 @@ def lambda_handler(event, context):
 
         return {
           'statusCode': 200,
-          'body': json.dumps(response)
+          'body': json.dumps(response.body)
         }
       except ClientError as e:
         error_response = e.response['Error']
@@ -58,5 +58,5 @@ def lambda_handler(event, context):
 
         return {
           'statusCode': e.response['ResponseMetadata']['HTTPStatusCode'],
-          'body': json.dumps(response)
+          'body': json.dumps(response.body)
         }

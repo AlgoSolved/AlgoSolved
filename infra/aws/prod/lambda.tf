@@ -1,10 +1,22 @@
+data "archive_file" "scale_in_lambda_to_zip" {
+  type        = "zip"
+  source_file = "./scale_in/${var.lambda_function_filename}"
+  output_path = "./scale_in/${var.lambda_function_filename}.zip"
+}
+
+data "archive_file" "scale_out_lambda_to_zip" {
+  type        = "zip"
+  source_file = "./scale_out/${var.lambda_function_filename}"
+  output_path = "./scale_out/${var.lambda_function_filename}.zip"
+}
+
 resource "aws_lambda_function" "scale_in_lambda" {
-  filename         = "./scale_in/${var.lambda_function_filename}.zip"
+  filename         = data.archive_file.scale_in_lambda_to_zip.output_path
   function_name    = "${var.service}-scale-in-lambda"
   role             = aws_iam_role.lambda_role.arn
-  handler          = "${var.lambda_function_filename}.lambda_handler"
+  handler          = "lambda_function.lambda_handler"
   timeout          = "600"
-  source_code_hash = filebase64sha256("./scale_in/${var.lambda_function_filename}.zip")
+  source_code_hash = data.archive_file.scale_in_lambda_to_zip.output_base64sha256
   runtime          = "python3.12"
 
   tags = {
@@ -18,12 +30,12 @@ resource "aws_lambda_function" "scale_in_lambda" {
 }
 
 resource "aws_lambda_function" "scale_out_lambda" {
-  filename         = "./scale_out/${var.lambda_function_filename}.zip"
+  filename         = data.archive_file.scale_out_lambda_to_zip.output_path
   function_name    = "${var.service}-scale-out-lambda"
   role             = aws_iam_role.lambda_role.arn
-  handler          = "${var.lambda_function_filename}.lambda_handler"
+  handler          = "lambda_function.lambda_handler"
   timeout          = "600"
-  source_code_hash = filebase64sha256("./scale_out/${var.lambda_function_filename}.zip")
+  source_code_hash = data.archive_file.scale_out_lambda_to_zip.output_base64sha256
   runtime          = "python3.12"
 
   tags = {
@@ -40,10 +52,8 @@ resource "aws_cloudwatch_event_rule" "scale_in_rule" {
   name        = "${var.service}-scale-in-rule"
   description = "Event bridge scale-in lambda"
   event_pattern = jsonencode({
-    "resources" : [
-      aws_db_instance.algosolved-rdb.arn,
-      aws_autoscaling_group.algosolved-ec2-asg.arn
-    ]
+    "rds_identifier": [aws_db_instance.algosolved-rdb.identifier],
+    "asg_name": [aws_autoscaling_group.algosolved-ec2-asg.name],
   })
   depends_on = [
     aws_db_instance.algosolved-rdb,
@@ -60,10 +70,8 @@ resource "aws_cloudwatch_event_rule" "scale_out_rule" {
   name        = "${var.service}-scale-out-rule"
   description = "Event bridge scale-out lambda"
   event_pattern = jsonencode({
-    "resources" : [
-      aws_db_instance.algosolved-rdb.arn,
-      aws_autoscaling_group.algosolved-ec2-asg.arn
-    ]
+    "rds_identifier": [aws_db_instance.algosolved-rdb.identifier],
+    "asg_name": [aws_autoscaling_group.algosolved-ec2-asg.name],
   })
   depends_on = [
     aws_db_instance.algosolved-rdb,
