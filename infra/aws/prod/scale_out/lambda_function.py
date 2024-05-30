@@ -1,46 +1,62 @@
 import json
+import os
 import boto3
 
-asg = boto3.client('autoscaling')
-rds = boto3.client('rds')
+from botocore.exceptions import ClientError
+
+region = os.environ['AWS_REGION']
+asg = boto3.client('autoscaling', region_name=region)
+rds = boto3.client('rds', region_name=region)
 
 def lambda_handler(event, context):
-  desired_capacity = event['detail']['DesiredCapacity']
-  auto_scaling_group_name = event['detail']['AutoScalingGroupName']
+  rds_resource = event['resources'][0].split(':')[6]
+  asg_resource = event['resources'][1].split(':')[5]
 
-  rds_instances = event['resources'][0]
-  action = event['detail']['Action']
+  dbs = rds.describe_db_instances(DBInstanceIdentifier=[rds_resource])['DBInstances']
+  asgs = asg.describe_auto_scaling_groups(AutoScalingGroupNames=[asg_resource])['AutoScalingGroups']
+  for db in dbs:
+    if db['DBInstanceStatus'] == 'available':
+      response = []
+      response.append({
+        'DBInstanceIdentifier': db['DBInstanceIdentifier'],
+        'DBInstanceStatus': db['DBInstanceStatus']
+      })
+      return {
+        'statusCode': 204,
+        'body': json.dumps(response)
+      }
 
-  print(f"Event details:\n"
-        f"  Auto Scaling Group: {auto_scaling_group_name}\n"
-        f"  Desired Capacity: {desired_capacity}\n"
-        f"  RDS Instance Identifier: {rds_instances}\n"
-        f"  Action: {action}")
+    if db['DBInstanceStatus'] == 'stopped':
+      try:
+        response = []
+        response.append(rds.start_db_instances(DBInstanceIdentifier=db['DBInstanceIdentifier']))
+        for asg_group in asgs:
+          if asg_group['DesiredCapacity'] <= 0:
+            response.append(asg.update_auto_scaling_group
+                (
+                AutoScalingGroupName = asg_group['AutoScalingGroupName'],
+                DesiredCapacity = 1
+            ))
 
-  if action == 'start':
-    start_rds_instances(rds_instances)
-    update_autoscaling_group(auto_scaling_group_name, desired_capacity)
+        return {
+          'statusCode': 200,
+          'body': json.dumps(response)
+        }
+      except ClientError as e:
+        error_response = e.response['Error']
+        error_code = error_response['Code']
+        error_message = error_response['Message']
+        response_metadata = e.response['ResponseMetadata']
 
-  return {
-    'statusCode': 200,
-    'body': json.dumps('Success: Server count 1 and ASG count 1')
-  }
+        response = {
+          'Error': {
+            'Code': error_code,
+            'Message': error_message
+          },
+          'ResponseMetadata': response_metadata
+        }
 
-def start_rds_instances(rds_instances):
-  try:
-    rds.start_db_instances(DBInstanceIdentifier=rds_instances)
-    print(f"Successfully started RDS instance: {rds_instances}")
-  except Exception as e:
-    print(e)
-
-def update_autoscaling_group(auto_scaling_group_name, desired_capacity):
-  try:
-    asg.update_autoscaling_group(
-        AutoScalingGroupName = auto_scaling_group_name,
-        DesiredCapacity = desired_capacity
-    )
-    print(f"Successfully updated ASG DesiredCapacity: {desired_capacity}")
-  except Exception as e:
-    print(e)
-
-
+        return {
+          'statusCode': e.response['ResponseMetadata']['HTTPStatusCode']
+          'body': json.dumps(response)
+        }
