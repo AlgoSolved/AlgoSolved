@@ -1,10 +1,10 @@
 resource "aws_lambda_function" "scale_in_lambda" {
-  filename         = "./scale_in/${var.lambda_function_name}.zip"
+  filename         = "./scale_in/${var.lambda_function_filename}.zip"
   function_name    = "${var.service}-scale-in-lambda"
   role             = aws_iam_role.lambda_role.arn
-  handler          = "${var.lambda_function_name}.lambda_handler"
+  handler          = "${var.lambda_function_filename}.lambda_handler"
   timeout          = "600"
-  source_code_hash = filebase64sha256("./scale_in/${var.lambda_function_name}.zip")
+  source_code_hash = filebase64sha256("./scale_in/${var.lambda_function_filename}.zip")
   runtime          = "python3.12"
 
   tags = {
@@ -18,12 +18,12 @@ resource "aws_lambda_function" "scale_in_lambda" {
 }
 
 resource "aws_lambda_function" "scale_out_lambda" {
-  filename         = "./scale_out/${var.lambda_function_name}.zip"
+  filename         = "./scale_out/${var.lambda_function_filename}.zip"
   function_name    = "${var.service}-scale-out-lambda"
   role             = aws_iam_role.lambda_role.arn
-  handler          = "${var.lambda_function_name}.lambda_handler"
+  handler          = "${var.lambda_function_filename}.lambda_handler"
   timeout          = "600"
-  source_code_hash = filebase64sha256("./scale_out/${var.lambda_function_name}.zip")
+  source_code_hash = filebase64sha256("./scale_out/${var.lambda_function_filename}.zip")
   runtime          = "python3.12"
 
   tags = {

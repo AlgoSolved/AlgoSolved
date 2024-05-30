@@ -58,6 +58,6 @@ variable "ec2_key" {
 }
 
 # lambda
-variable "lambda_function_name" {
+variable "lambda_function_filename" {
   type = string
 }
