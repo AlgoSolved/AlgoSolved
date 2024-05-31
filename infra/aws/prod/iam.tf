@@ -17,6 +17,22 @@ resource "aws_iam_role" "lambda_role" {
   })
 }
 
+resource "aws_iam_role" "scalable_lambda_scheduler_role" {
+  name = "scalable-lambda-scheduler-role"
+  assume_role_policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Principal": {
+          "Service": "scheduler.amazonaws.com"
+        },
+        "Action": "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
 # RDS
 resource "aws_iam_policy" "rds_management_policy" {
   name        = "rds-management-policy"
@@ -56,6 +72,27 @@ resource "aws_iam_policy" "asg_management_policy" {
   })
 }
 
+resource "aws_iam_policy" "scalable_lambda_scheduler_policy" {
+  name = "scalable-lambda-scheduler-policy"
+  policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": [
+          "lambda:InvokeFunction"
+        ],
+        "Resource": [
+          "arn:aws:lambda:ap-northeast-2:471112990651:function:algosolved-scale-in-lambda:*",
+          "arn:aws:lambda:ap-northeast-2:471112990651:function:algosolved-scale-in-lambda",
+          "arn:aws:lambda:ap-northeast-2:471112990651:function:algosolved-scale-out-lambda:*",
+          "arn:aws:lambda:ap-northeast-2:471112990651:function:algosolved-scale-out-lambda"
+        ]
+      }
+    ]
+  })
+}
+
 resource "aws_iam_role_policy_attachment" "asg_policy_attachment" {
   policy_arn = aws_iam_policy.asg_management_policy.arn
   role       = aws_iam_role.lambda_role.name
@@ -64,4 +101,10 @@ resource "aws_iam_role_policy_attachment" "asg_policy_attachment" {
 resource "aws_iam_role_policy_attachment" "rds_policy_attachment" {
   policy_arn = aws_iam_policy.rds_management_policy.arn
   role       = aws_iam_role.lambda_role.name
+}
+
+
+resource "aws_iam_role_policy_attachment" "scalable_lambda_scheduler_policy_attachment" {
+  role       = aws_iam_role.scalable_lambda_scheduler_role.name
+  policy_arn = aws_iam_policy.scalable_lambda_scheduler_policy.arn
 }
