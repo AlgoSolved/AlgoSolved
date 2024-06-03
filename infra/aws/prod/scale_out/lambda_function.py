@@ -9,55 +9,71 @@ asg = boto3.client('autoscaling', region_name=region)
 rds = boto3.client('rds', region_name=region)
 
 def lambda_handler(event, context):
-  # TODO: scale_in 작성하고 scale_out 복붙해서 수정
-  rds_resource = event['resources'][0].split(':')[6]
-  asg_resource = event['resources'][1].split(':')[5]
+  dbs = rds.describe_db_instances(DBInstanceIdentifier=event['rds_identifier'][0])['DBInstances']
+  asgs = asg.describe_auto_scaling_groups(AutoScalingGroupNames=event['asg_name'])['AutoScalingGroups']
 
-  dbs = rds.describe_db_instances(DBInstanceIdentifier=[rds_resource])['DBInstances']
-  asgs = asg.describe_auto_scaling_groups(AutoScalingGroupNames=[asg_resource])['AutoScalingGroups']
-  for db in dbs:
-    if db['DBInstanceStatus'] == 'available':
-      response = []
-      response.append({
-        'DBInstanceIdentifier': db['DBInstanceIdentifier'],
-        'DBInstanceStatus': db['DBInstanceStatus']
-      })
-      return {
-        'statusCode': 200,
-        'body': json.dumps(response)
-      }
+  rds_response = start_rds_instances(dbs)
+  asg_response = update_autoscaling_group(asgs)
 
-    if db['DBInstanceStatus'] == 'stopped':
-      try:
-        response = []
-        response.append(rds.start_db_instances(DBInstanceIdentifier=db['DBInstanceIdentifier']))
-        for asg_group in asgs:
-          if asg_group['DesiredCapacity'] <= 0:
-            response.append(asg.update_auto_scaling_group
-                (
-                AutoScalingGroupName = asg_group['AutoScalingGroupName'],
-                DesiredCapacity = 1
-            ))
+  response = [rds_response, asg_response]
+  return {
+    'statusCode': 200,
+    'body': json.dumps(response)
+  }
 
-        return {
-          'statusCode': 200,
-          'body': json.dumps(response)
-        }
-      except ClientError as e:
-        error_response = e.response['Error']
-        error_code = error_response['Code']
-        error_message = error_response['Message']
-        response_metadata = e.response['ResponseMetadata']
+def client_error_handler(e):
+  error_response = e.response['Error']
+  error_code = error_response['Code']
+  error_message = error_response['Message']
+  response_metadata = e.response['ResponseMetadata']
 
-        response = {
-          'Error': {
-            'Code': error_code,
-            'Message': error_message
-          },
-          'ResponseMetadata': response_metadata
-        }
+  response = {
+    'Error': {
+      'Code': error_code,
+      'Message': error_message
+    },
+    'ResponseMetadata': response_metadata
+  }
 
-        return {
-          'statusCode': e.response['ResponseMetadata']['HTTPStatusCode'],
-          'body': json.dumps(response)
-        }
+  return {
+    'statusCode': e.response['ResponseMetadata']['HTTPStatusCode'],
+    'body': json.dumps(response)
+  }
+
+def start_rds_instances(dbs):
+  response = []
+
+  try:
+    for db in dbs:
+      if db['DBInstanceStatus'] == 'available':
+        response.append({
+          'DBInstanceIdentifier': db['DBInstanceIdentifier'],
+          'DBInstanceStatus': db['DBInstanceStatus']
+        })
+      elif db['DBInstanceStatus'] == 'stopped':
+        response.append(rds.start_db_instance(DBInstanceIdentifier=db['DBInstanceIdentifier']))
+  except ClientError as e:
+    return client_error_handler(e)
+
+  return {
+    'statusCode': 200,
+    'body': json.dumps(response)
+  }
+
+def update_autoscaling_group(asgs):
+  response = []
+
+  try:
+    for asg_group in asgs:
+      if asg_group['DesiredCapacity'] <= 0:
+        response.append(asg.update_auto_scaling_group(
+            AutoScalingGroupName=asg_group['AutoScalingGroupName'],
+            DesiredCapacity=1
+        ))
+  except ClientError as e:
+    return client_error_handler(e)
+
+  return {
+    'statusCode': 200,
+    'body': json.dumps(response)
+  }
