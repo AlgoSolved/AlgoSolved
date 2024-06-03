@@ -94,7 +94,7 @@ def build_message(result, status):
     status_message = "❌ FAILED"
     
   text_message = (
-      f"*[AlgoSolved Scale-In 알람]* \n> *State* : {status_message} \n> "
+      f"*[AlgoSolved Scale-Out 알람]* \n> *State* : {status_message} \n> "
       + f"*Time* : {current_time} \n> *Message* {message} \n")
   return text_message
 
