@@ -52,8 +52,8 @@ resource "aws_cloudwatch_event_rule" "scale_in_rule" {
   name        = "${var.service}-scale-in-rule"
   description = "Event bridge scale-in lambda"
   event_pattern = jsonencode({
-    "rds_identifier": [aws_db_instance.algosolved-rdb.identifier],
-    "asg_name": [aws_autoscaling_group.algosolved-ec2-asg.name],
+    "rds_identifier" : [aws_db_instance.algosolved-rdb.identifier],
+    "asg_name" : [aws_autoscaling_group.algosolved-ec2-asg.name],
   })
   depends_on = [
     aws_db_instance.algosolved-rdb,
@@ -70,8 +70,8 @@ resource "aws_cloudwatch_event_rule" "scale_out_rule" {
   name        = "${var.service}-scale-out-rule"
   description = "Event bridge scale-out lambda"
   event_pattern = jsonencode({
-    "rds_identifier": [aws_db_instance.algosolved-rdb.identifier],
-    "asg_name": [aws_autoscaling_group.algosolved-ec2-asg.name],
+    "rds_identifier" : [aws_db_instance.algosolved-rdb.identifier],
+    "asg_name" : [aws_autoscaling_group.algosolved-ec2-asg.name],
   })
   depends_on = [
     aws_db_instance.algosolved-rdb,
