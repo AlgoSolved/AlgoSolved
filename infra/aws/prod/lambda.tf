@@ -30,7 +30,7 @@ resource "aws_lambda_function" "scale_in_lambda" {
 
   environment {
     variables = {
-      slack_webhook_url = var.slack_webhook_url
+      SLACK_WEBHOOK_URL = var.slack_webhook_url
     }
   }
 }

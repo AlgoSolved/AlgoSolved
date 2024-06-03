@@ -6,7 +6,7 @@ from datetime import datetime
 
 from botocore.exceptions import ClientError
 
-SLACK_HOOK_URL = os.environ['slack_webhook_url']
+SLACK_HOOK_URL = os.environ['SLACK_WEBHOOK_URL']
 
 region = os.environ['AWS_REGION']
 asg = boto3.client('autoscaling', region_name=region)
