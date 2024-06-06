@@ -20,14 +20,14 @@ resource "aws_iam_role" "lambda_role" {
 resource "aws_iam_role" "scalable_lambda_scheduler_role" {
   name = "scalable-lambda-scheduler-role"
   assume_role_policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
+    "Version" : "2012-10-17",
+    "Statement" : [
       {
-        "Effect": "Allow",
-        "Principal": {
-          "Service": "scheduler.amazonaws.com"
+        "Effect" : "Allow",
+        "Principal" : {
+          "Service" : "scheduler.amazonaws.com"
         },
-        "Action": "sts:AssumeRole"
+        "Action" : "sts:AssumeRole"
       }
     ]
   })
@@ -75,14 +75,14 @@ resource "aws_iam_policy" "asg_management_policy" {
 resource "aws_iam_policy" "scalable_lambda_scheduler_policy" {
   name = "scalable-lambda-scheduler-policy"
   policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
+    "Version" : "2012-10-17",
+    "Statement" : [
       {
-        "Effect": "Allow",
-        "Action": [
+        "Effect" : "Allow",
+        "Action" : [
           "lambda:InvokeFunction"
         ],
-        "Resource": [
+        "Resource" : [
           "arn:aws:lambda:ap-northeast-2:471112990651:function:algosolved-scale-in-lambda:*",
           "arn:aws:lambda:ap-northeast-2:471112990651:function:algosolved-scale-in-lambda",
           "arn:aws:lambda:ap-northeast-2:471112990651:function:algosolved-scale-out-lambda:*",
