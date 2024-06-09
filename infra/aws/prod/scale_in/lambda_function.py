@@ -117,4 +117,3 @@ def slack_alarm(result, status):
       data=json.dumps(send_message).encode('utf-8'),
       headers={'Content-Type': 'application/json'}
   )
-  
