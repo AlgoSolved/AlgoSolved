@@ -1,9 +1,18 @@
 import React from "react";
 import { Container } from "@mui/material";
+import { useEffect, useState } from "react";
 import styles from "../../styles/components/users/Repository.module.css";
+import { connectRepository } from "../../apis/v1/github-repository/connectRepository";
 
-// TODO: 레포지토리 연동 API 연결
-const Repository = (props: any) => {
+const Repository = () => {
+
+    const [repo, setRepo] = useState<string>("");
+
+    const useHandleSubmit = async(event: any) => {
+      event.preventDefault();
+      const data = await connectRepository({owner: "", repo: repo});
+    }
+
   return (
     <div>
       <Container>
@@ -13,8 +22,16 @@ const Repository = (props: any) => {
           <div className={styles.repository_container}>
             <div>깃허브 레포지토리 링크 변경 {}</div>
             <div className={styles.repo_input_container}>
-              <input className={styles.repo_input}></input>
-              <button className={styles.repo_update_button}>적용</button>
+              <form onSubmit={useHandleSubmit} className={styles.repo_input} >
+              <input
+                type="text"
+                name="repo"
+                placeholder="https://github.com/"
+                className={styles.repo_input}
+                onChange={(e) => setRepo(e.target.value)}
+              />
+              <input className={styles.repo_update_button} type="submit" value="적용" />
+              </form>
             </div>
             <div className={styles.description}>
               새로 고침을 통해 공유된 레포지토리 링크가 제대로 설정 되었는지

@@ -1,12 +1,11 @@
-import { UserInfo } from "../../../types/users/Info";
 import { ApiClient } from "../../ApiClient";
 import { AxiosErrorClass } from "../../../types/common/error/Error";
 import { ApiResponseProps } from "../../../types/common/BaseResponse";
 
-// TODO: API 에 맞는 uri 로 변경
-export const getUserInfo = async () => {
+
+export const loginUser = async () => {
   try {
-    const res: any = await ApiClient.get<UserInfo>(`api/v1/users/current`);
+    const res: any = await ApiClient.post(`api/login`);
 
     return res.data.data;
   } catch (error: AxiosErrorClass | any) {

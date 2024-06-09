@@ -8,7 +8,7 @@ export function useUserInfo(id: number) {
   useEffect(() => {
     const initUserInfo = async () => {
       try {
-        const data = await getUserInfo(id);
+        const data = await getUserInfo();
         setUserInfo(data);
       } catch {
         console.log("error!");
