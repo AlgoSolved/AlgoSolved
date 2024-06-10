@@ -19,12 +19,12 @@ def lambda_handler(event, context):
     response = [rds_response, asg_response]
     return {
       'statusCode': 200,
-      'body': json.dumps(response)
+      'body': response
     }
   except ClientError as e:
     return {
       'statusCode': e.response['ResponseMetadata']['HTTPStatusCode'],
-      'body': json.dumps(e.response)
+      'body': e.rsponse
     }
 
 def stop_rds_instances(dbs):
@@ -32,21 +32,19 @@ def stop_rds_instances(dbs):
 
   try:
     for db in dbs:
+      db_instance = {
+        'DBInstanceIdentifier': db['DBInstanceIdentifier'],
+        'DBInstanceStatus': db['DBInstanceStatus']
+      }
       if db['DBInstanceStatus'] == 'stopped':
-        response.append({
-          'DBInstanceIdentifier': db['DBInstanceIdentifier'],
-          'DBInstanceStatus': db['DBInstanceStatus']
-        })
+        response.append(db_instance)
       elif db['DBInstanceStatus'] == 'available':
         rds.stop_db_instance(DBInstanceIdentifier=db['DBInstanceIdentifier'])
-        response.append({
-          'DBInstanceIdentifier': db['DBInstanceIdentifier'],
-          'DBInstanceStatus': db['DBInstanceStatus']
-        })
+        response.append(db_instance)
   except ClientError as e:
     raise e
 
-  return json.dumps(response)
+  return response
 
 def update_autoscaling_group(asgs):
   response = []
@@ -64,4 +62,4 @@ def update_autoscaling_group(asgs):
   except ClientError as e:
     raise e
 
-  return json.dumps(response)
+  return response
