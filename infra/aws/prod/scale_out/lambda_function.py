@@ -12,33 +12,20 @@ def lambda_handler(event, context):
   dbs = rds.describe_db_instances(DBInstanceIdentifier=event['rds_identifier'][0])['DBInstances']
   asgs = asg.describe_auto_scaling_groups(AutoScalingGroupNames=event['asg_name'])['AutoScalingGroups']
 
-  rds_response = start_rds_instances(dbs)
-  asg_response = update_autoscaling_group(asgs)
+  try:
+    rds_response = start_rds_instances(dbs)
+    asg_response = update_autoscaling_group(asgs)
 
-  response = [rds_response, asg_response]
-  return {
-    'statusCode': 200,
-    'body': json.dumps(response)
-  }
-
-def client_error_handler(e):
-  error_response = e.response['Error']
-  error_code = error_response['Code']
-  error_message = error_response['Message']
-  response_metadata = e.response['ResponseMetadata']
-
-  response = {
-    'Error': {
-      'Code': error_code,
-      'Message': error_message
-    },
-    'ResponseMetadata': response_metadata
-  }
-
-  return {
-    'statusCode': e.response['ResponseMetadata']['HTTPStatusCode'],
-    'body': json.dumps(response)
-  }
+    response = [rds_response, asg_response]
+    return {
+      'statusCode': 200,
+      'body': json.dumps(response)
+    }
+  except ClientError as e:
+    return {
+      'statusCode': e.response['ResponseMetadata']['HTTPStatusCode'],
+      'body': json.dumps(e.response)
+    }
 
 def start_rds_instances(dbs):
   response = []
@@ -51,14 +38,15 @@ def start_rds_instances(dbs):
           'DBInstanceStatus': db['DBInstanceStatus']
         })
       elif db['DBInstanceStatus'] == 'stopped':
-        response.append(rds.start_db_instance(DBInstanceIdentifier=db['DBInstanceIdentifier']))
+        rds.start_db_instance(DBInstanceIdentifier=db['DBInstanceIdentifier'])
+        response.append({
+          'DBInstanceIdentifier': db['DBInstanceIdentifier'],
+          'DBInstanceStatus': db['DBInstanceStatus']
+        })
   except ClientError as e:
-    return client_error_handler(e)
+    raise e
 
-  return {
-    'statusCode': 200,
-    'body': json.dumps(response)
-  }
+  return json.dumps(response)
 
 def update_autoscaling_group(asgs):
   response = []
@@ -66,14 +54,15 @@ def update_autoscaling_group(asgs):
   try:
     for asg_group in asgs:
       if asg_group['DesiredCapacity'] <= 0:
-        response.append(asg.update_auto_scaling_group(
+        asg.update_auto_scaling_group(
             AutoScalingGroupName=asg_group['AutoScalingGroupName'],
             DesiredCapacity=1
-        ))
+        )
+        response.append({
+          'AutoScalingGroupName': asg_group['AutoScalingGroupName'],
+          'DesiredCapacity': asg_group['DesiredCapacity']
+        })
   except ClientError as e:
-    return client_error_handler(e)
+    raise e
 
-  return {
-    'statusCode': 200,
-    'body': json.dumps(response)
-  }
+  return json.dumps(response)
