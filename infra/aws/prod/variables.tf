@@ -61,3 +61,8 @@ variable "ec2_key" {
 variable "lambda_function_filename" {
   type = string
 }
+
+# slack
+variable "slack_webhook_url" {
+  type = string
+}

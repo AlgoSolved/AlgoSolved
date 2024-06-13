@@ -27,6 +27,12 @@ resource "aws_lambda_function" "scale_in_lambda" {
   depends_on = [
     aws_iam_role.lambda_role
   ]
+
+  environment {
+    variables = {
+      SLACK_WEBHOOK_URL = var.slack_webhook_url
+    }
+  }
 }
 
 resource "aws_lambda_function" "scale_out_lambda" {
