@@ -1,8 +1,12 @@
 import json
 import os
 import boto3
+import urllib3
+from datetime import datetime
 
 from botocore.exceptions import ClientError
+
+SLACK_HOOK_URL = os.environ['SLACK_WEBHOOK_URL']
 
 region = os.environ['AWS_REGION']
 asg = boto3.client('autoscaling', region_name=region)
@@ -109,8 +113,10 @@ def slack_alarm(result, status):
     ]
   }
 
-  return requests.post(
-      SLACK_HOOK_URL,
-      data=json.dumps(send_message).encode('utf-8'),
-      headers={'Content-Type': 'application/json'}
+  http = urllib3.PoolManager()
+  return http.request(
+    'POST',
+    SLACK_HOOK_URL,
+    body=json.dumps(send_message).encode('utf-8'),
+    headers={'Content-Type': 'application/json'}
   )
