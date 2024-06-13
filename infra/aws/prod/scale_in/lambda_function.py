@@ -1,12 +1,8 @@
 import json
 import os
 import boto3
-import requests
-from datetime import datetime
 
 from botocore.exceptions import ClientError
-
-SLACK_HOOK_URL = os.environ['SLACK_WEBHOOK_URL']
 
 region = os.environ['AWS_REGION']
 asg = boto3.client('autoscaling', region_name=region)
@@ -15,62 +11,62 @@ rds = boto3.client('rds', region_name=region)
 def lambda_handler(event, context):
   dbs = rds.describe_db_instances(DBInstanceIdentifier=event['rds_identifier'][0])['DBInstances']
   asgs = asg.describe_auto_scaling_groups(AutoScalingGroupNames=event['asg_name'])['AutoScalingGroups']
+  is_success = True
 
-  for db in dbs:
-    if db['DBInstanceStatus'] == 'stopped':
-      response = []
-      response.append({
+  try:
+    rds_response = stop_rds_instances(dbs)
+    asg_response = update_autoscaling_group(asgs)
+
+    response = [rds_response, asg_response]
+    return {
+      'statusCode': 200,
+      'body': response
+    }
+  except ClientError as e:
+    is_success = False
+    return {
+      'statusCode': e.response['ResponseMetadata']['HTTPStatusCode'],
+      'body': e.rsponse
+    }
+  finally:
+    slack_alarm(response, is_success and 'success' or 'error')
+
+def stop_rds_instances(dbs):
+  response = []
+
+  try:
+    for db in dbs:
+      db_instance = {
         'DBInstanceIdentifier': db['DBInstanceIdentifier'],
         'DBInstanceStatus': db['DBInstanceStatus']
-      })
-
-      slack_alarm(response, 'success')
-
-      return {
-        'statusCode': 200,
-        'body': json.dumps(response)
       }
+      if db['DBInstanceStatus'] == 'stopped':
+        response.append(db_instance)
+      elif db['DBInstanceStatus'] == 'available':
+        rds.stop_db_instance(DBInstanceIdentifier=db['DBInstanceIdentifier'])
+        response.append(db_instance)
+  except ClientError as e:
+    raise e
 
-    # TODO: DB 랑 ASG 분리할 것
+  return response
 
-    if db['DBInstanceStatus'] == 'available':
-      try:
-        response = []
-        response.append(rds.stop_db_instance(DBInstanceIdentifier=db['DBInstanceIdentifier']))
-        for asg_group in asgs:
-          if asg_group['DesiredCapacity'] > 0:
-            response.append(asg.update_auto_scaling_group
-                (
-                AutoScalingGroupName = asg_group['AutoScalingGroupName'],
-                DesiredCapacity = 0
-            ))
+def update_autoscaling_group(asgs):
+  response = []
 
-        slack_alarm(response, 'success')
+  try:
+    for asg_group in asgs:
+      if asg_group['DesiredCapacity'] > 0:
+        asg.update_auto_scaling_group(
+            AutoScalingGroupName=asg_group['AutoScalingGroupName'],
+            DesiredCapacity=0)
+        response.append({
+          'AutoScalingGroupName': asg_group['AutoScalingGroupName'],
+          'DesiredCapacity': asg_group['DesiredCapacity']
+        })
+  except ClientError as e:
+    raise e
 
-        return {
-          'statusCode': 200,
-          'body': json.dumps(response.body)
-        }
-      except ClientError as e:
-        error_response = e.response['Error']
-        error_code = error_response['Code']
-        error_message = error_response['Message']
-        response_metadata = e.response['ResponseMetadata']
-
-        response = {
-          'Error': {
-            'Code': error_code,
-            'Message': error_message
-          },
-          'ResponseMetadata': response_metadata
-        }
-
-        slack_alarm(error_message, 'error')
-
-        return {
-          'statusCode': e.response['ResponseMetadata']['HTTPStatusCode'],
-          'body': json.dumps(response.body)
-        }
+  return response
 
 
 def build_message(result, status):
@@ -87,12 +83,12 @@ def build_message(result, status):
         message = f"\n> {result}"
   else:
     message = f"\n> {result}"
-  
+
   if status == 'success':
     status_message = "✅ COMPLETED"
   else :
     status_message = "❌ FAILED"
-    
+
   text_message = (
       f"*[AlgoSolved Scale-In 알람]* \n> *State* : {status_message} \n> "
       + f"*Time* : {current_time} \n> *Message* {message} \n")

@@ -12,7 +12,7 @@
 ```
 
 infra
-├── README.md
+├── .md
 └── aws
     └── prod
         ├── backend.tf
