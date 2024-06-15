@@ -7,12 +7,12 @@ env:
   AWS_REGION: ap-northeast-2
 
 jobs:
-  ecr-push:
-    uses: algosolved/algosolved/.github/workflows/BUILD-PRODUCTION-IMAGE.yml@main
+  reusable_job:
+    uses: ./.github/workflows/BUILD-PRODUCTION-IMAGE.yml
 
   build:
     runs-on: ubuntu-latest
-    needs: ecr-push
+    needs: reusable_job
     steps:
       - name: Checkout
         uses: actions/checkout@v3
