@@ -47,8 +47,7 @@ jobs:
         run: |
           desired_count=$(aws autoscaling describe-auto-scaling-groups \
             --auto-scaling-group-name algosolved-ec2-asg \
-            --query 'AutoScalingGroups[0].DesiredCapacity'
-            --output json | jq -r '.[]')
+            --query 'AutoScalingGroups[0].DesiredCapacity')
           
           echo "desired-count=${desired_count}" >> $GITHUB_OUTPUT
 
@@ -57,7 +56,8 @@ jobs:
         run: |
           running_instances=$(aws autoscaling describe-auto-scaling-groups \
             --auto-scaling-group-name algosolved-ec2-asg \
-            --query 'AutoScalingGroups[0].Instances[*].InstanceId')
+            --query 'AutoScalingGroups[0].Instances[*].InstanceId' \ 
+            --output json | jq -r '.[]')
           
           echo "instance-ids=${running_instances}" >> $GITHUB_OUTPUT
 
@@ -73,7 +73,8 @@ jobs:
           
           instances=aws autoscaling describe-auto-scaling-groups \
             --auto-scaling-group-name algosolved-ec2-asg \
-            --query 'AutoScalingGroups[0].Instances[*]'
+            --query 'AutoScalingGroups[0].Instances[*]' \
+            --output json | jq -r '.[]')
           
           healthy_count=0
           while [ healthy_count < count ];
