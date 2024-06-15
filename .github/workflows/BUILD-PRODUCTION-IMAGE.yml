@@ -63,7 +63,7 @@ jobs:
           running_instances=$(aws autoscaling describe-auto-scaling-groups \
             --auto-scaling-group-name algosolved-ec2-asg \
             --query 'AutoScalingGroups[0].Instances[*].InstanceId' \
-            --output text | tr -d '[:space:]')
+            --output text)
           
           echo "instance-ids=${running_instances}" >> $GITHUB_OUTPUT
 
@@ -77,25 +77,25 @@ jobs:
             --auto-scaling-group-name algosolved-ec2-asg \
             --desired-capacity ${count} \
             --honor-cooldown
-          
+
           instances=$(aws autoscaling describe-auto-scaling-groups \
             --auto-scaling-group-name algosolved-ec2-asg \
-            --query 'AutoScalingGroups[0].Instances[*]' \
-            --output text | tr -d '[:space:]')
-          
+            --query 'AutoScalingGroups[0].Instances[*].HealthStatus' \
+            --output text)
+
           healthy_count=0
-          while [ healthy_count < count ];
+          while [ $healthy_count -le $count ]
           do
-            for var in instances
+            for var in $instances
             do
-              if [ var['HealthStatus'] == 'Healthy' ]; then
-                healthy_count = healthy_count + 1
+              if [ $var == 'Healthy' ]; then
+                ((healthy_count++))
               fi
             done
-            if [ healthy_count == count ]; then
+            if [ $healthy_count == $count ]; then
                 break
             fi
-            sleep 30000
+            sleep 30
           done
 
       - name: Delete ASG Instances
