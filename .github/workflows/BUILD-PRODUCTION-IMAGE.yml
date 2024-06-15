@@ -88,11 +88,11 @@ jobs:
           do
             for var in $instances
             do
-              if [ $var == 'Healthy' ]; then
+              if [ $var -eq 'Healthy' ]; then
                 ((healthy_count++))
               fi
             done
-            if [ $healthy_count == $count ]; then
+            if [ $healthy_count -eq $count ]; then
                 break
             fi
             sleep 30
