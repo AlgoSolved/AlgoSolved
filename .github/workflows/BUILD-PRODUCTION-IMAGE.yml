@@ -90,10 +90,11 @@ jobs:
               --query 'AutoScalingGroups[0].Instances[*].HealthStatus' \
               --output text)
             echo $instances
-            for var in $instances
+            for status in $instances
             do
-              echo $var
-              if [ "$var" == "Healthy" ]; then
+              echo $status
+              if [[ "$status" == "Healthy" ]]; then
+                echo "count up!"
                 ((healthy_count++))
               fi
             done
