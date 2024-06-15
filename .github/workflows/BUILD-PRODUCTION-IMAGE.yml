@@ -95,7 +95,8 @@ jobs:
               echo $status
               if [[ "$status" == "Healthy" ]]; then
                 echo "count up!"
-                ((healthy_count++))
+                healthy_count=`expr $healthy_count + 1`
+                echo $healthy_count
               fi
             done
             if [ $healthy_count -eq $count ]; then
