@@ -47,10 +47,10 @@ jobs:
         run: |
           desired_count=$(aws autoscaling describe-auto-scaling-groups \
             --auto-scaling-group-name algosolved-ec2-asg \
-            --query 'AutoScalingGroups[0].DesiredCapacity')
+            --query 'AutoScalingGroups[0].DesiredCapacity'
+            --output json | jq -r '.[]')
           
           echo "desired-count=${desired_count}" >> $GITHUB_OUTPUT
-
 
       - name: Get ASG Instances
         id: asg-instances
