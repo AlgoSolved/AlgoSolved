@@ -80,6 +80,7 @@ jobs:
           sleep 30
 
           healthy_count=0
+          echo $healthy_count
           while [ $healthy_count -le $count ]
           do
             healthy_count=0
@@ -88,15 +89,19 @@ jobs:
               --auto-scaling-group-name algosolved-ec2-asg \
               --query 'AutoScalingGroups[0].Instances[*].HealthStatus' \
               --output text)
+            echo $instances
             for var in $instances
             do
-              if [ "$var" == "Healthy" ]; then
+              echo $var
+              if [ "$var == "Healthy" ]; then
                 ((healthy_count++))
               fi
             done
             if [ $healthy_count -eq $count ]; then
+                echo $healthy_count
                 break
             fi
+            echo "sleep 30 sec"
             sleep 30
           done
 
