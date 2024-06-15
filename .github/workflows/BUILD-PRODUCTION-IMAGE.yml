@@ -54,10 +54,10 @@ jobs:
       - name: Get ASG Instances
         id: asg-instances
         run: |
+          running_instances=[]
           running_instances=$(aws autoscaling describe-auto-scaling-groups \
             --auto-scaling-group-name algosolved-ec2-asg \
-            --query 'AutoScalingGroups[0].Instances[*].InstanceId' \ 
-            --output json | jq -r '.[]')
+            --query 'AutoScalingGroups[0].Instances[*].InstanceId')
           
           echo "instance-ids=${running_instances}" >> $GITHUB_OUTPUT
 
@@ -65,16 +65,16 @@ jobs:
         id: update-desired-count
         if: ${{ steps.desired-count.outputs.desired-count > 0 }}
         run: |
+          instances=[]
           count=`expr ${{ steps.desired-count.outputs.desired-count }} \* 2`
           aws autoscaling set-desired-capacity \
             --auto-scaling-group-name algosolved-ec2-asg \
             --desired-capacity ${count} \
             --honor-cooldown
           
-          instances=aws autoscaling describe-auto-scaling-groups \
+          instances=$(aws autoscaling describe-auto-scaling-groups \
             --auto-scaling-group-name algosolved-ec2-asg \
-            --query 'AutoScalingGroups[0].Instances[*]' \
-            --output json | jq -r '.[]')
+            --query 'AutoScalingGroups[0].Instances[*]')
           
           healthy_count=0
           while [ healthy_count < count ];
