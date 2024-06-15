@@ -77,6 +77,7 @@ jobs:
             --auto-scaling-group-name algosolved-ec2-asg \
             --desired-capacity ${count} 
 
+          sleep 30
 
           instances=$(aws autoscaling describe-auto-scaling-groups \
             --auto-scaling-group-name algosolved-ec2-asg \
@@ -103,7 +104,7 @@ jobs:
         if: ${{ steps.desired-count.outputs.desired-count > 0 }}
         run: |
           count=${{ steps.desired-count.outputs.desired-count }}
+          sleep 30
           aws autoscaling set-desired-capacity \
             --auto-scaling-group-name algosolved-ec2-asg \
             --desired-capacity ${count} \
-            --honor-cooldown
