@@ -93,7 +93,7 @@ jobs:
             for var in $instances
             do
               echo $var
-              if [ "$var == "Healthy" ]; then
+              if [ "$var" == "Healthy" ]; then
                 ((healthy_count++))
               fi
             done
