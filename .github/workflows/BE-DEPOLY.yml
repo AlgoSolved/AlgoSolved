@@ -8,6 +8,7 @@ env:
 
 jobs:
   reusable_job:
+    runs-on: ubuntu-latest
     uses: ./.github/workflows/BUILD-PRODUCTION-IMAGE.yml
 
   build:
@@ -31,19 +32,19 @@ jobs:
       - name: Get ASG Desired Count
         id: desired-count
         run: |
-          desired_count=aws autoscaling describe-auto-scaling-groups \
+          desired_count=$(aws autoscaling describe-auto-scaling-groups \
             --auto-scaling-group-name algosolved-ec2-asg \
-            --query 'AutoScalingGroups[0].DesiredCapacity'
+            --query 'AutoScalingGroups[0].DesiredCapacity')
           
           echo "desired-count=${desired_count}" >> $GITHUB_OUTPUT
-          
+
 
       - name: Get ASG Instances
         id: asg-instances
         run: |
-          running_instances=aws autoscaling describe-auto-scaling-groups \
+          running_instances=$(aws autoscaling describe-auto-scaling-groups \
             --auto-scaling-group-name algosolved-ec2-asg \
-            --query 'AutoScalingGroups[0].Instances[*].InstanceId'
+            --query 'AutoScalingGroups[0].Instances[*].InstanceId')
           
           echo "instance-ids=${running_instances}" >> $GITHUB_OUTPUT
 
@@ -62,7 +63,7 @@ jobs:
             --query 'AutoScalingGroups[0].Instances[*]'
           
           healthy_count=0
-          while [ healthy_count < count ]
+          while [ healthy_count < count ];
           do
             for var in instances
             do
