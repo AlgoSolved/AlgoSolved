@@ -20,6 +20,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli
+          
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
@@ -57,7 +62,7 @@ jobs:
           running_instances=[]
           running_instances=aws autoscaling describe-auto-scaling-groups \
             --auto-scaling-group-name algosolved-ec2-asg \
-            --query 'AutoScalingGroups[0].Instances[*].InstanceId' \ 
+            --query 'AutoScalingGroups[0].Instances[*].InstanceId' \
             --output text | tr -d '[:space:]')
           
           echo "instance-ids=${running_instances}" >> $GITHUB_OUTPUT
