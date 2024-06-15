@@ -79,21 +79,21 @@ jobs:
 
           sleep 30
 
-          instances=$(aws autoscaling describe-auto-scaling-groups \
-            --auto-scaling-group-name algosolved-ec2-asg \
-            --query 'AutoScalingGroups[0].Instances[*].HealthStatus' \
-            --output text)
-
           healthy_count=0
           while [ $healthy_count -le $count ]
           do
+            instances=[]
+            instances=$(aws autoscaling describe-auto-scaling-groups \
+              --auto-scaling-group-name algosolved-ec2-asg \
+              --query 'AutoScalingGroups[0].Instances[*].HealthStatus' \
+              --output text)
             for var in $instances
             do
-              if [ $var -eq 'Healthy' ]; then
+              if [ $var == 'Healthy' ]; then
                 ((healthy_count++))
               fi
             done
-            if [ $healthy_count -eq $count ]; then
+            if [ $healthy_count == $count ]; then
                 break
             fi
             sleep 30
