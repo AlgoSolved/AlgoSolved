@@ -101,7 +101,6 @@ jobs:
       - name: Delete ASG Instances
         id: asg-count
         if: ${{ steps.desired-count.outputs.desired-count > 0 }}
-        need: update-desired-count
         run: |
           count=${{ steps.desired-count.outputs.desired-count }}
           aws autoscaling set-desired-capacity \
