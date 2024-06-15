@@ -1,4 +1,4 @@
-name: Build Production Image
+name: BE DEPOLY
 
 on:
   workflow_dispatch:
