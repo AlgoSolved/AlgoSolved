@@ -1,6 +1,6 @@
 #!/bin/bash
 
-##1. 도커를 실행시키기 위해 도커 설치
+##1. 도커 실행을 위한 도커 설치
 export AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}"
 export AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}"
 
@@ -15,8 +15,6 @@ echo \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt update
 sudo apt -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-##sudo reboot
 
 # AWS CLI 설치
 sudo apt install -y awscli
