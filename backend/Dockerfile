@@ -1,7 +1,7 @@
 FROM openjdk:17-slim-buster AS base
 ENV JAR_FILE_NAME=backend-0.0.1-SNAPSHOT.jar
 ENV JAR_FILE_PATH=/home/deploy/app/backend/build/libs/${JAR_FILE_NAME}
-
+ENV TZ=Asia/Seoul
 
 FROM base as builder
 
@@ -25,7 +25,6 @@ COPY --chown=deploy:users --from=builder ${JAR_FILE_PATH} ${JAR_FILE_PATH}
 COPY --chown=deploy:users entrypoint.sh entrypoint.sh
 EXPOSE 8080
 
-RUN chmod +x ${JAR_FILE_PATH}
 RUN chmod +x entrypoint.sh
 
 ENTRYPOINT ["./entrypoint.sh"]
