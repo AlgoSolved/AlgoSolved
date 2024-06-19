@@ -80,6 +80,7 @@ resource "aws_autoscaling_group" "algosolved-ec2-asg" {
   desired_capacity    = 1
   vpc_zone_identifier = [var.sub_pub_a_id, var.sub_pub_b_id, var.sub_pub_c_id, var.sub_pub_d_id]
   target_group_arns   = [aws_lb_target_group.algosolved-lb-tg.arn]
+  termination_policies  = ["OldestInstance"]
 
   launch_template {
     id      = aws_launch_template.algosolved-lt.id
