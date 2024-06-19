@@ -19,11 +19,13 @@ RUN ./gradlew build -x test --parallel
 
 FROM base AS production
 
+ENV STAGE=production
 WORKDIR /home/deploy/app/backend
 COPY --chown=deploy:users --from=builder ${JAR_FILE_PATH} ${JAR_FILE_PATH}
 COPY --chown=deploy:users entrypoint.sh entrypoint.sh
 EXPOSE 8080
 
+RUN chmod +x ${JAR_FILE_PATH}
 RUN chmod +x entrypoint.sh
 
 ENTRYPOINT ["./entrypoint.sh"]
