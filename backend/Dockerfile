@@ -25,6 +25,8 @@ COPY --chown=deploy:users --from=builder ${JAR_FILE_PATH} ${JAR_FILE_PATH}
 COPY --chown=deploy:users entrypoint.sh entrypoint.sh
 EXPOSE 8080
 
+HEALTHCHECK --interval=5s --timeout=120s --retries=5 CMD curl -f http://localhost:8080/api/health/ping || exit 1
+
 RUN chmod +x entrypoint.sh
 
 ENTRYPOINT ["./entrypoint.sh"]
