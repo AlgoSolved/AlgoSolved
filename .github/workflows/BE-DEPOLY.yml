@@ -55,8 +55,7 @@ jobs:
           count=`expr ${{ steps.desired-count.outputs.desired-count }} \* 2`
           aws autoscaling set-desired-capacity \
             --auto-scaling-group-name algosolved-ec2-asg \
-            --desired-capacity ${count} \
-            --honor-cooldown
+            --desired-capacity ${count}
           
           instances=aws autoscaling describe-auto-scaling-groups \
             --auto-scaling-group-name algosolved-ec2-asg \
@@ -84,5 +83,4 @@ jobs:
           count=${{ steps.desired-count.outputs.desired-count }}
           aws autoscaling set-desired-capacity \
             --auto-scaling-group-name algosolved-ec2-asg \
-            --desired-capacity ${count} \
-            --honor-cooldown
+            --desired-capacity ${count} 
