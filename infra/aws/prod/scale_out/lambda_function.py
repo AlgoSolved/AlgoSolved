@@ -15,25 +15,27 @@ rds = boto3.client('rds', region_name=region)
 def lambda_handler(event, context):
   dbs = rds.describe_db_instances(DBInstanceIdentifier=event['rds_identifier'][0])['DBInstances']
   asgs = asg.describe_auto_scaling_groups(AutoScalingGroupNames=event['asg_name'])['AutoScalingGroups']
+  status = 200
+  response = None
   is_success = True
 
   try:
     rds_response = start_rds_instances(dbs)
     asg_response = update_autoscaling_group(asgs)
 
+    status = 200
     response = [rds_response, asg_response]
-    return {
-      'statusCode': 200,
-      'body': response
-    }
   except ClientError as e:
     is_success = False
-    return {
-      'statusCode': e.response['ResponseMetadata']['HTTPStatusCode'],
-      'body': e.response
-    }
-  finally:
-    slack_alarm(response, is_success and 'success' or 'error')
+    response = e.response
+    status = e.response['ResponseMetadata']['HTTPStatusCode']
+
+  slack_alarm(response, 'success' if is_success else 'error')
+
+  return {
+    'statusCode': status,
+    'body': response
+  }
 
 def start_rds_instances(dbs):
   response = []

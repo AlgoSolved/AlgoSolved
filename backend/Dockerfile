@@ -1,7 +1,7 @@
 FROM openjdk:17-slim-buster AS base
 ENV JAR_FILE_NAME=backend-0.0.1-SNAPSHOT.jar
 ENV JAR_FILE_PATH=/home/deploy/app/backend/build/libs/${JAR_FILE_NAME}
-
+ENV TZ=Asia/Seoul
 
 FROM base as builder
 
@@ -19,10 +19,13 @@ RUN ./gradlew build -x test --parallel
 
 FROM base AS production
 
+ENV STAGE=production
 WORKDIR /home/deploy/app/backend
 COPY --chown=deploy:users --from=builder ${JAR_FILE_PATH} ${JAR_FILE_PATH}
 COPY --chown=deploy:users entrypoint.sh entrypoint.sh
 EXPOSE 8080
+
+HEALTHCHECK --interval=5s --timeout=120s --retries=5 CMD curl -f http://localhost:8080/api/health/ping || exit 1
 
 RUN chmod +x entrypoint.sh
 

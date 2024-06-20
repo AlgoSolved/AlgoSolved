@@ -6,7 +6,7 @@ start_dev_server() {
 }
 
 start_prod_server() {
-  java -jar -Dspring.profiles.active=prod $JAR_FILE_NAME
+  java -jar -Dspring.profiles.active=prod $JAR_FILE_PATH
 }
 
 start_server() {
