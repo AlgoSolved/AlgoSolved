@@ -1,0 +1,86 @@
+name: BE DEPOLY
+
+on:
+  workflow_dispatch:
+
+env:
+  AWS_REGION: ap-northeast-2
+
+jobs:
+  reusable_job:
+    runs-on: ubuntu-latest
+    uses: ./.github/workflows/BUILD-PRODUCTION-IMAGE.yml
+
+  build:
+    runs-on: ubuntu-latest
+    needs: reusable_job
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials for production
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Get ASG Desired Count
+        id: desired-count
+        run: |
+          desired_count=$(aws autoscaling describe-auto-scaling-groups \
+            --auto-scaling-group-name algosolved-ec2-asg \
+            --query 'AutoScalingGroups[0].DesiredCapacity')
+          
+          echo "desired-count=${desired_count}" >> $GITHUB_OUTPUT
+
+
+      - name: Get ASG Instances
+        id: asg-instances
+        run: |
+          running_instances=$(aws autoscaling describe-auto-scaling-groups \
+            --auto-scaling-group-name algosolved-ec2-asg \
+            --query 'AutoScalingGroups[0].Instances[*].InstanceId')
+          
+          echo "instance-ids=${running_instances}" >> $GITHUB_OUTPUT
+
+      - name: Update ASG Desired Count
+        id: update-desired-count
+        if: ${{ steps.desired-count.outputs.desired-count > 0 }}
+        run: |
+          count=`expr ${{ steps.desired-count.outputs.desired-count }} \* 2`
+          aws autoscaling set-desired-capacity \
+            --auto-scaling-group-name algosolved-ec2-asg \
+            --desired-capacity ${count}
+          
+          instances=aws autoscaling describe-auto-scaling-groups \
+            --auto-scaling-group-name algosolved-ec2-asg \
+            --query 'AutoScalingGroups[0].Instances[*]'
+          
+          healthy_count=0
+          while [ healthy_count < count ];
+          do
+            for var in instances
+            do
+              if [ var['HealthStatus'] == 'Healthy' ]; then
+                healthy_count = healthy_count + 1
+              fi
+            done
+            if [ healthy_count == count ]; then
+                break
+            fi
+            sleep 30000
+          done
+
+      - name: Delete ASG Instances
+        id: asg-count
+        if: ${{ steps.desired-count.outputs.desired-count > 0 }}
+        run: |
+          count=${{ steps.desired-count.outputs.desired-count }}
+          aws autoscaling set-desired-capacity \
+            --auto-scaling-group-name algosolved-ec2-asg \
+            --desired-capacity ${count} 
