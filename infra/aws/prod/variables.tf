@@ -9,6 +9,15 @@ variable "stage" {
   type = string
 }
 
+## AWS
+variable "AWS_ACCESS_KEY_ID" {
+  type = string
+}
+
+variable "AWS_SECRET_ACCESS_KEY" {
+  type = string
+}
+
 ## vpc
 variable "vpc_id" {
   type      = string
