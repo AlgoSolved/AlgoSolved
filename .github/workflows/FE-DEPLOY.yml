@@ -40,8 +40,8 @@ jobs:
         run: npm ci
 
       - name: Build FE
-        - run: |
-            npm run build:prod
+        run: |
+          npm run build:prod
 
       - name: Upload FE artifacts To S3
         run: |
