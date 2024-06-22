@@ -1,7 +1,7 @@
 import React from "react";
 
-import NavBar from "../components/common/Nav";
 import Footer from "../components/common/Footer";
+import NavBar from "../components/common/Nav";
 import AccountInfo from "../components/users/Info";
 import Repository from "../components/users/Repository";
 import { useUserInfo } from "../hooks/userInfo";

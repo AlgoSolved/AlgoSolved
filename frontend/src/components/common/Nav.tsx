@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
-import { styled, alpha } from '@mui/material/styles';
+import { Link } from 'react-router-dom';
+
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import ButtonGroup from '@mui/material/ButtonGroup';
@@ -12,6 +12,7 @@ import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import { styled, alpha } from '@mui/material/styles';
 
 
 const Search = styled('div')(({ theme }) => ({

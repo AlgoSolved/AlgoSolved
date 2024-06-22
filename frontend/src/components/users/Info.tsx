@@ -1,5 +1,7 @@
 import React from "react";
+
 import { Container } from "@mui/material";
+
 import styles from "../../styles/components/users/Info.module.css";
 import { UserInfo } from "../../types/users/Info";
 

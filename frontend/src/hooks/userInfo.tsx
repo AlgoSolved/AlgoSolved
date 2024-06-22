@@ -1,6 +1,7 @@
-import { UserInfo } from "../types/users/Info";
 import { useEffect, useState } from "react";
+
 import { getUserInfo } from "../apis/v1/users/info";
+import { UserInfo } from "../types/users/Info";
 
 export function useUserInfo(id: number) {
   const [user_info, setUserInfo] = useState<UserInfo | undefined>();
