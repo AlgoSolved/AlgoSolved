@@ -63,8 +63,8 @@ resource "aws_alb_listener" "algosolved-http-forward" {
   protocol          = "HTTP"
 
   default_action {
-   target_group_arn = aws_lb_target_group.algosolved-lb-tg.arn
-   type             = "forward"
+    target_group_arn = aws_lb_target_group.algosolved-lb-tg.arn
+    type             = "forward"
   }
 
 
