@@ -63,13 +63,8 @@ resource "aws_alb_listener" "algosolved-http-forward" {
   protocol          = "HTTP"
 
   default_action {
-    type = "redirect"
-
-    redirect {
-      port        = "443"
-      protocol    = "HTTPS"
-      status_code = "HTTP_301"
-    }
+   target_group_arn = aws_lb_target_group.algosolved-lb-tg.arn
+   type             = "forward"
   }
 
 
