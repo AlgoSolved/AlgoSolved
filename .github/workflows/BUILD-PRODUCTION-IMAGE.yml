@@ -2,6 +2,14 @@ name: Build Production Image
 
 on:
   workflow_dispatch:
+  workflow_call:
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      ECR_REPOSITORY:
+        required: true
 
 env:
   AWS_REGION: ap-northeast-2
