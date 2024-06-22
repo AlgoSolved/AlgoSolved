@@ -5,6 +5,7 @@ on:
 
 env:
   AWS_REGION: ap-northeast-2
+  AUTOSCALING_GROUP_NAME: algosolved-ec2-asg
 
 jobs:
   build:
@@ -32,48 +33,36 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Get ASG Desired Count
-        id: desired-count
+      - name: Get current desired capacity
+        id: get-desired-capacity
         run: |
-          desired_count=$(aws autoscaling describe-auto-scaling-groups \
-            --auto-scaling-group-name algosolved-ec2-asg \
-            --query 'AutoScalingGroups[0].DesiredCapacity')
-          
-          echo "desired-count=${desired_count}" >> $GITHUB_OUTPUT
+          current_capacity=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names ${{ env.AUTOSCALING_GROUP_NAME }} --query "AutoScalingGroups[0].DesiredCapacity" --output text)
+          echo "::set-output name=current_capacity::$current_capacity"
 
-      - name: Update ASG Desired Count
-        id: update-desired-count
-        if: ${{ steps.desired-count.outputs.desired-count > 0 }}
+      - name: Double the desired capacity
+        id: scale-up
         run: |
-          count=`expr ${{ steps.desired-count.outputs.desired-count }} \* 2`
-          aws autoscaling set-desired-capacity \
-            --auto-scaling-group-name algosolved-ec2-asg \
-            --desired-capacity ${count}
-          
-          instances=$(aws autoscaling describe-auto-scaling-groups \
-            --auto-scaling-group-name algosolved-ec2-asg \
-            --query 'AutoScalingGroups[0].Instances[*].InstanceId')
-          
-          healthy_count=0
-          while [ healthy_count < count ];
-          do
-            for var in instances
-            do
-              if [ var['HealthStatus'] == 'Healthy' ]; then
-                healthy_count = healthy_count + 1
-              fi
-            done
-            if [ healthy_count == count ]; then
-                break
+          new_capacity=$((${{ steps.get-desired-capacity.outputs.current_capacity }} * 2))
+          aws autoscaling update-auto-scaling-group --auto-scaling-group-name ${{ env.AUTOSCALING_GROUP_NAME }} --desired-capacity $new_capacity
+          echo "::set-output name=new_capacity::$new_capacity"
+          echo "Scaled up to $new_capacity instances."
+
+      - name: Wait for new instances to become healthy
+        id: wait-for-health
+        run: |
+          new_capacity=${{ steps.scale-up.outputs.new_capacity }}
+          while true; do
+            healthy_instances=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names ${{ env.AUTOSCALING_GROUP_NAME }} --query "AutoScalingGroups[0].Instances[?LifecycleState=='InService' && HealthStatus=='Healthy']" --output json | jq length)
+            if [ "$healthy_instances" -eq "$new_capacity" ]; then
+              echo "All instances are healthy."
+              break
+            else
+              echo "Waiting for instances to become healthy... (currently $healthy_instances/$new_capacity healthy)"
+              sleep 30
             fi
-            sleep 30000
           done
 
-      - name: Delete ASG Instances
-        id: asg-count
-        if: ${{ steps.desired-count.outputs.desired-count > 0 }}
+      - name: Restore original desired capacity
         run: |
-          count=${{ steps.desired-count.outputs.desired-count }}
-          aws autoscaling set-desired-capacity \
-            --auto-scaling-group-name algosolved-ec2-asg \
-            --desired-capacity ${count} 
+          aws autoscaling update-auto-scaling-group --auto-scaling-group-name ${{ env.AUTOSCALING_GROUP_NAME }} --desired-capacity ${{ steps.get-desired-capacity.outputs.current_capacity }}
+          echo "Scaled down to original capacity of ${{ steps.get-desired-capacity.outputs.current_capacity }} instances."
