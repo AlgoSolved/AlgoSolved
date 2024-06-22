@@ -2,7 +2,7 @@ resource "aws_s3_bucket" "algosolved-fe-bucket" {
   bucket = "algosolved-fe-bucket"
 
   tags = {
-    Name = "algosolved-fe-bucket"
+    Name    = "algosolved-fe-bucket"
     Project = var.project
     Stage   = var.stage
   }
@@ -26,9 +26,9 @@ resource "aws_s3_bucket_policy" "public_bucket_policy" {
 resource "aws_s3_bucket_public_access_block" "public_access_block" {
   bucket = aws_s3_bucket.algosolved-fe-bucket.bucket
 
-  block_public_acls   = false
-  block_public_policy = false
-  ignore_public_acls  = false
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
   restrict_public_buckets = false
 }
 
@@ -52,7 +52,7 @@ resource "aws_s3_bucket" "algosolved-org" {
   bucket = "algosolved.org"
 
   tags = {
-    Name = "algosolved.org"
+    Name    = "algosolved.org"
     Project = var.project
     Stage   = var.stage
   }
@@ -90,9 +90,9 @@ resource "aws_s3_bucket_policy" "algosolved-org-policy" {
 resource "aws_s3_bucket_public_access_block" "algosolved-org-access" {
   bucket = aws_s3_bucket.algosolved-org.bucket
 
-  block_public_acls   = false
-  block_public_policy = false
-  ignore_public_acls  = false
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
   restrict_public_buckets = false
 }
 
