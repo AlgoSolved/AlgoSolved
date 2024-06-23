@@ -20,9 +20,9 @@ resource "aws_route53_zone" "algosolved_org_public_zone" {
 }
 
 resource "aws_route53_record" "algosolved_org_record" {
-  zone_id = aws_route53_zone.algosolved_org_public_zone.zone_id
-  name    = "algosolved.org"
-  type    = "A"
+  zone_id         = aws_route53_zone.algosolved_org_public_zone.zone_id
+  name            = "algosolved.org"
+  type            = "A"
   allow_overwrite = true
 
   alias {
@@ -45,13 +45,13 @@ resource "aws_route53_record" "algosolved_org_api_record" {
 }
 
 resource "aws_acm_certificate" "algosolved-cert" {
-  domain_name = "algosolved.org"
-  validation_method = "DNS"
+  domain_name               = "algosolved.org"
+  validation_method         = "DNS"
   subject_alternative_names = ["*.algosolved.org", "algosolved.org"]
 
   lifecycle {
     create_before_destroy = true
-    ignore_changes = [id]
+    ignore_changes        = [id]
   }
 }
 
