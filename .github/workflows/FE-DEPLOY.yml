@@ -49,4 +49,4 @@ jobs:
 
       - name: Upload FE artifacts To S3
         run: |
-          aws s3 cp ./build s3://algosolved-org --recursive
+          aws s3 cp ./build s3://algosolved.org --recursive
