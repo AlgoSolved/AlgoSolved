@@ -26,20 +26,8 @@ resource "aws_route53_record" "algosolved_org_record" {
   allow_overwrite = true
 
   alias {
-    name                   = aws_s3_bucket_website_configuration.algosolved-org-website.website_domain
-    zone_id                = aws_s3_bucket.algosolved-org.hosted_zone_id
-    evaluate_target_health = true
-  }
-}
-
-resource "aws_route53_record" "algosolved_org_api_record" {
-  zone_id = aws_route53_zone.algosolved_org_public_zone.zone_id
-  name    = "api.algosolved.org"
-  type    = "A"
-
-  alias {
-    name                   = aws_lb.algosolved-lb.dns_name
-    zone_id                = aws_lb.algosolved-lb.zone_id
+    name                   = aws_cloudfront_distribution.algosolved-org-cf.domain_name
+    zone_id                = aws_cloudfront_distribution.algosolved-org-cf.hosted_zone_id
     evaluate_target_health = true
   }
 }

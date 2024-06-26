@@ -82,14 +82,6 @@ resource "aws_s3_bucket_policy" "algosolved-org-policy" {
         Principal = "*",
         Action    = "s3:GetObject",
         Resource  = "arn:aws:s3:::${aws_s3_bucket.algosolved-org.bucket}/*",
-        Condition = {
-          Bool =  {
-            "aws:SecureTransport": "true"
-          },
-          "StringEquals" :  {
-            "aws:SourceVpce" :  "vpce-01c3d4e8ae4b8596d"
-          }
-        }
       },
     ],
   })
@@ -118,5 +110,7 @@ resource "aws_s3_bucket_website_configuration" "algosolved-org-website" {
     key = "error.html"
   }
 }
+
+
 
 

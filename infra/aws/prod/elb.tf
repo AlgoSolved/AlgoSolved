@@ -107,7 +107,7 @@ resource "aws_alb_listener" "algosolved-https-listener" {
   }
 }
 
-resource "aws_lb_listener_rule" "static" {
+resource "aws_lb_listener_rule" "algosolved-https-listener-rule" {
   listener_arn = aws_alb_listener.algosolved-https-listener.arn
   priority     = 1
 
@@ -129,24 +129,3 @@ resource "aws_lb_listener_rule" "static" {
   }
 }
 
-resource "aws_lb_listener_rule" "static" {
-  listener_arn = aws_alb_listener.algosolved-https-listener.arn
-  priority     = 1
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.algosolved-lb-tg.arn
-  }
-
-  condition {
-    path_pattern {
-      values = ["/api/*"]
-    }
-  }
-
-  condition {
-    host_header {
-      values = ["algosolved.org"]
-    }
-  }
-}
