@@ -7,9 +7,22 @@ resource "aws_cloudfront_distribution" "algosolved-org-cf" {
     origin_id   = aws_s3_bucket.algosolved-org.id
     domain_name = aws_s3_bucket_website_configuration.algosolved-org-website.website_endpoint
 
-    s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.algosolved-origin-access.cloudfront_access_identity_path
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "https-only"
+      origin_ssl_protocols = [
+        "SSLv3",
+        "TLSv1",
+        "TLSv1.1",
+        "TLSv1.2"
+      ]
     }
+  }
+
+  origin {
+    domain_name = aws_lb.algosolved-lb.dns_name
+    origin_id   = aws_lb.algosolved-lb.name
 
     custom_origin_config {
       http_port              = 80
@@ -19,7 +32,8 @@ resource "aws_cloudfront_distribution" "algosolved-org-cf" {
         "SSLv3",
         "TLSv1",
         "TLSv1.1",
-      "TLSv1.2", ]
+        "TLSv1.2"
+      ]
     }
   }
 
@@ -58,7 +72,7 @@ resource "aws_cloudfront_distribution" "algosolved-org-cf" {
   }
 
   viewer_certificate {
-    acm_certificate_arn            = aws_acm_certificate.algosolved-cert.arn
+    acm_certificate_arn            = aws_acm_certificate.algosolved-cert-us.arn
     cloudfront_default_certificate = false
     minimum_protocol_version       = "TLSv1.2_2021"
     ssl_support_method             = "sni-only"

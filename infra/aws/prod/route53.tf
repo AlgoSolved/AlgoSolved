@@ -41,6 +41,38 @@ resource "aws_acm_certificate" "algosolved-cert" {
     create_before_destroy = true
     ignore_changes        = [id]
   }
+
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+  tags_all = {
+    Project = var.project
+    Stage   = var.stage
+  }
+}
+
+resource "aws_acm_certificate" "algosolved-cert-us" {
+  domain_name       = "algosolved.org"
+  validation_method = "DNS"
+  subject_alternative_names = [
+    "*.algosolved.org", "algosolved.org"
+  ]
+  provider = aws.us-east-1
+
+  lifecycle {
+    create_before_destroy = true
+    ignore_changes        = [id]
+  }
+
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+  tags_all = {
+    Project = var.project
+    Stage   = var.stage
+  }
 }
 
 
