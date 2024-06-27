@@ -33,7 +33,7 @@ resource "aws_lb_target_group" "algosolved-lb-tg" {
   name                 = "algosolved-ec2-target-group"
   deregistration_delay = 15
   protocol             = "HTTP"
-  port                 = 80
+  port                 = 8080
   vpc_id               = var.vpc_id
 
   health_check {
@@ -57,16 +57,21 @@ resource "aws_lb_target_group" "algosolved-lb-tg" {
 }
 
 // 리스너
-resource "aws_alb_listener" "algosolved-http-forward" {
+resource "aws_alb_listener" "algosolved-http-listener" {
   load_balancer_arn = aws_lb.algosolved-lb.arn
   port              = "80"
   protocol          = "HTTP"
 
   default_action {
-    target_group_arn = aws_lb_target_group.algosolved-lb-tg.arn
-    type             = "forward"
-  }
+    type = "redirect"
 
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+
+    }
+  }
 
   tags = {
     Project = var.project
