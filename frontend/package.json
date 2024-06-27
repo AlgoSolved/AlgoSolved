@@ -28,6 +28,7 @@
     "start:dev": "cp env.dev ./.env && react-scripts start",
     "build": "react-scripts build",
     "build:dev": "cp env.dev ./.env && react-scripts build",
+    "build:prod": "CI=false && cp env.prod ./.env && react-scripts build",
     "test": "jest -c jest.config.js",
     "eject": "react-scripts eject",
     "coverage": "jest -c jest.config.js --coverage",

@@ -24,7 +24,7 @@ aws ecr get-login-password --region ap-northeast-2 | sudo docker login --usernam
 sudo docker pull 471112990651.dkr.ecr.ap-northeast-2.amazonaws.com/algosolved-ecr:main
 
 ##3. 도커 실행시키는 명령어
-docker run -d -p 80:8080 \
+docker run -d -p 8080:8080 \
   -e STAGE=production \
   -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
   -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \

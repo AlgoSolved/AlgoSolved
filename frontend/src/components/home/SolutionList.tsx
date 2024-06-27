@@ -1,5 +1,7 @@
 import React from "react";
+
 import { Container, List, ListItem, ListItemText } from "@mui/material";
+
 import styles from "../../styles/components/home/SolutionList.module.css";
 import { Solution } from "../../types/solution/Solution";
 
