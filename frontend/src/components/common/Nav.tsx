@@ -103,7 +103,7 @@ function NavBar() {
                       variant="contained"
                       aria-label="Disabled elevation buttons"
                     >
-                      <Link to={'/login'}><Button>Login</Button></Link>
+                      <Link to={'/api/login'}><Button>Login</Button></Link>
                     </ButtonGroup>
 
                 }
