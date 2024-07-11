@@ -33,7 +33,7 @@ resource "aws_lb_target_group" "algosolved-lb-tg" {
   name                 = "algosolved-ec2-target-group"
   deregistration_delay = 15
   protocol             = "HTTP"
-  port                 = 80
+  port                 = 8080
   vpc_id               = var.vpc_id
 
   health_check {
@@ -57,16 +57,21 @@ resource "aws_lb_target_group" "algosolved-lb-tg" {
 }
 
 // 리스너
-resource "aws_alb_listener" "algosolved-http-forward" {
+resource "aws_alb_listener" "algosolved-http-listener" {
   load_balancer_arn = aws_lb.algosolved-lb.arn
   port              = "80"
   protocol          = "HTTP"
 
   default_action {
-    target_group_arn = aws_lb_target_group.algosolved-lb-tg.arn
-    type             = "forward"
-  }
+    type = "redirect"
 
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+
+    }
+  }
 
   tags = {
     Project = var.project
@@ -78,32 +83,49 @@ resource "aws_alb_listener" "algosolved-http-forward" {
   }
 }
 
-// TODO : HTTPS 를 지원하기 위해 인증서가 필요함(domain-CRA)
-# resource "aws_acm_certificate" "algosolved-cert" {
-#   domain_name = "example.com"
-#   validation_method = "DNS"
-# }
+resource "aws_alb_listener" "algosolved-https-listener" {
+  load_balancer_arn = aws_lb.algosolved-lb.arn
+  port              = 443
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-TLS-1-2-2017-01"
+  certificate_arn   = aws_acm_certificate.algosolved-cert.arn
 
-# resource "aws_alb_listener" "algosolved-https-listener" {
-#   load_balancer_arn = aws_lb.algosolved-lb.arn
-#   port              = 443
-#   protocol          = "HTTPS"
-#   ssl_policy        = "ELBSecurityPolicy-TLS-1-2-2017-01"
+  default_action {
+    target_group_arn = aws_lb_target_group.algosolved-lb-tg.arn
+    type             = "forward"
+  }
 
-#   default_action {
-#     target_group_arn = aws_lb_target_group.algosolved-lb-tg.arn
-#     type             = "forward"
-#   }
+  timeouts {}
 
-#   timeouts {}
+  tags = {
+    Project = var.project
+    Stage   = var.stage
+  }
+  tags_all = {
+    Project = var.project
+    Stage   = var.stage
+  }
+}
 
-#   tags = {
-#     Project = var.project
-#     Stage   = var.stage
-#   }
-#   tags_all = {
-#     Project = var.project
-#     Stage   = var.stage
-#   }
-# }
+resource "aws_lb_listener_rule" "algosolved-https-listener-rule" {
+  listener_arn = aws_alb_listener.algosolved-https-listener.arn
+  priority     = 1
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.algosolved-lb-tg.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/api/*"]
+    }
+  }
+
+  condition {
+    host_header {
+      values = ["backend.algosolved.org"]
+    }
+  }
+}
 

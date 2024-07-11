@@ -36,3 +36,7 @@ resource "aws_db_subnet_group" "algosovled-subnet-group" {
     Stage   = var.stage
   }
 }
+
+output "rdb_password" {
+  value = random_string.password.result
+}
