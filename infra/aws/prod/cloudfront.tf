@@ -72,7 +72,7 @@ resource "aws_cloudfront_distribution" "algosolved-org-cf" {
 
     forwarded_values {
       query_string = false
-      headers      = ["Origin"]
+      headers      = ["Host"]
 
       cookies {
         forward = "none"
@@ -95,7 +95,7 @@ resource "aws_cloudfront_distribution" "algosolved-org-cf" {
   viewer_certificate {
     acm_certificate_arn            = aws_acm_certificate.algosolved-cert-us.arn
     cloudfront_default_certificate = false
-    minimum_protocol_version       = "TLSv1.2_2021"
+    minimum_protocol_version       = "TLSv1.1_2016"
     ssl_support_method             = "sni-only"
   }
 
