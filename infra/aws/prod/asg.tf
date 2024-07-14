@@ -18,8 +18,8 @@ output "latest_ami_id" {
 }
 
 resource "aws_ssm_parameter" "aws_access_key_id" {
-  name = "/config/algosolved_prod/aws.access.key.id"
-  type = "String"
+  name  = "/config/algosolved_prod/aws.access.key.id"
+  type  = "String"
   value = "existing_aws_access_key_id"
 
   lifecycle {
@@ -30,8 +30,8 @@ resource "aws_ssm_parameter" "aws_access_key_id" {
 }
 
 resource "aws_ssm_parameter" "aws_secret_access_key" {
-  name = "/config/algosolved_prod/aws.secret.access.key"
-  type = "String"
+  name  = "/config/algosolved_prod/aws.secret.access.key"
+  type  = "String"
   value = "existing_aws_secret_access_key"
 
   lifecycle {
