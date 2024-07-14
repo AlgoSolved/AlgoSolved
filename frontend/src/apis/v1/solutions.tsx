@@ -6,8 +6,10 @@ import { ApiClient } from "../ApiClient";
 export const solutionList = async () => {
   try {
     const res: ApiResponseProps<Solution[]> = await ApiClient.get(
-      `api/v1/solutions/recent-list`,
+      `/api/v1/solutions/recent-list`,
     );
+
+    console.log
 
     return res.body.data;
   } catch (error: AxiosErrorClass | any) {
