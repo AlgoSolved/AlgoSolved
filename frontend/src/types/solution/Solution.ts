@@ -1,8 +1,7 @@
 export interface Solution {
-  id: number;
-  title: string;
-  provider: string;
-  number: number;
+  problemName: string;
+  problemType: string;
+  problemNumber: number;
   username: string;
 }
 

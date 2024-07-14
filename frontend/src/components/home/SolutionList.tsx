@@ -23,11 +23,11 @@ const SolutionItemList = (props: any) => {
               >
                 <ListItemText
                   primary={
-                    solution.number +
+                    solution.problemName +
                     " " +
-                    solution.provider +
+                    solution.problemType +
                     " - " +
-                    solution.title
+                    solution.problemName
                   }
                 />
               </ListItem>
