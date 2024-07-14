@@ -6,6 +6,7 @@ import styles from "../../styles/components/home/SolutionList.module.css";
 import { Solution } from "../../types/solution/Solution";
 
 const SolutionItemList = (props: any) => {
+  console.log(props.list);
   return (
     <div>
       <Container>
