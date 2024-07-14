@@ -1,7 +1,7 @@
 export interface Solution {
   problemName: string;
   problemType: string;
-  problemNumber: number;
+  problemNumber: string;
   username: string;
 }
 
