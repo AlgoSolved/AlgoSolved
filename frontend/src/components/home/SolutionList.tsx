@@ -19,7 +19,7 @@ const SolutionItemList = (props: any) => {
               <ListItem
                 key={index}
                 disableGutters
-                secondaryAction={solution.username}
+                secondaryAction={solution.userName}
               >
                 <ListItemText
                   primary={
