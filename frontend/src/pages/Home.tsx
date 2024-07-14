@@ -9,7 +9,7 @@ import style from "../styles/pages/Home.module.css";
 
 const Home = () => {
   return (
-    <div>
+    <>
       <div className={style.wrapper}>
         <NavBar />
         <Banner />
@@ -18,7 +18,7 @@ const Home = () => {
       <div className={style.footer}>
         <Footer />
       </div>
-    </div>
+    </>
   );
 };
 

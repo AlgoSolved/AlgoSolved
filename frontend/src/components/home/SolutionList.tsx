@@ -8,7 +8,7 @@ import { Solution } from "../../types/solution/Solution";
 const SolutionItemList = (props: any) => {
   console.log(props.list);
   return (
-    <div>
+    <>
       <Container>
         <div className={styles.title}>최근 문제 풀이</div>
         {props.list === undefined || props.list?.length === 0 ? (
@@ -35,7 +35,7 @@ const SolutionItemList = (props: any) => {
           </List>
         )}
       </Container>
-    </div>
+    </>
   );
 };
 
