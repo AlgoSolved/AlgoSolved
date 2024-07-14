@@ -2,7 +2,7 @@ export interface Solution {
   problemName: string;
   problemType: string;
   problemNumber: string;
-  username: string;
+  userName: string;
 }
 
 export interface SolutionList {
