@@ -1,0 +1,17 @@
+.title {
+  text-decoration: none;
+  color: black;
+  padding: 10px;
+  width: fit-content;
+  font-weight: bold;
+  :hover {
+    background: lightgrey;
+    color: black;
+  }
+}
+
+.detail_container {
+  text-align: left;
+  width: 100%;
+  background-color: "background.paper";
+}

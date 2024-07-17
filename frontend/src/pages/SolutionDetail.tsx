@@ -15,7 +15,7 @@ const SolutionDetail = () => {
   return (
     <div>
       <NavBar />
-      <Detail solution={ useSolutionDetail(id)} />
+      <Detail solution={ useSolutionDetail(Number(id))} />
     </div>
   );
 };

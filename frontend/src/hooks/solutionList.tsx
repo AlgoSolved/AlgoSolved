@@ -9,7 +9,7 @@ export function useSolutionList() {
   useEffect(() => {
     const initSolutionList = async () => {
       const data = await solutionList();
-      console.log(data);
+
       setSolutionList(data);
     };
     initSolutionList();
