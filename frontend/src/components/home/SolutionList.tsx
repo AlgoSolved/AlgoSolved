@@ -24,6 +24,7 @@ const SolutionItemList = (props: any) => {
               >
               <Link to={'/problem/detail/'+solution.problemNumber} style={{ textDecoration: "none"}}>
                 <ListItemText
+                  style={{color: "black"}}
                   primary={
                     solution.problemName +
                     " " +
