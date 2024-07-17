@@ -11,5 +11,5 @@ export interface BaseResponse<T> {
 
 export interface ApiResponseProps<T> {
   status: number;
-  body: BaseResponse<T>;
+  data: BaseResponse<T>;
 }
