@@ -9,7 +9,9 @@ export const solutionList = async () => {
       `/api/v1/solutions/recent-list`,
     );
 
-    console.log
+    console.log(res.status);
+    console.log(res.body.data);
+    console.log(res);
 
     return res.body.data;
   } catch (error: AxiosErrorClass | any) {
