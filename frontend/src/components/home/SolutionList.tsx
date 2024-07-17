@@ -22,7 +22,7 @@ const SolutionItemList = (props: any) => {
                 disableGutters
                 secondaryAction={solution.userName}
               >
-              <Link to={'/problem/detail/'+solution.problemNumber} styles={{ textDecoration: "none"}}>
+              <Link to={'/problem/detail/'+solution.problemNumber} style={{ textDecoration: "none"}}>
                 <ListItemText
                   primary={
                     solution.problemName +
