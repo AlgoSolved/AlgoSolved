@@ -7,7 +7,7 @@ import styles from "../../styles/components/home/SolutionList.module.css";
 import { Solution } from "../../types/solution/Solution";
 
 const SolutionItemList = (props: any) => {
-  console.log(props.list);
+
   return (
     <>
       <Container>
@@ -22,7 +22,7 @@ const SolutionItemList = (props: any) => {
                 disableGutters
                 secondaryAction={solution.userName}
               >
-              <Link to={'/api/login'}>
+              <Link to={'/problem/detail/'+solution.problemNumber} styles={{ textDecoration: "none"}}>
                 <ListItemText
                   primary={
                     solution.problemName +

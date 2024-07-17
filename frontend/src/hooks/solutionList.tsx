@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { solutionList } from "../apis/v1/solutions";
+import { solutionList } from "../apis/v1/solutions/list";
 import { Solution } from "../types/solution/Solution";
 
 export function useSolutionList() {

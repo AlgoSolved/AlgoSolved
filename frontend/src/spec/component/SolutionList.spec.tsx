@@ -6,7 +6,7 @@ import "@testing-library/jest-dom/extend-expect";
 import { getBlankSolutionList } from "../../mock/api/solution_list";
 import { server } from "../../mock/server";
 import SolutionList from "../../components/home/SolutionList";
-import { solutionList } from "../../apis/v1/solutions";
+import { solutionList } from "../../apis/v1/solutions/list";
 
 describe("메인 페이지 통합테스트", () => {
   it("solution list api 가 빈값일 때 풀이가 없다고 나온다.", async () => {
