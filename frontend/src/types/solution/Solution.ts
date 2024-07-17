@@ -18,3 +18,8 @@ export interface SolutionDetail {
   link: string;
   rank: string;
 }
+
+export enum ProblemType {
+  BeakJoon = "BaekjoonProblem",
+  Programmers = "ProgrammersProblem",
+}

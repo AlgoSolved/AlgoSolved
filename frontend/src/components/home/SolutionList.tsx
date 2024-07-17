@@ -1,10 +1,14 @@
 import React from "react";
 import { Link } from 'react-router-dom';
 
-import { Container, List, ListItem, ListItemText } from "@mui/material";
+import EmojiObjectsIcon from '@mui/icons-material/EmojiObjects';
+import { Container, List, ListItem, ListItemText, ListItemIcon } from "@mui/material";
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import ListItemButton from '@mui/material/ListItemButton';
 
 import styles from "../../styles/components/home/SolutionList.module.css";
-import { Solution } from "../../types/solution/Solution";
+import { Solution, ProblemType } from "../../types/solution/Solution";
 
 const SolutionItemList = (props: any) => {
 
@@ -17,24 +21,28 @@ const SolutionItemList = (props: any) => {
         ) : (
           <List className={styles.list_container}>
             {props.list?.map((solution: Solution, index: number) => (
+            <Link key={solution.id} to={'/problem/detail/'+solution.id} style={{ textDecoration: "none"}}>
+            <ListItemButton>
               <ListItem
                 key={index}
+                style={{color: "black"}}
                 disableGutters
                 secondaryAction={solution.userName}
               >
-              <Link to={'/problem/detail/'+solution.problemNumber} style={{ textDecoration: "none"}}>
+                <ListItemIcon>
+                    <EmojiObjectsIcon color="primary"/>
+                </ListItemIcon>
                 <ListItemText
+                  key={index+"text"}
                   style={{color: "black"}}
-                  primary={
-                    solution.problemName +
-                    " " +
-                    solution.problemType +
-                    " - " +
-                    solution.problemName
+                  primary={solution.problemNumber + " -" + solution.problemName}
+                  secondary={
+                    solution.problemType == ProblemType.Programmers ? " 프로그래머스 " : " 백준 "
                   }
                 />
-              </Link>
               </ListItem>
+              </ListItemButton>
+            </Link>
             ))}
           </List>
         )}
