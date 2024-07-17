@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
@@ -14,6 +14,7 @@ import Container from '@mui/material/Container';
 import { styled, alpha } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 
+import { loginUser } from "../../apis/v1/users/login";
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -65,6 +66,10 @@ const isLoggedIn = false;
 
 function NavBar() {
 
+  // TODO: 서버의 세션 정보를 클라이언트에 저장해야함.
+  const handleLogin = () => {
+    loginUser();
+  };
 
   return (
     <Container>
@@ -103,9 +108,10 @@ function NavBar() {
                       variant="contained"
                       aria-label="Disabled elevation buttons"
                     >
-                      <Link to={'/api/login'}><Button>Login</Button></Link>
+                    <Link to={process.env.REACT_APP_API_BASE_URL+'/api/login'}>
+                      <Button onClick={handleLogin}>Login</Button>
+                    </Link>
                     </ButtonGroup>
-
                 }
                 </Box>
             </Toolbar>

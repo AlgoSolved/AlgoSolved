@@ -2,18 +2,6 @@ resource "aws_route53_zone" "algosolved_org_public_zone" {
   name = "algosolved.org"
 }
 
-#resource "aws_route53_record" "backend_algosolved_org_record" {
-#  zone_id = aws_route53_zone.algosolved_org_public_zone.zone_id
-#  name    = "backend.algosolved.org"
-#  type    = "A"
-#
-#  alias {
-#    name                   = aws_lb.algosolved-lb.dns_name
-#    zone_id                = aws_lb.algosolved-lb.zone_id
-#    evaluate_target_health = true
-#  }
-#}
-
 resource "aws_route53_record" "algosolved_org_record" {
   zone_id         = aws_route53_zone.algosolved_org_public_zone.zone_id
   name            = "algosolved.org"
