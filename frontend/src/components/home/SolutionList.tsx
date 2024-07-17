@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 
 import { Container, List, ListItem, ListItemText } from "@mui/material";
 
@@ -21,6 +22,7 @@ const SolutionItemList = (props: any) => {
                 disableGutters
                 secondaryAction={solution.userName}
               >
+              <Link to={'/api/login'}>
                 <ListItemText
                   primary={
                     solution.problemName +
@@ -30,6 +32,7 @@ const SolutionItemList = (props: any) => {
                     solution.problemName
                   }
                 />
+              </Link>
               </ListItem>
             ))}
           </List>
