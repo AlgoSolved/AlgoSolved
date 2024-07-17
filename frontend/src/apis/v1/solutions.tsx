@@ -9,8 +9,8 @@ export const solutionList = async () => {
       `/api/v1/solutions/recent-list`,
     );
 
+    console.log(res);
     console.log(res.status);
-    console.log(res.data);
     console.log(res.body.data);
 
     return res.body.data;
