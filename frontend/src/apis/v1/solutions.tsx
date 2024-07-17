@@ -10,8 +10,6 @@ export const solutionList = async () => {
     );
 
     console.log(res);
-    console.log(res.status);
-    console.log(res.body.data);
 
     return res.body.data;
   } catch (error: AxiosErrorClass | any) {
