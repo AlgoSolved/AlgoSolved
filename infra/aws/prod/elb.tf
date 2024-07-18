@@ -124,7 +124,7 @@ resource "aws_lb_listener_rule" "algosolved-https-listener-rule" {
 
   condition {
     host_header {
-      values = ["backend.algosolved.org"]
+      values = ["algosolved.org"]
     }
   }
 }

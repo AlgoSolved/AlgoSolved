@@ -69,6 +69,7 @@ public class SolutionService {
 
     private SolutionDTO mapToDTO(Solution solution) {
         SolutionDTO solutionDTO = new SolutionDTO();
+        solutionDTO.setId(solution.getId());
         solutionDTO.setProblemType(getProblemType(solution.getProblem()));
         solutionDTO.setProblemNumber(solution.getProblem().getId().toString());
         solutionDTO.setProblemName(solution.getProblem().getTitle());
