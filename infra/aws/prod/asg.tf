@@ -17,6 +17,30 @@ output "latest_ami_id" {
   description = "The AMI ID latest ubuntu 22.04 verison"
 }
 
+resource "aws_ssm_parameter" "aws_access_key_id" {
+  name  = "/config/algosolved_prod/aws.access.key.id"
+  type  = "String"
+  value = "existing_aws_access_key_id"
+
+  lifecycle {
+    ignore_changes = [
+      value
+    ]
+  }
+}
+
+resource "aws_ssm_parameter" "aws_secret_access_key" {
+  name  = "/config/algosolved_prod/aws.secret.access.key"
+  type  = "String"
+  value = "existing_aws_secret_access_key"
+
+  lifecycle {
+    ignore_changes = [
+      value
+    ]
+  }
+}
+
 resource "aws_launch_template" "algosolved-lt" {
   depends_on = [
     aws_security_group.algosolved-ec2-sg,
@@ -28,8 +52,8 @@ resource "aws_launch_template" "algosolved-lt" {
   key_name               = var.ec2_key
   vpc_security_group_ids = [aws_security_group.algosolved-ec2-sg.id]
   user_data = base64encode(templatefile("./launch_template.sh", {
-    AWS_ACCESS_KEY_ID     = var.AWS_ACCESS_KEY_ID
-    AWS_SECRET_ACCESS_KEY = var.AWS_SECRET_ACCESS_KEY
+    AWS_ACCESS_KEY_ID     = aws_ssm_parameter.aws_access_key_id.value
+    AWS_SECRET_ACCESS_KEY = aws_ssm_parameter.aws_secret_access_key.value
   }))
 
   block_device_mappings {
