@@ -1,7 +1,6 @@
 package org.algosolved.backend.user.controller;
 
 import java.util.Objects;
-import javax.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import org.algosolved.backend.common.enums.ExceptionStatus;
 import org.algosolved.backend.common.response.BaseResponse;
@@ -15,15 +14,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.view.RedirectView;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/v1/user")
 public class UserController {
@@ -36,21 +34,15 @@ public class UserController {
 
 
     @GetMapping("/auth/success")
-    public RedirectView loginSuccess(@AuthenticationPrincipal OAuth2User oAuth2User) {
+    public ResponseEntity<BaseResponse<String>> loginSuccess(@AuthenticationPrincipal OAuth2User oAuth2User) {
 
         String jwtToken = jwtProvider.createToken(
-                new UserJwtDto(Long.parseLong(Objects.requireNonNull(oAuth2User.getAttribute("id"))), oAuth2User.getName(), oAuth2User.getAuthorities()));
+                new UserJwtDto(Long.parseLong(Objects.requireNonNull(oAuth2User.getAttribute("id"))), oAuth2User.getName(), oAuth2User.getAuthorities()), "access");
 
-        Cookie cookie = new Cookie("accessToken", jwtToken);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        cookie.setMaxAge(3600);
-
-        RedirectView redirectView = new RedirectView();
-
-        redirectView.setUrl(clientUrl);
-        return redirectView;
+        return new ResponseEntity(
+                BaseResponse.success(
+                        UserStatus.SUCCESS.getCode(), UserStatus.SUCCESS.getMessage(), jwtToken),
+                HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

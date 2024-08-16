@@ -25,40 +25,26 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         try {
             DefaultOAuth2UserService service = new DefaultOAuth2UserService();
-            String accessToken = userRequest.getAccessToken().getTokenValue();
             OAuth2User oAuth2User = service.loadUser(userRequest); // OAuth 서비스에서 가져온 유저 정보 담김
 
             System.out.println(oAuth2User.getAttributes());
 
             String username = oAuth2User.getAttribute("login").toString();
-            System.out.println(oAuth2User.getAttribute("login").toString());
 
-            User user = createUserFromOAuth(accessToken, oAuth2User);;
-
-            if (!isExistUser(username)) {
-                userRepository.save(user);
-            } else {
-                user = userRepository.findByUsername(username);
-            }
-
+            User user = userRepository.findByUsername(username);
             if (user == null) {
-                System.out.println("유저가 null이다.");
+                user = createUserFromOAuth(username, oAuth2User);
+                userRepository.save(user);
             }
 
             Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, oAuth2User.getAuthorities());
 
-            System.out.println(authentication+" : authentication");
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             return oAuth2User;
         } catch (OAuth2AuthenticationException e) {
             throw new RuntimeException("[Error] Failed to load OAuth2 user" + e.getMessage(), e);
         }
-    }
-
-    public boolean isExistUser(String username) {
-        // TODO: 유저가 username 을 변경 시 주의
-        return userRepository.existsByUsername(username);
     }
 
     private User createUserFromOAuth(String accessToken, OAuth2User oAuth2User) {

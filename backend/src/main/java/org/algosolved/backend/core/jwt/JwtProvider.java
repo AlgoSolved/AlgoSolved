@@ -38,7 +38,7 @@ public class JwtProvider {
     }
 
 
-    public String createToken(UserJwtDto userInfo) {
+    public String createToken(UserJwtDto userInfo, String type) {
 
         Claims claims = Jwts.claims();
         claims.put("id", userInfo.getId());

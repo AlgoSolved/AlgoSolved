@@ -20,10 +20,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    @Autowired
     private final OAuthService oAuthService;
 
     @Value("${server.servlet.contextPath}")
     private String API_URL_PREFIX;  // api
+
+    @Value("${client.base.url}")
+    private String clientUrl;
 
     @Autowired
     private JwtAuthEntryPoint unauthorizedHandler;
@@ -44,7 +49,7 @@ public class SecurityConfig {
                 .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers( "/").permitAll()
-                .antMatchers("/v1/user/auth/success").permitAll()
+                .antMatchers("/v1/auth/success").permitAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -52,10 +57,10 @@ public class SecurityConfig {
                 .authorizationEndpoint()
                 .baseUri("/api/login")
                 .and()
-                .defaultSuccessUrl("/v1/user/auth/success")
                 .userInfoEndpoint()
-                .userService(oAuthService);
-        ;
+                .userService(oAuthService)
+                .and()
+                .defaultSuccessUrl(clientUrl);
 
         return http.build();
     }

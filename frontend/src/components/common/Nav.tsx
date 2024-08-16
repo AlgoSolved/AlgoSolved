@@ -109,7 +109,7 @@ function NavBar() {
                       aria-label="Disabled elevation buttons"
                     >
                     <Link to={process.env.REACT_APP_API_BASE_URL+'/api/api/login/github'}>
-                      <Button onClick={handleLogin}>Login</Button>
+                      <Button>Login</Button>
                     </Link>
                     </ButtonGroup>
                 }
