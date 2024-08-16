@@ -6,7 +6,10 @@ import org.algosolved.backend.problem.domain.BaekjoonProblem;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+@ExtendWith(MockitoExtension.class)
 public class BaekjoonProblemTest {
     @Nested
     @DisplayName("BaekjoonProblem 인스턴스 메서드 테스트")
