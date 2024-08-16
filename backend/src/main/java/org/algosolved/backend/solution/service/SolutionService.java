@@ -1,5 +1,7 @@
 package org.algosolved.backend.solution.service;
 
+import lombok.RequiredArgsConstructor;
+
 import org.algosolved.backend.common.enums.ExceptionStatus;
 import org.algosolved.backend.common.exceptions.NotFoundException;
 import org.algosolved.backend.github.domain.GithubRepository;
@@ -12,9 +14,6 @@ import org.algosolved.backend.solution.domain.Solution;
 import org.algosolved.backend.solution.dto.SolutionDTO;
 import org.algosolved.backend.solution.dto.SolutionDetailDTO;
 import org.algosolved.backend.solution.repository.SolutionRepository;
-
-import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
 
 import java.util.List;

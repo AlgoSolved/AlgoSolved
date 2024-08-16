@@ -1,11 +1,11 @@
 package org.algosolved.backend.solution.dto;
 
-import org.algosolved.backend.problem.domain.Problem;
-import org.algosolved.backend.solution.domain.Solution;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
+import org.algosolved.backend.problem.domain.Problem;
+import org.algosolved.backend.solution.domain.Solution;
 
 @Builder
 @Getter

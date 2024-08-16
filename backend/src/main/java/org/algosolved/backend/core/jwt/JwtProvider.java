@@ -9,8 +9,7 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
-import java.security.Key;
-import javax.annotation.PostConstruct;
+
 import org.algosolved.backend.common.enums.ExceptionStatus;
 import org.algosolved.backend.common.exceptions.JwtException;
 import org.algosolved.backend.user.dto.UserJwtDto;
@@ -20,11 +19,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.security.Key;
+
+import javax.annotation.PostConstruct;
+
 @Component
 public class JwtProvider {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
     private Key key;
+
     @Value("${jwt.token.secret.key}")
     private String secretKey;
 
@@ -37,7 +41,6 @@ public class JwtProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-
     public String createToken(UserJwtDto userInfo, String type) {
 
         Claims claims = Jwts.claims();
@@ -45,12 +48,11 @@ public class JwtProvider {
         claims.put("userName", userInfo.getName());
         claims.put("auth", userInfo.getAuthorities());
 
-
         DateTime expiryDate = DateTime.now().plusSeconds(expiration);
 
         return Jwts.builder()
-                .setClaims(claims)//
-                .setIssuedAt(DateTime.now().toDate())//
+                .setClaims(claims) //
+                .setIssuedAt(DateTime.now().toDate()) //
                 .setExpiration(expiryDate.toDate())
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
@@ -58,15 +60,25 @@ public class JwtProvider {
 
     public Long getUserId(String token) {
         if (token.startsWith("Bearer ")) {
-            token =  token.replace("Bearer ","");
+            token = token.replace("Bearer ", "");
         }
-        return Long.valueOf(Jwts.parser().setSigningKey(key).parseClaimsJws(token)
-                .getBody().get("id").toString()) ;
+        return Long.valueOf(
+                Jwts.parser()
+                        .setSigningKey(key)
+                        .parseClaimsJws(token)
+                        .getBody()
+                        .get("id")
+                        .toString());
     }
 
     public String getBodyValue(String token, String field) throws Exception {
-        if(this.validateJwtToken(token)) {
-            return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().get(field).toString();
+        if (this.validateJwtToken(token)) {
+            return Jwts.parser()
+                    .setSigningKey(key)
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .get(field)
+                    .toString();
         }
         return null;
     }
@@ -95,9 +107,6 @@ public class JwtProvider {
         } catch (IllegalArgumentException e) {
             logger.error("JWT claims string is empty -> Message: {}", e.getMessage());
             throw new JwtException(ExceptionStatus.TOKEN_INVALID);
-
         }
-
     }
-
 }

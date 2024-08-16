@@ -1,16 +1,15 @@
 package org.algosolved.backend.user.domain;
 
-import org.algosolved.backend.common.BaseTimeEntity;
-import org.algosolved.backend.github.domain.GithubRepository;
-import org.algosolved.backend.user.common.converters.RoleTypeListConverter;
-import org.algosolved.backend.user.common.enums.Role;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.algosolved.backend.common.BaseTimeEntity;
+import org.algosolved.backend.github.domain.GithubRepository;
+import org.algosolved.backend.user.common.converters.RoleTypeListConverter;
+import org.algosolved.backend.user.common.enums.Role;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 

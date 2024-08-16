@@ -1,13 +1,12 @@
 package org.algosolved.backend.solution.controller;
 
+import lombok.RequiredArgsConstructor;
+
 import org.algosolved.backend.common.response.BaseResponse;
 import org.algosolved.backend.solution.dto.SolutionDTO;
 import org.algosolved.backend.solution.dto.SolutionDetailDTO;
 import org.algosolved.backend.solution.response.SolutionStatus;
 import org.algosolved.backend.solution.service.SolutionService;
-
-import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

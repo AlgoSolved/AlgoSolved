@@ -1,14 +1,13 @@
 package org.algosolved.backend.github.domain;
 
-import org.algosolved.backend.common.BaseTimeEntity;
-import org.algosolved.backend.solution.domain.Solution;
-import org.algosolved.backend.user.domain.User;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.algosolved.backend.common.BaseTimeEntity;
+import org.algosolved.backend.solution.domain.Solution;
+import org.algosolved.backend.user.domain.User;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;

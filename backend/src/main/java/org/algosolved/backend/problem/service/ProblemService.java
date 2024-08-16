@@ -1,14 +1,13 @@
 package org.algosolved.backend.problem.service;
 
+import lombok.RequiredArgsConstructor;
+
 import org.algosolved.backend.problem.domain.BaekjoonProblem;
 import org.algosolved.backend.problem.domain.Problem;
 import org.algosolved.backend.problem.domain.ProblemFactory;
 import org.algosolved.backend.problem.domain.ProgrammersProblem;
 import org.algosolved.backend.problem.repository.BaekjoonProblemRepository;
 import org.algosolved.backend.problem.repository.ProgrammersProblemRepository;
-
-import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
 
 @Service

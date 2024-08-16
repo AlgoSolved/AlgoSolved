@@ -1,10 +1,10 @@
 package org.algosolved.backend.problem.domain;
 
-import org.algosolved.backend.common.BaseTimeEntity;
-import org.algosolved.backend.solution.domain.Solution;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import org.algosolved.backend.common.BaseTimeEntity;
+import org.algosolved.backend.solution.domain.Solution;
 
 import java.time.LocalDateTime;
 import java.util.List;

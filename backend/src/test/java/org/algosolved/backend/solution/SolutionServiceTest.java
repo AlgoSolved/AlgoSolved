@@ -2,6 +2,8 @@ package org.algosolved.backend.solution;
 
 import static org.mockito.Mockito.when;
 
+import net.datafaker.Faker;
+
 import org.algosolved.backend.common.exceptions.NotFoundException;
 import org.algosolved.backend.github.domain.GithubRepository;
 import org.algosolved.backend.problem.domain.Problem;
@@ -12,9 +14,6 @@ import org.algosolved.backend.solution.dto.SolutionDetailDTO;
 import org.algosolved.backend.solution.repository.SolutionRepository;
 import org.algosolved.backend.solution.service.SolutionService;
 import org.algosolved.backend.user.domain.User;
-
-import net.datafaker.Faker;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

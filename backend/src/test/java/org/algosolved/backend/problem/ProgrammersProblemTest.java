@@ -3,7 +3,6 @@ package org.algosolved.backend.problem;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.algosolved.backend.problem.domain.ProgrammersProblem;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

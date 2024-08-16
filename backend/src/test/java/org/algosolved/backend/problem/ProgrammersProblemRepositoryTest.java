@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.algosolved.backend.problem.domain.ProgrammersProblem;
 import org.algosolved.backend.problem.repository.ProgrammersProblemRepository;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

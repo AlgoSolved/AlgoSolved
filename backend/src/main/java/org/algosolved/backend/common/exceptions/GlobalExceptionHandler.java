@@ -2,7 +2,6 @@ package org.algosolved.backend.common.exceptions;
 
 import org.algosolved.backend.common.enums.ExceptionStatus;
 import org.algosolved.backend.common.response.BaseResponse;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

@@ -1,12 +1,13 @@
 package org.algosolved.backend.user.dto;
 
-import java.util.Collection;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import org.springframework.security.core.GrantedAuthority;
 
+import java.util.Collection;
 
 @Getter
 @Setter
@@ -23,5 +24,4 @@ public class UserJwtDto {
         this.name = name;
         this.authorities = authorities;
     }
-
 }

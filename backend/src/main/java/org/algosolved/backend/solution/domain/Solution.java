@@ -1,15 +1,15 @@
 package org.algosolved.backend.solution.domain;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import org.algosolved.backend.common.BaseTimeEntity;
 import org.algosolved.backend.github.domain.GithubRepository;
 import org.algosolved.backend.problem.domain.Problem;
 import org.algosolved.backend.solution.common.enums.LanguageType;
 import org.algosolved.backend.util.Sha256Generator;
-
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 

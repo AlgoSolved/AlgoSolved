@@ -1,10 +1,10 @@
 package org.algosolved.backend.lib;
 
-import org.algosolved.backend.util.JWTGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.algosolved.backend.util.JWTGenerator;
 import org.kohsuke.github.GHAppInstallation;
 import org.kohsuke.github.GHAppInstallationToken;
 import org.kohsuke.github.GHContent;

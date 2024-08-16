@@ -11,7 +11,6 @@ import org.algosolved.backend.solution.domain.Solution;
 import org.algosolved.backend.solution.repository.SolutionRepository;
 import org.algosolved.backend.user.domain.User;
 import org.algosolved.backend.user.repository.UserRepository;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

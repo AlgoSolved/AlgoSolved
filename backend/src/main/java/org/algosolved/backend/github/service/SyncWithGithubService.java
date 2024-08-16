@@ -1,5 +1,8 @@
 package org.algosolved.backend.github.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.algosolved.backend.github.domain.GithubRepository;
 import org.algosolved.backend.github.repository.GithubRepositoryRepository;
 import org.algosolved.backend.lib.GithubClient;
@@ -9,10 +12,6 @@ import org.algosolved.backend.solution.common.enums.LanguageType;
 import org.algosolved.backend.solution.service.SolutionService;
 import org.algosolved.backend.user.domain.User;
 import org.algosolved.backend.user.repository.UserRepository;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 

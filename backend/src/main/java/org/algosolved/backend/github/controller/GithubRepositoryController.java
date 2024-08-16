@@ -1,5 +1,8 @@
 package org.algosolved.backend.github.controller;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.algosolved.backend.common.response.BaseResponse;
 import org.algosolved.backend.github.domain.GithubRepository;
 import org.algosolved.backend.github.repository.GithubRepositoryRepository;
@@ -7,10 +10,6 @@ import org.algosolved.backend.github.response.GithubRepositoryStatus;
 import org.algosolved.backend.github.service.SyncWithGithubService;
 import org.algosolved.backend.problem.service.ProblemService;
 import org.algosolved.backend.solution.service.SolutionService;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

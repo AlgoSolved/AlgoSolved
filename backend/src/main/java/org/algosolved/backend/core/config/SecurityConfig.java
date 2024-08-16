@@ -1,6 +1,7 @@
 package org.algosolved.backend.core.config;
 
 import lombok.RequiredArgsConstructor;
+
 import org.algosolved.backend.core.jwt.JwtAuthEntryPoint;
 import org.algosolved.backend.core.jwt.JwtFilter;
 import org.algosolved.backend.user.service.OAuthService;
@@ -21,17 +22,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Autowired
-    private final OAuthService oAuthService;
+    @Autowired private final OAuthService oAuthService;
 
     @Value("${server.servlet.contextPath}")
-    private String API_URL_PREFIX;  // api
+    private String API_URL_PREFIX; // api
 
     @Value("${client.base.url}")
     private String clientUrl;
 
-    @Autowired
-    private JwtAuthEntryPoint unauthorizedHandler;
+    @Autowired private JwtAuthEntryPoint unauthorizedHandler;
 
     @Bean
     public JwtFilter authenticationJwtTokenFilter() {
@@ -45,13 +44,20 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
-                .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
-                .authorizeRequests()
-                .antMatchers( "/").permitAll()
-                .antMatchers("/v1/auth/success").permitAll()
+        http.cors()
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .csrf()
+                .disable()
+                .addFilterBefore(
+                        authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+                .authorizeRequests()
+                .antMatchers("/")
+                .permitAll()
+                .antMatchers("/v1/auth/success")
+                .permitAll()
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .oauth2Login()
                 .authorizationEndpoint()

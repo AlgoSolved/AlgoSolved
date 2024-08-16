@@ -10,7 +10,6 @@ import org.algosolved.backend.user.domain.User;
 import org.algosolved.backend.user.dto.UserDTO;
 import org.algosolved.backend.user.repository.UserRepository;
 import org.algosolved.backend.user.service.UserService;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

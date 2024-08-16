@@ -15,7 +15,6 @@ import org.algosolved.backend.solution.domain.Solution;
 import org.algosolved.backend.solution.service.SolutionService;
 import org.algosolved.backend.user.domain.User;
 import org.algosolved.backend.user.repository.UserRepository;
-
 import org.instancio.Instancio;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

@@ -6,12 +6,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.algosolved.backend.solution.controller.SolutionController;
 import org.algosolved.backend.solution.dto.SolutionDTO;
 import org.algosolved.backend.solution.dto.SolutionDetailDTO;
 import org.algosolved.backend.solution.service.SolutionService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.instancio.Instancio;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

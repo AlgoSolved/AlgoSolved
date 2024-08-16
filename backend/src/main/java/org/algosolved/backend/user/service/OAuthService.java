@@ -1,7 +1,7 @@
 package org.algosolved.backend.user.service;
 
-import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+
 import org.algosolved.backend.user.domain.User;
 import org.algosolved.backend.user.repository.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,6 +13,8 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpSession;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +39,9 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
                 userRepository.save(user);
             }
 
-            Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, oAuth2User.getAuthorities());
+            Authentication authentication =
+                    new UsernamePasswordAuthenticationToken(
+                            user, null, oAuth2User.getAuthorities());
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
