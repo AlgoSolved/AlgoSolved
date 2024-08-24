@@ -22,27 +22,12 @@ variable "sub_pub_b_id" {
   type      = string
   sensitive = true
 }
-variable "sub_pub_c_id" {
-  type      = string
-  sensitive = true
-}
-variable "sub_pub_d_id" {
-  type      = string
-  sensitive = true
-}
+
 variable "sub_pri_a_id" {
   type      = string
   sensitive = true
 }
 variable "sub_pri_b_id" {
-  type      = string
-  sensitive = true
-}
-variable "sub_pri_c_id" {
-  type      = string
-  sensitive = true
-}
-variable "sub_pri_d_id" {
   type      = string
   sensitive = true
 }
