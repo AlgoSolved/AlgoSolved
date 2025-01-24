@@ -33,8 +33,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<BaseResponse> handleInternalException(
-            ExceptionStatus exceptionStatus) {
+    public ResponseEntity<BaseResponse> handleInternalException(ExceptionStatus exceptionStatus) {
         BaseResponse exceptionResponse =
                 BaseResponse.builder()
                         .code(exceptionStatus.getCode())
