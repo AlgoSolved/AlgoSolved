@@ -1,7 +1,6 @@
 package org.algosolved.backend.user.controller;
 
 import lombok.RequiredArgsConstructor;
-
 import org.algosolved.backend.common.enums.ExceptionStatus;
 import org.algosolved.backend.common.response.BaseResponse;
 import org.algosolved.backend.user.dto.UserDTO.Profile;
@@ -27,26 +26,36 @@ public class UserController {
     @Value("${client.base.url}")
     private String clientUrl;
 
-    //    @GetMapping("/auth/success")
-    //    public ResponseEntity<BaseResponse<String>> loginSuccess(
-    //            @AuthenticationPrincipal OAuth2User oAuth2User) {
-    //
-    //        String jwtToken =
-    //                jwtProvider.createToken(
-    //                        new UserJwtDto(
-    //                                Long.parseLong(
-    //
-    // Objects.requireNonNull(oAuth2User.getAttribute("id"))),
-    //                                oAuth2User.getName(),
-    //                                oAuth2User.getAuthorities()),
-    //                        "access");
-    //
-    //        return new ResponseEntity(
-    //                BaseResponse.success(
-    //                        UserStatus.SUCCESS.getCode(), UserStatus.SUCCESS.getMessage(),
-    // jwtToken),
-    //                HttpStatus.OK);
-    //    }
+//        @GetMapping("/auth/success")
+//        public ResponseEntity<BaseResponse<String>> loginSuccess(
+//                @AuthenticationPrincipal OAuth2User oAuth2User) {
+//
+//            String jwtToken =
+//                    jwtProvider.createToken(
+//                            new UserJwtDto(
+//                                    Long.parseLong(
+//
+//     Objects.requireNonNull(oAuth2User.getAttribute("id"))),
+//                                    oAuth2User.getName(),
+//                                    oAuth2User.getAuthorities()),
+//                            "access");
+//
+//            return new ResponseEntity(
+//                    BaseResponse.success(
+//                            UserStatus.SUCCESS.getCode(), UserStatus.SUCCESS.getMessage(),
+//     jwtToken),
+//                    HttpStatus.OK);
+//        }
+
+    @GetMapping("/auth/success")
+    public ResponseEntity<BaseResponse<Boolean>> loginSuccess() {
+
+
+        return new ResponseEntity(
+                BaseResponse.success(
+                        UserStatus.SUCCESS.getCode(), UserStatus.SUCCESS.getMessage(), true),
+                HttpStatus.OK);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<BaseResponse<Profile>> getUserInfo(@PathVariable("id") Long id) {

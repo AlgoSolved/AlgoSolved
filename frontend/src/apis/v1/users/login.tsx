@@ -5,7 +5,7 @@ import { ApiResponseProps } from "../../../types/common/BaseResponse";
 
 export const loginUser = async () => {
   try {
-    const res: any = await ApiClient.post(`api/login`);
+    const res: any = await ApiClient.get(`api/v1/user/auth/success`);
 
     return res.data.data;
   } catch (error: AxiosErrorClass | any) {

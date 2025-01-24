@@ -31,4 +31,16 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(exceptionResponse, exceptionStatus.getHttpStatus());
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<BaseResponse> handleInternalException(
+            ExceptionStatus exceptionStatus) {
+        BaseResponse exceptionResponse =
+                BaseResponse.builder()
+                        .code(exceptionStatus.getCode())
+                        .message(exceptionStatus.getMessage())
+                        .build();
+
+        return new ResponseEntity<>(exceptionResponse, exceptionStatus.getHttpStatus());
+    }
 }
