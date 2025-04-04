@@ -1,7 +1,7 @@
 package org.algosolved.backend.user.controller;
 
-import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+
 import org.algosolved.backend.common.enums.ExceptionStatus;
 import org.algosolved.backend.common.response.BaseResponse;
 import org.algosolved.backend.user.dto.UserDto.Profile;
@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequiredArgsConstructor

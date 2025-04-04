@@ -1,6 +1,5 @@
 package org.algosolved.backend.common.enums;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

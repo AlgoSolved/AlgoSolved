@@ -1,7 +1,7 @@
 package org.algosolved.backend.core.config;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+
 import org.algosolved.backend.core.filter.JwtAuthenticationFilter;
 import org.algosolved.backend.core.filter.OAuthSuccessHandler;
 import org.algosolved.backend.core.jwt.JwtAuthEntryPoint;
@@ -19,6 +19,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -28,40 +30,52 @@ public class SecurityConfig {
     private final JwtAuthEntryPoint jwtAuthEntryPoint;
     private final OAuthSuccessHandler oAuthSuccessHandler;
 
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
     public SecurityFilterChain jwtSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.cors(cors -> cors.configurationSource(request -> {
-                    CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of("http://localhost:3000"));
-                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-                    config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-                    config.setAllowCredentials(true);
-                    return config;
-                })).csrf(AbstractHttpConfigurer::disable)
-                .oauth2Login(oauth2 -> oauth2
-                        .successHandler(oAuthSuccessHandler))
+        http.cors(
+                        cors ->
+                                cors.configurationSource(
+                                        request -> {
+                                            CorsConfiguration config = new CorsConfiguration();
+                                            config.setAllowedOrigins(
+                                                    List.of("http://localhost:3000"));
+                                            config.setAllowedMethods(
+                                                    List.of("GET", "POST", "PUT", "DELETE"));
+                                            config.setAllowedHeaders(
+                                                    List.of("Authorization", "Content-Type"));
+                                            config.setAllowCredentials(true);
+                                            return config;
+                                        }))
+                .csrf(AbstractHttpConfigurer::disable)
+                .oauth2Login(oauth2 -> oauth2.successHandler(oAuthSuccessHandler))
                 .addFilterBefore(jwtAuthTokenFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling((exception) -> exception.authenticationEntryPoint(jwtAuthEntryPoint))
-                .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .exceptionHandling(
+                        (exception) -> exception.authenticationEntryPoint(jwtAuthEntryPoint))
+                .sessionManagement(
+                        (session) ->
+                                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }
 
-    /**
-     * * setAuthRequiredPath
-     * Note: 인증이 필요한 필터 경로를 정의한다.
-     */
-    private Customizer<AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry> setAuthRequiredPath() {
-        return new Customizer<AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry>() {
+    /** * setAuthRequiredPath Note: 인증이 필요한 필터 경로를 정의한다. */
+    private Customizer<
+                    AuthorizeHttpRequestsConfigurer<HttpSecurity>
+                            .AuthorizationManagerRequestMatcherRegistry>
+            setAuthRequiredPath() {
+        return new Customizer<
+                AuthorizeHttpRequestsConfigurer<HttpSecurity>
+                        .AuthorizationManagerRequestMatcherRegistry>() {
             @Override
-            public void customize(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry registry) {
+            public void customize(
+                    AuthorizeHttpRequestsConfigurer<HttpSecurity>
+                                    .AuthorizationManagerRequestMatcherRegistry
+                            registry) {
                 registry.antMatchers(
                                 "/api/**",
                                 "/api/swagger-ui.html",
@@ -71,9 +85,7 @@ public class SecurityConfig {
                         .permitAll()
                         .antMatchers("/api/v1/**")
                         .authenticated();
-
             }
         };
     }
-
 }

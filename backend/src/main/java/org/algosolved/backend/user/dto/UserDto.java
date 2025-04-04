@@ -2,6 +2,7 @@ package org.algosolved.backend.user.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+
 import org.algosolved.backend.user.domain.User;
 
 public class UserDto {

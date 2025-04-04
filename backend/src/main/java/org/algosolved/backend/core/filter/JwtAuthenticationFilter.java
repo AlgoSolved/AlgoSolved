@@ -1,16 +1,10 @@
 package org.algosolved.backend.core.filter;
 
 import io.jsonwebtoken.ExpiredJwtException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.algosolved.backend.common.exceptions.JwtException;
 import org.algosolved.backend.core.jwt.JwtAuthenticationProvider;
 import org.algosolved.backend.user.dto.UserJwtDto;
@@ -23,6 +17,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -31,10 +35,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final HandlerExceptionResolver handlerExceptionResolver;
     private final JwtAuthenticationProvider jwtAuthTokenProvider;
 
-
-
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    protected void doFilterInternal(
+            HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
         String uri = request.getRequestURI();
 
@@ -42,18 +45,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String method = request.getMethod();
         // 다음과 같은 uri는 토큰검증x
         String[] equalsWith = {
-                "/api/v1/health/ping",
-                "/api/v1/users/signin",
-                "/api/v1/users/refresh",
-                "/api/oauth2/authorization/github",
-                "/api/v1/user/auth/success",
-                "/", "/error"
+            "/api/v1/health/ping",
+            "/api/v1/users/signin",
+            "/api/v1/users/refresh",
+            "/api/oauth2/authorization/github",
+            "/api/v1/user/auth/success",
+            "/",
+            "/error"
         };
 
         String[] startWith = {};
         String[] endWith = {};
 
-        //OPTIONS 는 토큰 검증 X
+        // OPTIONS 는 토큰 검증 X
         boolean isPreflight = method.equals("OPTIONS");
         boolean equalsWithPass = equalsWithUri(uri, equalsWith);
         boolean startWithPass = startsWithUri(uri, startWith);
@@ -77,16 +81,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (jwtAuthTokenProvider.validateJwtToken(token)) {
                 // 유저 권한 파싱
                 List<GrantedAuthority> authorities = new ArrayList<>();
-                authorities.add(new SimpleGrantedAuthority((String) jwtAuthTokenProvider.getBodyValue(token, "roleCode")));
+                authorities.add(
+                        new SimpleGrantedAuthority(
+                                (String) jwtAuthTokenProvider.getBodyValue(token, "roleCode")));
 
                 // payload 파싱
-                UserJwtDto userInfo = UserJwtDto.builder()
-                        .id(Long.parseLong(jwtAuthTokenProvider.getBodyValue(token, "id").toString()))
-                        .name(jwtAuthTokenProvider.getBodyValue(token, "name").toString())
-                        .build();
+                UserJwtDto userInfo =
+                        UserJwtDto.builder()
+                                .id(
+                                        Long.parseLong(
+                                                jwtAuthTokenProvider
+                                                        .getBodyValue(token, "id")
+                                                        .toString()))
+                                .name(jwtAuthTokenProvider.getBodyValue(token, "name").toString())
+                                .build();
 
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userInfo, null, authorities);
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(userInfo, null, authorities);
+                authentication.setDetails(
+                        new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
@@ -119,5 +132,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private boolean endWithUri(String uri, String[] list) {
         return Arrays.stream(list).anyMatch(uri::endsWith);
     }
-
 }

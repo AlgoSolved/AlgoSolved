@@ -7,12 +7,9 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.SignatureException;
-import java.io.IOException;
-import java.util.Base64;
-import java.util.Date;
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.algosolved.backend.common.enums.ExceptionStatus;
 import org.algosolved.backend.common.enums.Token;
 import org.algosolved.backend.common.exceptions.JwtException;
@@ -22,12 +19,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.util.Base64;
+import java.util.Date;
+
+import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
+
 @Slf4j
 @Component
 public class JwtAuthenticationProvider {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
-
 
     @Value("${jwt.token.issr}")
     private String JWT_ISSUER;
@@ -78,7 +81,8 @@ public class JwtAuthenticationProvider {
     }
 
     public boolean checkRefreshToken(String refreshToken) throws IOException {
-        if (checkRefreshTokenExpired(refreshToken) && this.getBodyValue(refreshToken, "iss").equals(JWT_ISSUER)) {
+        if (checkRefreshTokenExpired(refreshToken)
+                && this.getBodyValue(refreshToken, "iss").equals(JWT_ISSUER)) {
             return true;
         } else {
             throw new JwtException(ExceptionStatus.TOKEN_INVALID);
@@ -97,7 +101,12 @@ public class JwtAuthenticationProvider {
 
     public Object getBodyValue(String token, String field) throws IOException {
         if (this.validateJwtToken(token)) {
-            return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody().get(field).toString();
+            return Jwts.parser()
+                    .setSigningKey(SECRET_KEY)
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .get(field)
+                    .toString();
         }
         return null;
     }
