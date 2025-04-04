@@ -9,11 +9,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import java.util.Map;
 import org.algosolved.backend.common.enums.ExceptionStatus;
 import org.algosolved.backend.common.exceptions.NotFoundException;
 import org.algosolved.backend.user.controller.UserController;
-import org.algosolved.backend.user.dto.UserDTO;
+import org.algosolved.backend.user.dto.UserDto;
 import org.algosolved.backend.user.service.UserService;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.DisplayName;
@@ -24,8 +24,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Map;
 
 @WebMvcTest(UserController.class)
 public class UserControllerTest {
@@ -38,7 +36,7 @@ public class UserControllerTest {
     @DisplayName("id에 해당하는 유저가 존재하는 경우 관련된 정보를 반환한다.")
     @WithMockUser(username = "jake", roles = "USER")
     void 유저_정보_반환_성공() throws Exception {
-        UserDTO.Profile userProfile = Instancio.create(UserDTO.Profile.class);
+        UserDto.Profile userProfile = Instancio.create(UserDto.Profile.class);
         when(userService.getUserProfile(1L)).thenReturn(userProfile);
 
         ObjectMapper objectMapper = new ObjectMapper();

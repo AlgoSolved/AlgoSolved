@@ -1,17 +1,15 @@
 package org.algosolved.backend.user.service;
 
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-
 import org.algosolved.backend.common.enums.ExceptionStatus;
 import org.algosolved.backend.common.exceptions.NotFoundException;
 import org.algosolved.backend.github.domain.GithubRepository;
 import org.algosolved.backend.lib.GithubClient;
 import org.algosolved.backend.user.domain.User;
-import org.algosolved.backend.user.dto.UserDTO.Profile;
+import org.algosolved.backend.user.dto.UserDto.Profile;
 import org.algosolved.backend.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
 
 @Service
 @RequiredArgsConstructor

@@ -5,9 +5,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
 import org.algosolved.backend.lib.GithubClient;
 import org.algosolved.backend.user.domain.User;
-import org.algosolved.backend.user.dto.UserDTO;
+import org.algosolved.backend.user.dto.UserDto;
 import org.algosolved.backend.user.repository.UserRepository;
 import org.algosolved.backend.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,8 +18,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
@@ -44,7 +43,7 @@ public class UserServiceTest {
     void 유저_프로필_반환_성공() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
-        UserDTO.Profile userProfile = userService.getUserProfile(1L);
+        UserDto.Profile userProfile = userService.getUserProfile(1L);
 
         assertEquals("jake", userProfile.getUsername());
         assertEquals("github-url", userProfile.getGithubLink());

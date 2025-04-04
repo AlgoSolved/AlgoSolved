@@ -80,3 +80,7 @@ terraform.rc
 
 # Ignore private key
 *.pem
+
+# Redis Local Test Data
+redis-data
+
