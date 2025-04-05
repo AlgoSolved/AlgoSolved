@@ -7,8 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.List;
-import java.util.Map;
+
 import org.algosolved.backend.mock.WithCustomJwtMockUser;
 import org.algosolved.backend.solution.dto.SolutionDTO;
 import org.algosolved.backend.solution.dto.SolutionDetailDTO;
@@ -26,6 +25,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+import java.util.Map;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 public class SolutionControllerTest {
@@ -34,7 +36,7 @@ public class SolutionControllerTest {
 
     @MockBean private SolutionService solutionService;
 
-    //인증은 남기지 않고, 테스트마다 초기화한다.
+    // 인증은 남기지 않고, 테스트마다 초기화한다.
     @AfterEach
     void clearSecurityContext() {
         SecurityContextHolder.clearContext();
@@ -127,7 +129,7 @@ public class SolutionControllerTest {
         public void unAuthorizedUserTest() throws Exception {
             SolutionDetailDTO solutionDetailDto = Instancio.create(SolutionDetailDTO.class);
 
-//            when(solutionService.getSolution(1L)).thenReturn(solutionDetailDto);
+            //            when(solutionService.getSolution(1L)).thenReturn(solutionDetailDto);
 
             Map<String, Object> resultMap = objectMapper.convertValue(solutionDetailDto, Map.class);
 

@@ -7,12 +7,9 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.SignatureException;
-import java.io.IOException;
-import java.util.Base64;
-import java.util.Date;
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.algosolved.backend.common.enums.ExceptionStatus;
 import org.algosolved.backend.common.enums.JwtType;
 import org.algosolved.backend.common.exceptions.JwtException;
@@ -22,6 +19,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.util.Base64;
+import java.util.Date;
+
+import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @Component

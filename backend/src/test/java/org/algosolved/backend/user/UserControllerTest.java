@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Map;
+
 import org.algosolved.backend.common.enums.ExceptionStatus;
 import org.algosolved.backend.common.exceptions.NotFoundException;
 import org.algosolved.backend.mock.WithCustomJwtMockUser;
@@ -25,6 +25,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Map;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -67,9 +68,7 @@ public class UserControllerTest {
         when(userService.getUserProfile(1L))
                 .thenThrow(new NotFoundException(ExceptionStatus.NOT_FOUND));
 
-        mockMvc.perform(get("/v1/users/{id}", 1)
-                        .contentType(MediaType.APPLICATION_JSON)
-                )
+        mockMvc.perform(get("/v1/users/{id}", 1).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
 

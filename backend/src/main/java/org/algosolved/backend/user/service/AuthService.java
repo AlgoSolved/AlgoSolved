@@ -1,6 +1,7 @@
 package org.algosolved.backend.user.service;
 
 import lombok.RequiredArgsConstructor;
+
 import org.algosolved.backend.common.enums.JwtType;
 import org.algosolved.backend.core.jwt.JwtAuthProvider;
 import org.algosolved.backend.user.domain.User;
@@ -22,8 +23,7 @@ public class AuthService {
         User user = userRepository.findByUsername(username);
         UserJwtDto userJwtDto = new UserJwtDto(user.getId(), username);
         String accessToken = jwtAuthProvider.createToken(userJwtDto, JwtType.ACCESS_TOKEN);
-        String refreshToken =
-                jwtAuthProvider.createToken(userJwtDto, JwtType.REFRESH_TOKEN);
+        String refreshToken = jwtAuthProvider.createToken(userJwtDto, JwtType.REFRESH_TOKEN);
 
         return new UserSignInResponseDto(accessToken, refreshToken);
     }

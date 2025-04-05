@@ -1,7 +1,7 @@
 package org.algosolved.backend.core.config;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+
 import org.algosolved.backend.core.filter.JwtAuthenticationFilter;
 import org.algosolved.backend.core.filter.OAuthSuccessHandler;
 import org.algosolved.backend.core.jwt.JwtAuthEntryPoint;
@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity

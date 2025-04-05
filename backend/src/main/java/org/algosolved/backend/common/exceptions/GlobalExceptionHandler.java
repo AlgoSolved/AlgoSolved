@@ -24,8 +24,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<BaseResponse> handleUsernameMismatchException(
-            BadRequestException e) {
+    public ResponseEntity<BaseResponse> handleUsernameMismatchException(BadRequestException e) {
         ExceptionStatus exceptionStatus = e.getExceptionStatus();
 
         BaseResponse exceptionResponse =
@@ -38,8 +37,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(JwtException.class)
-    public ResponseEntity<BaseResponse> handleUnAuthorizedException(
-            JwtException e) {
+    public ResponseEntity<BaseResponse> handleUnAuthorizedException(JwtException e) {
         ExceptionStatus exceptionStatus = e.getExceptionStatus();
 
         BaseResponse exceptionResponse =
@@ -55,10 +53,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<BaseResponse> handleInternalException(Exception e) {
 
         BaseResponse exceptionResponse =
-                BaseResponse.builder()
-                        .code("5000")
-                        .message(e.getMessage())
-                        .build();
+                BaseResponse.builder().code("5000").message(e.getMessage()).build();
 
         return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }

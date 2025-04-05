@@ -1,16 +1,10 @@
 package org.algosolved.backend.core.filter;
 
 import io.jsonwebtoken.ExpiredJwtException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.algosolved.backend.common.exceptions.JwtException;
 import org.algosolved.backend.core.jwt.JwtAuthProvider;
 import org.algosolved.backend.user.dto.UserJwtDto;
@@ -23,6 +17,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -30,7 +34,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final HandlerExceptionResolver handlerExceptionResolver;
     private final JwtAuthProvider jwtAuthProvider;
-
 
     @Override
     protected void doFilterInternal(
