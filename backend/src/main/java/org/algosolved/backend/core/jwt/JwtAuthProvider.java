@@ -7,11 +7,14 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.SignatureException;
-
+import java.io.IOException;
+import java.util.Base64;
+import java.util.Date;
+import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-
 import org.algosolved.backend.common.enums.ExceptionStatus;
-import org.algosolved.backend.common.enums.Token;
+import org.algosolved.backend.common.enums.JwtType;
 import org.algosolved.backend.common.exceptions.JwtException;
 import org.algosolved.backend.user.dto.UserJwtDto;
 import org.slf4j.Logger;
@@ -19,16 +22,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.util.Base64;
-import java.util.Date;
-
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @Component
-public class JwtAuthenticationProvider {
+public class JwtAuthProvider {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -38,30 +35,34 @@ public class JwtAuthenticationProvider {
     @Value("${jwt.token.secret.key}")
     private String SECRET_KEY;
 
-    @Value(value = "${jwt.token.expiration.access}")
+    @Value("${jwt.token.expiration.access}")
     private String ACCESS_TOKEN_EXPIRE_TIME;
 
-    @Value(value = "${jwt.token.expiration.refresh}")
+    @Value("${jwt.token.expiration.refresh}")
     private String REFRESH_TOKEN_EXPIRE_TIME;
 
     @PostConstruct
     protected void init() {
-        SECRET_KEY = Base64.getEncoder().encodeToString(SECRET_KEY.getBytes());
+        if (SECRET_KEY != null) {
+            SECRET_KEY = Base64.getEncoder().encodeToString(SECRET_KEY.getBytes());
+        } else {
+            logger.warn("SECRET_KEY is null! Check your application.yml");
+        }
     }
 
-    public String createToken(UserJwtDto user, Token tokenType) {
+    public String createToken(UserJwtDto user, JwtType tokenType) {
         Claims claims = Jwts.claims();
         Date now = new Date();
         Date validity = null;
 
         try {
-            if (tokenType.equals(Token.ACCESS_TOKEN)) {
+            if (tokenType.equals(JwtType.ACCESS_TOKEN)) {
                 claims.put("id", user.getId());
                 claims.put("name", user.getName());
                 validity = new Date(now.getTime() + Long.parseLong(ACCESS_TOKEN_EXPIRE_TIME));
             }
 
-            if (tokenType.equals(Token.REFRESH_TOKEN)) {
+            if (tokenType.equals(JwtType.REFRESH_TOKEN)) {
                 claims.put("id", user.getId());
                 validity = new Date(now.getTime() + Long.parseLong(REFRESH_TOKEN_EXPIRE_TIME));
             }

@@ -1,33 +1,21 @@
 package org.algosolved.backend.core.filter;
 
-import org.algosolved.backend.core.jwt.JwtAuthenticationProvider;
-import org.algosolved.backend.user.repository.UserRepository;
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 @Component
 public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-
-    private final JwtAuthenticationProvider jwtTokenProvider;
-    private final UserRepository userRepository;
 
     @Value("${client.base.url}")
     private String FRONTEND_ENDPOINT;
 
-    public OAuthSuccessHandler(
-            JwtAuthenticationProvider jwtTokenProvider, UserRepository userRepository) {
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.userRepository = userRepository;
-    }
 
     @Override
     public void onAuthenticationSuccess(

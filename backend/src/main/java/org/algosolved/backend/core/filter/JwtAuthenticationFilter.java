@@ -1,12 +1,18 @@
 package org.algosolved.backend.core.filter;
 
 import io.jsonwebtoken.ExpiredJwtException;
-
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.algosolved.backend.common.exceptions.JwtException;
-import org.algosolved.backend.core.jwt.JwtAuthenticationProvider;
+import org.algosolved.backend.core.jwt.JwtAuthProvider;
 import org.algosolved.backend.user.dto.UserJwtDto;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,23 +23,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final HandlerExceptionResolver handlerExceptionResolver;
-    private final JwtAuthenticationProvider jwtAuthTokenProvider;
+    private final JwtAuthProvider jwtAuthProvider;
+
 
     @Override
     protected void doFilterInternal(
@@ -50,6 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/api/v1/users/refresh",
             "/api/oauth2/authorization/github",
             "/api/v1/user/auth/success",
+            "/api/v1/solutions/recent-list",
             "/",
             "/error"
         };
@@ -74,26 +72,31 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.info("[url]" + uri);
 
         try {
-            String token = jwtAuthTokenProvider.getToken(request);
+            if (SecurityContextHolder.getContext().getAuthentication() != null) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            String token = jwtAuthProvider.getToken(request);
 
             log.info(token);
 
-            if (jwtAuthTokenProvider.validateJwtToken(token)) {
+            if (jwtAuthProvider.validateJwtToken(token)) {
                 // 유저 권한 파싱
                 List<GrantedAuthority> authorities = new ArrayList<>();
                 authorities.add(
                         new SimpleGrantedAuthority(
-                                (String) jwtAuthTokenProvider.getBodyValue(token, "roleCode")));
+                                (String) jwtAuthProvider.getBodyValue(token, "roleCode")));
 
                 // payload 파싱
                 UserJwtDto userInfo =
                         UserJwtDto.builder()
                                 .id(
                                         Long.parseLong(
-                                                jwtAuthTokenProvider
+                                                jwtAuthProvider
                                                         .getBodyValue(token, "id")
                                                         .toString()))
-                                .name(jwtAuthTokenProvider.getBodyValue(token, "name").toString())
+                                .name(jwtAuthProvider.getBodyValue(token, "name").toString())
                                 .build();
 
                 UsernamePasswordAuthenticationToken authentication =

@@ -1,7 +1,7 @@
 package org.algosolved.backend.core.config;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-
 import org.algosolved.backend.core.filter.JwtAuthenticationFilter;
 import org.algosolved.backend.core.filter.OAuthSuccessHandler;
 import org.algosolved.backend.core.jwt.JwtAuthEntryPoint;
@@ -18,8 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -52,6 +50,7 @@ public class SecurityConfig {
                                             return config;
                                         }))
                 .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(setAuthRequiredPath())
                 .oauth2Login(oauth2 -> oauth2.successHandler(oAuthSuccessHandler))
                 .addFilterBefore(jwtAuthTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(
@@ -76,15 +75,15 @@ public class SecurityConfig {
                     AuthorizeHttpRequestsConfigurer<HttpSecurity>
                                     .AuthorizationManagerRequestMatcherRegistry
                             registry) {
-                registry.antMatchers(
+                registry.antMatchers("/api/v1/**")
+                        .authenticated()
+                        .antMatchers(
                                 "/api/**",
                                 "/api/swagger-ui.html",
                                 "/api/swagger-ui/**",
                                 "/api/v3/api-docs/**",
                                 "/api/v1/user/auth/success")
-                        .permitAll()
-                        .antMatchers("/api/v1/**")
-                        .authenticated();
+                        .permitAll();
             }
         };
     }

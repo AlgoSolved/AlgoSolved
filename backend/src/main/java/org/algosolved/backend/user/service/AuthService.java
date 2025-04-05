@@ -1,9 +1,8 @@
 package org.algosolved.backend.user.service;
 
 import lombok.RequiredArgsConstructor;
-
-import org.algosolved.backend.common.enums.Token;
-import org.algosolved.backend.core.jwt.JwtAuthenticationProvider;
+import org.algosolved.backend.common.enums.JwtType;
+import org.algosolved.backend.core.jwt.JwtAuthProvider;
 import org.algosolved.backend.user.domain.User;
 import org.algosolved.backend.user.dto.UserJwtDto;
 import org.algosolved.backend.user.dto.UserTokenResponseDto.UserSignInResponseDto;
@@ -11,23 +10,20 @@ import org.algosolved.backend.user.repository.UserRepository;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
-
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final JwtAuthenticationProvider jwtAuthenticationProvider;
+    private final JwtAuthProvider jwtAuthProvider;
     private final UserRepository userRepository;
-    private final HttpSession session;
 
     // TODO: redis 토큰 저장
     public UserSignInResponseDto loginUser(String username) {
         User user = userRepository.findByUsername(username);
         UserJwtDto userJwtDto = new UserJwtDto(user.getId(), username);
-        String accessToken = jwtAuthenticationProvider.createToken(userJwtDto, Token.ACCESS_TOKEN);
+        String accessToken = jwtAuthProvider.createToken(userJwtDto, JwtType.ACCESS_TOKEN);
         String refreshToken =
-                jwtAuthenticationProvider.createToken(userJwtDto, Token.REFRESH_TOKEN);
+                jwtAuthProvider.createToken(userJwtDto, JwtType.REFRESH_TOKEN);
 
         return new UserSignInResponseDto(accessToken, refreshToken);
     }
