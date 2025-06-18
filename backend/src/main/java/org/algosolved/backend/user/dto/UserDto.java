@@ -5,7 +5,7 @@ import lombok.Getter;
 
 import org.algosolved.backend.user.domain.User;
 
-public class UserDTO {
+public class UserDto {
 
     @Getter
     @Builder

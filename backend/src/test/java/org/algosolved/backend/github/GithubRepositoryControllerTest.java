@@ -6,10 +6,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.algosolved.backend.github.controller.GithubRepositoryController;
 import org.algosolved.backend.github.domain.GithubRepository;
 import org.algosolved.backend.github.repository.GithubRepositoryRepository;
 import org.algosolved.backend.github.service.SyncWithGithubService;
+import org.algosolved.backend.mock.WithCustomJwtMockUser;
 import org.algosolved.backend.problem.domain.BaekjoonProblem;
 import org.algosolved.backend.problem.service.ProblemService;
 import org.algosolved.backend.solution.common.enums.LanguageType;
@@ -20,16 +20,17 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@WebMvcTest(GithubRepositoryController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class GithubRepositoryControllerTest {
 
     @Autowired private MockMvc mockMvc;
@@ -44,8 +45,8 @@ public class GithubRepositoryControllerTest {
     class ConnectTest {
 
         @Test
-        @WithMockUser(username = "uchan", roles = "USER")
         @DisplayName("성공적으로 연결됐을 때 테스트")
+        @WithCustomJwtMockUser(username = "uchan")
         public void connectTest() throws Exception {
             given(syncWithGithubService.connect("uchan", "repo")).willReturn(true);
 
@@ -53,6 +54,7 @@ public class GithubRepositoryControllerTest {
                             post("/v1/github-repositories/connect")
                                     .contentType(MediaType.APPLICATION_JSON)
                                     .content("{\"owner\":\"uchan\",\"repo\":\"repo\"}")
+                                    .header("Authorization", "Bearer test")
                                     .with(csrf()))
                     .andExpect(status().isOk())
                     .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -69,8 +71,8 @@ public class GithubRepositoryControllerTest {
         }
 
         @Test
-        @WithMockUser(username = "uchan", roles = "USER")
         @DisplayName("연결에 실패했을 때 테스트")
+        @WithCustomJwtMockUser(username = "uchan")
         public void connectFailTest() throws Exception {
             given(syncWithGithubService.connect("uchan", "repo")).willReturn(false);
 
@@ -78,6 +80,7 @@ public class GithubRepositoryControllerTest {
                             post("/v1/github-repositories/connect")
                                     .contentType(MediaType.APPLICATION_JSON)
                                     .content("{\"owner\":\"uchan\",\"repo\":\"repo\"}")
+                                    .header("Authorization", "Bearer test")
                                     .with(csrf()))
                     .andExpect(status().isOk())
                     .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -99,8 +102,8 @@ public class GithubRepositoryControllerTest {
     class SyncTest {
 
         @Test
-        @WithMockUser(username = "uchan", roles = "USER")
         @DisplayName("성공적으로 싱크 맞췄을 때 테스트")
+        @WithCustomJwtMockUser(username = "uchan")
         public void syncTest() throws Exception {
             String file = "file.py";
             String sourceCode = "sourceCode";
@@ -122,6 +125,7 @@ public class GithubRepositoryControllerTest {
             mockMvc.perform(
                             post("/v1/github-repositories/sync")
                                     .contentType(MediaType.APPLICATION_JSON)
+                                    .header("Authorization", "Bearer test")
                                     .content(
                                             """
                               {

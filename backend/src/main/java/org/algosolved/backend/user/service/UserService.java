@@ -7,7 +7,7 @@ import org.algosolved.backend.common.exceptions.NotFoundException;
 import org.algosolved.backend.github.domain.GithubRepository;
 import org.algosolved.backend.lib.GithubClient;
 import org.algosolved.backend.user.domain.User;
-import org.algosolved.backend.user.dto.UserDTO.Profile;
+import org.algosolved.backend.user.dto.UserDto.Profile;
 import org.algosolved.backend.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 

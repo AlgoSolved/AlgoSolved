@@ -8,33 +8,42 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.algosolved.backend.solution.controller.SolutionController;
+import org.algosolved.backend.mock.WithCustomJwtMockUser;
 import org.algosolved.backend.solution.dto.SolutionDTO;
 import org.algosolved.backend.solution.dto.SolutionDetailDTO;
 import org.algosolved.backend.solution.service.SolutionService;
 import org.instancio.Instancio;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.Map;
 
-@WebMvcTest(SolutionController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class SolutionControllerTest {
 
     @Autowired private MockMvc mockMvc;
 
     @MockBean private SolutionService solutionService;
 
+    // 인증은 남기지 않고, 테스트마다 초기화한다.
+    @AfterEach
+    void clearSecurityContext() {
+        SecurityContextHolder.clearContext();
+    }
+
     @Test
-    @WithMockUser(username = "jake", roles = "USER")
+    @WithCustomJwtMockUser
     public void solutionControllerTest() throws Exception {
         // 문제 풀이가 없을 때
         given(solutionService.getRecentSolutions()).willReturn(List.of());
@@ -91,7 +100,7 @@ public class SolutionControllerTest {
 
         @Test
         @DisplayName("로그인 한 경우")
-        @WithMockUser(username = "jake", roles = "USER")
+        @WithCustomJwtMockUser
         public void returnResponseTest() throws Exception {
             SolutionDetailDTO solutionDetailDto = Instancio.create(SolutionDetailDTO.class);
 
@@ -116,15 +125,15 @@ public class SolutionControllerTest {
         }
 
         @Test
-        @DisplayName("로그인 하지 않은 경우")
-        public void invalidParamsTest() throws Exception {
+        @DisplayName("로그인을 하지 않은 경우")
+        public void unAuthorizedUserTest() throws Exception {
             SolutionDetailDTO solutionDetailDto = Instancio.create(SolutionDetailDTO.class);
 
-            when(solutionService.getSolution(1L)).thenReturn(solutionDetailDto);
+            //            when(solutionService.getSolution(1L)).thenReturn(solutionDetailDto);
 
             Map<String, Object> resultMap = objectMapper.convertValue(solutionDetailDto, Map.class);
 
-            mockMvc.perform(get(url, 1L)).andExpect(status().is3xxRedirection());
+            mockMvc.perform(get(url, 1L)).andExpect(status().isUnauthorized());
         }
     }
 }

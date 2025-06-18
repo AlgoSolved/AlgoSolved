@@ -6,8 +6,9 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useLogin } from "../hooks/login";
 import style from "../styles/pages/Home.module.css";
 
+
 const Login = () => {
-  useLogin();
+  const data = useLogin();
 
   return (
     <div className={style.wrapper}>

@@ -19,9 +19,8 @@ public class UserJwtDto {
     private Collection<? extends GrantedAuthority> authorities;
 
     @Builder
-    public UserJwtDto(Long id, String name, Collection<? extends GrantedAuthority> authorities) {
+    public UserJwtDto(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.authorities = authorities;
     }
 }
