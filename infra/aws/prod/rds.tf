@@ -29,7 +29,7 @@ resource "aws_db_instance" "algosolved-rdb" {
 
 resource "aws_db_subnet_group" "algosovled-subnet-group" {
   name       = "${var.service}-subnet-group"
-  subnet_ids = [var.sub_pri_a_id, var.sub_pri_b_id, var.sub_pri_c_id, var.sub_pri_d_id]
+  subnet_ids = [var.sub_pri_a_id, var.sub_pri_b_id]
 
   tags = {
     Project = var.project
