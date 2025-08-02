@@ -108,9 +108,9 @@ function NavBar() {
                       variant="contained"
                       aria-label="Disabled elevation buttons"
                     >
-                    <Link to={process.env.REACT_APP_API_BASE_URL+'/api/oauth2/authorization/github'}>
+                    <a href={process.env.REACT_APP_API_BASE_URL+'/api/oauth2/authorization/github'}>
                       <Button>Login</Button>
-                    </Link>
+                    </a>
                     </ButtonGroup>
                 }
                 </Box>
