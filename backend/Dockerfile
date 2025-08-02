@@ -1,4 +1,4 @@
-FROM openjdk:17-slim-buster AS base
+FROM openjdk:17-slim AS base
 ENV JAR_FILE_NAME=backend-0.0.1-SNAPSHOT.jar
 ENV JAR_FILE_PATH=/home/deploy/app/backend/build/libs/${JAR_FILE_NAME}
 ENV TZ=Asia/Seoul
