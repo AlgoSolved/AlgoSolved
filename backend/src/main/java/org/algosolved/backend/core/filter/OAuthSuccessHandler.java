@@ -26,6 +26,6 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         String username = oAuth2User.getAttribute("login");
         request.getSession().setAttribute("oauthUserName", username);
 
-        response.sendRedirect(FRONTEND_ENDPOINT);
+        response.sendRedirect(FRONTEND_ENDPOINT+ "/login");
     }
 }
