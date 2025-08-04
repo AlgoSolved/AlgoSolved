@@ -1,20 +1,31 @@
 import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import { Container, List, ListItem, ListItemText, ListItemIcon } from "@mui/material";
 
 import "./App.css";
 import Footer from "./components/common/Footer";
+import NavBar from "./components/common/Nav";
 import Seo from "./components/common/Seo";
 import Router from "./routers/router";
 
 function App() {
   return (
   <>
-    <div className="App">
+    <BrowserRouter>
+    <div className="app-wrapper">
       <Seo />
-      <Router />
+      <NavBar />
+      <div className="app-content">
+      <Container>
+        <Router />
+      </Container>
+      </div>
+      <footer className="footer">
+        <Footer />
+      </footer>
     </div>
-    <div className="footer">
-      <Footer />
-    </div>
+    </BrowserRouter>
   </>
   );
 }

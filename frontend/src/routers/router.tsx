@@ -7,9 +7,10 @@ import Login from "../pages/Login";
 import NotFoundPage from "../pages/common/NotFoundPage";
 import SolutionDetail from "../pages/SolutionDetail";
 
+
 const Router = () => {
   return (
-    <BrowserRouter>
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/users" element={<Users />} />
@@ -18,7 +19,7 @@ const Router = () => {
 
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-    </BrowserRouter>
+
   );
 };
 

@@ -64,7 +64,7 @@ const Logo = styled(Link)(({theme}) => ({
 const isLoggedIn = false;
 
 
-function NavBar() {
+export const NavBar = () => {
 
   // TODO: 서버의 세션 정보를 클라이언트에 저장해야함.
   const handleLogin = () => {
@@ -72,8 +72,9 @@ function NavBar() {
   };
 
   return (
-    <Container>
-        <AppBar position="static">
+
+        <AppBar position="static" sx={{ backgroundColor: "#0D1117", color: "#ffffff" }}>
+        <Container>
             <Toolbar>
                 <Logo to={'/'} >
                     Algo Solved
@@ -115,9 +116,8 @@ function NavBar() {
                 }
                 </Box>
             </Toolbar>
+            </Container>
         </AppBar>
-        <br/>
-    </Container>
    );
 }
 

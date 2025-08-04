@@ -10,7 +10,6 @@ const Banner = () => {
         <div style={{ height: '100%', maxHeight: '500px'}}>
             <h2>AlgoSolved!</h2>
         </div>
-
     );
 }
 

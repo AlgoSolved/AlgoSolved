@@ -25,21 +25,11 @@ const defaultTheme = createTheme();
 function Footer() {
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          minHeight: "25vh",
-        }}
-      >
-        <CssBaseline />
-
         <Box
           component="footer"
           sx={{
             py: 3,
             px: 2,
-            mt: "auto",
             backgroundColor: (theme) =>
               theme.palette.mode === "light"
                 ? theme.palette.grey[200]
@@ -50,7 +40,6 @@ function Footer() {
             <Copyright />
           </Container>
         </Box>
-      </Box>
     </ThemeProvider>
   );
 }
