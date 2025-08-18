@@ -1,10 +1,16 @@
 package org.algosolved.backend.core.filter;
 
 import io.jsonwebtoken.ExpiredJwtException;
-
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.algosolved.backend.common.exceptions.JwtException;
 import org.algosolved.backend.core.jwt.JwtAuthProvider;
 import org.algosolved.backend.user.dto.UserJwtDto;
@@ -16,16 +22,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
 @Component
@@ -45,7 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String method = request.getMethod();
         // 다음과 같은 uri는 토큰검증x
         String[] equalsWith = {
-            "/api/v1/health/ping",
+            "/api/health/ping",
             "/api/v1/users/signin",
             "/api/v1/users/refresh",
             "/api/oauth2/authorization/github",
