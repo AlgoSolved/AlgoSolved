@@ -2,6 +2,7 @@ package org.algosolved.backend.core.config;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.algosolved.backend.core.filter.JwtAuthenticationFilter;
 import org.algosolved.backend.core.filter.OAuthSuccessHandler;
 import org.algosolved.backend.core.jwt.JwtAuthEntryPoint;
@@ -19,6 +20,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -51,7 +53,12 @@ public class SecurityConfig {
                                         }))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(setAuthRequiredPath())
-                .oauth2Login(oauth2 -> oauth2.successHandler(oAuthSuccessHandler))
+                .oauth2Login(oauth2 -> oauth2.successHandler(oAuthSuccessHandler)
+                        .failureHandler((request, response, exception) -> {
+                    log.error("❌ OAuth 인증 실패: " + exception.getMessage());
+                    exception.printStackTrace(); // 상세 로그 출력
+                    response.sendRedirect("/api/login?error=true");
+                }))
                 .addFilterBefore(jwtAuthTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(
                         (exception) -> exception.authenticationEntryPoint(jwtAuthEntryPoint))
