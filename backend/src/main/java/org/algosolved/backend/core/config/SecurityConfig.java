@@ -64,7 +64,7 @@ public class SecurityConfig {
                         (exception) -> exception.authenticationEntryPoint(jwtAuthEntryPoint))
                 .sessionManagement(
                         (session) ->
-                                session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
+                                session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
 
         return http.build();
     }
