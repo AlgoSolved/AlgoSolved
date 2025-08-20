@@ -1,8 +1,8 @@
 package org.algosolved.backend.core.config;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.algosolved.backend.core.filter.JwtAuthenticationFilter;
 import org.algosolved.backend.core.filter.OAuthSuccessHandler;
 import org.algosolved.backend.core.jwt.JwtAuthEntryPoint;
@@ -19,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 @Slf4j
 @Configuration
@@ -43,7 +45,9 @@ public class SecurityConfig {
                                         request -> {
                                             CorsConfiguration config = new CorsConfiguration();
                                             config.setAllowedOrigins(
-                                                    List.of("http://localhost:3000", "https://algosolved.org"));
+                                                    List.of(
+                                                            "http://localhost:3000",
+                                                            "https://algosolved.org"));
                                             config.setAllowedMethods(
                                                     List.of("GET", "POST", "PUT", "DELETE"));
                                             config.setAllowedHeaders(
@@ -53,18 +57,22 @@ public class SecurityConfig {
                                         }))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(setAuthRequiredPath())
-                .oauth2Login(oauth2 -> oauth2.successHandler(oAuthSuccessHandler)
-                        .failureHandler((request, response, exception) -> {
-                    log.error("❌ OAuth 인증 실패: " + exception.getMessage());
-                    exception.printStackTrace(); // 상세 로그 출력
-                    response.sendRedirect("/api/login?error=true");
-                }))
+                .oauth2Login(
+                        oauth2 ->
+                                oauth2.successHandler(oAuthSuccessHandler)
+                                        .failureHandler(
+                                                (request, response, exception) -> {
+                                                    log.error(
+                                                            "❌ OAuth 인증 실패: "
+                                                                    + exception.getMessage());
+                                                    exception.printStackTrace(); // 상세 로그 출력
+                                                    response.sendRedirect("/api/login?error=true");
+                                                }))
                 .addFilterBefore(jwtAuthTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(
                         (exception) -> exception.authenticationEntryPoint(jwtAuthEntryPoint))
                 .sessionManagement(
-                        (session) ->
-                                session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
+                        (session) -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
 
         return http.build();
     }
