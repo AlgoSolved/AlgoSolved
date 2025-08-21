@@ -1,11 +1,12 @@
 package org.algosolved.backend.core.config;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.algosolved.backend.core.filter.JwtAuthenticationFilter;
 import org.algosolved.backend.core.filter.OAuthSuccessHandler;
 import org.algosolved.backend.core.jwt.JwtAuthEntryPoint;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -20,8 +21,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
-import java.util.List;
-
 @Slf4j
 @Configuration
 @EnableWebSecurity
@@ -31,6 +30,9 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthTokenFilter;
     private final JwtAuthEntryPoint jwtAuthEntryPoint;
     private final OAuthSuccessHandler oAuthSuccessHandler;
+
+    @Value("${client.base.url}")
+    private String CLIENT_ORIGIN;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -45,9 +47,7 @@ public class SecurityConfig {
                                         request -> {
                                             CorsConfiguration config = new CorsConfiguration();
                                             config.setAllowedOrigins(
-                                                    List.of(
-                                                            "http://localhost:3000",
-                                                            "https://algosolved.org"));
+                                                    List.of(CLIENT_ORIGIN));
                                             config.setAllowedMethods(
                                                     List.of("GET", "POST", "PUT", "DELETE"));
                                             config.setAllowedHeaders(
