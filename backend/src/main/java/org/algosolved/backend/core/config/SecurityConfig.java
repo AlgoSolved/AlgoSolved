@@ -1,8 +1,8 @@
 package org.algosolved.backend.core.config;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.algosolved.backend.core.filter.JwtAuthenticationFilter;
 import org.algosolved.backend.core.filter.OAuthSuccessHandler;
 import org.algosolved.backend.core.jwt.JwtAuthEntryPoint;
@@ -20,6 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 @Slf4j
 @Configuration
@@ -46,8 +48,7 @@ public class SecurityConfig {
                                 cors.configurationSource(
                                         request -> {
                                             CorsConfiguration config = new CorsConfiguration();
-                                            config.setAllowedOrigins(
-                                                    List.of(CLIENT_ORIGIN));
+                                            config.setAllowedOrigins(List.of(CLIENT_ORIGIN));
                                             config.setAllowedMethods(
                                                     List.of("GET", "POST", "PUT", "DELETE"));
                                             config.setAllowedHeaders(
