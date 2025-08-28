@@ -45,7 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String method = request.getMethod();
         // 다음과 같은 uri는 토큰검증x
         String[] equalsWith = {
-            "/api/v1/health/ping",
+            "/api/health/ping",
             "/api/v1/users/signin",
             "/api/v1/users/refresh",
             "/api/oauth2/authorization/github",

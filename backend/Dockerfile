@@ -1,4 +1,4 @@
-FROM openjdk:17-slim-buster AS base
+FROM eclipse-temurin:17-jre-noble AS base
 ENV JAR_FILE_NAME=backend-0.0.1-SNAPSHOT.jar
 ENV JAR_FILE_PATH=/home/deploy/app/backend/build/libs/${JAR_FILE_NAME}
 ENV TZ=Asia/Seoul
@@ -8,7 +8,7 @@ FROM base as builder
 RUN apt-get -qq update > /dev/null && \
     DEBIAN_FRONTEND=noninteractive apt-get -yq --no-install-recommends install build-essential unzip procps curl > /dev/null
 
-RUN useradd --uid 1000 --gid users --shell /bin/bash --create-home deploy
+RUN useradd --gid users --shell /bin/bash --create-home deploy
 USER deploy
 
 RUN mkdir -p /home/deploy/app/backend

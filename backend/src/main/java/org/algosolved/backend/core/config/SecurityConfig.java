@@ -1,10 +1,12 @@
 package org.algosolved.backend.core.config;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.algosolved.backend.core.filter.JwtAuthenticationFilter;
 import org.algosolved.backend.core.filter.OAuthSuccessHandler;
 import org.algosolved.backend.core.jwt.JwtAuthEntryPoint;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -21,6 +23,7 @@ import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.List;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -29,6 +32,9 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthTokenFilter;
     private final JwtAuthEntryPoint jwtAuthEntryPoint;
     private final OAuthSuccessHandler oAuthSuccessHandler;
+
+    @Value("${client.base.url}")
+    private String CLIENT_ORIGIN;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -42,8 +48,7 @@ public class SecurityConfig {
                                 cors.configurationSource(
                                         request -> {
                                             CorsConfiguration config = new CorsConfiguration();
-                                            config.setAllowedOrigins(
-                                                    List.of("http://localhost:3000"));
+                                            config.setAllowedOrigins(List.of(CLIENT_ORIGIN));
                                             config.setAllowedMethods(
                                                     List.of("GET", "POST", "PUT", "DELETE"));
                                             config.setAllowedHeaders(
@@ -53,13 +58,22 @@ public class SecurityConfig {
                                         }))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(setAuthRequiredPath())
-                .oauth2Login(oauth2 -> oauth2.successHandler(oAuthSuccessHandler))
+                .oauth2Login(
+                        oauth2 ->
+                                oauth2.successHandler(oAuthSuccessHandler)
+                                        .failureHandler(
+                                                (request, response, exception) -> {
+                                                    log.error(
+                                                            "❌ OAuth 인증 실패: "
+                                                                    + exception.getMessage());
+                                                    exception.printStackTrace(); // 상세 로그 출력
+                                                    response.sendRedirect("/api/login?error=true");
+                                                }))
                 .addFilterBefore(jwtAuthTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(
                         (exception) -> exception.authenticationEntryPoint(jwtAuthEntryPoint))
                 .sessionManagement(
-                        (session) ->
-                                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                        (session) -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
 
         return http.build();
     }
@@ -84,6 +98,7 @@ public class SecurityConfig {
                                 "/api/swagger-ui.html",
                                 "/api/swagger-ui/**",
                                 "/api/v3/api-docs/**",
+                                "/api/login/oauth2/code/**",
                                 "/api/v1/user/auth/success")
                         .permitAll();
             }
