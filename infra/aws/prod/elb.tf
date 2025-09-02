@@ -11,8 +11,6 @@ resource "aws_lb" "algosolved-lb" {
   subnets = [
     var.sub_pub_a_id,
     var.sub_pub_b_id,
-    var.sub_pub_c_id,
-    var.sub_pub_d_id,
   ]
 
   timeouts {}
